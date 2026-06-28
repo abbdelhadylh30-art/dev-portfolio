@@ -1,0 +1,1467 @@
+     1→'use client'
+     2→
+     3→import { useState, useCallback, useRef } from "react";
+     4→import { Button } from "@/components/ui/button";
+     5→import { Input } from "@/components/ui/input";
+     6→import { Textarea } from "@/components/ui/textarea";
+     7→import { Label } from "@/components/ui/label";
+     8→import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+     9→import { Badge } from "@/components/ui/badge";
+    10→import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+    11→import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+    12→import { Separator } from "@/components/ui/separator";
+    13→import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+    14→import { Loader2, Copy, Check, Sparkles, RotateCcw, ChevronRight, AlertTriangle, Wand2, FileText, Link2, Scan, ArrowRight, X, ImageIcon } from "lucide-react";
+    15→import { toast } from "sonner";
+    16→import {
+    17→  STEP_ORDER,
+    18→  STEP_LABELS,
+    19→  STEP_DESCRIPTIONS,
+    20→  type StepName,
+    21→  type UserServices,
+    22→  type LeadObservation,
+    23→} from "@/lib/lead-profiler-types";
+    24→import { ImageUploader, type UploadedImage } from "@/components/image-uploader";
+    25→
+    26→// ---------------------------------------------------------------------------
+    27→// Types
+    28→// ---------------------------------------------------------------------------
+    29→
+    30→type StepStatus = "pending" | "running" | "done" | "error";
+    31→
+    32→interface StepState {
+    33→  status: StepStatus;
+    34→  output?: Record<string, unknown>;
+    35→  duration_ms?: number;
+    36→  error?: string;
+    37→}
+    38→
+    39→type Tab = "profiler" | "audit";
+    40→
+    41→// ---------------------------------------------------------------------------
+    42→// Default data
+    43→// ---------------------------------------------------------------------------
+    44→
+    45→const DEFAULT_USER_SERVICES: UserServices = {
+    46→  primary: "",
+    47→  secondary: "",
+    48→  past_work_examples: [],
+    49→  track_record: "",
+    50→  service_depth: "",
+    51→};
+    52→
+    53→const EMPTY_DATA: LeadObservation = {
+    54→  lead_name: "",
+    55→  profession: "",
+    56→  apparent_subculture: "",
+    57→  westernization_signals: "",
+    58→  digital_presence_audit: {
+    59→    has_website: "no",
+    60→    has_booking_or_payment_link: "no",
+    61→    has_google_reviews: "no",
+    62→    primary_call_to_action: "dm",
+    63→  },
+    64→  observation_notes: {
+    65→    pace: "",
+    66→    people_orientation: "",
+    67→    content_shape: "",
+    68→    engagement: "",
+    69→    self_presentation: "",
+    70→    pressure_tells: "",
+    71→  },
+    72→  additional_context: "",
+    73→};
+    74→
+    75→// ---------------------------------------------------------------------------
+    76→// Main component
+    77→// ---------------------------------------------------------------------------
+    78→
+    79→export default function Home() {
+    80→  const [tab, setTab] = useState<Tab>("profiler");
+    81→
+    82→  return (
+    83→    <div className="min-h-screen bg-background flex flex-col">
+    84→      <Header tab={tab} setTab={setTab} />
+    85→      <main className="flex-1 container mx-auto max-w-6xl px-4 py-8">
+    86→        {tab === "profiler" ? <LeadProfiler /> : <ProspectAudit />}
+    87→      </main>
+    88→      <footer className="border-t mt-16 py-6">
+    89→        <div className="container mx-auto max-w-6xl px-4 text-center text-xs text-muted-foreground">
+    90→          Lead Profiler v4 · Arabic-first · Hook-driven · Factuality-checked · 5-step chain: Culture Map → DiSC → Status Anxiety ∥ Laws → Influence → SPIN
+    91→        </div>
+    92→      </footer>
+    93→    </div>
+    94→  );
+    95→}
+    96→
+    97→// ---------------------------------------------------------------------------
+    98→// Header with tab switcher
+    99→// ---------------------------------------------------------------------------
+   100→
+   101→function Header({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
+   102→  return (
+   103→    <header className="border-b bg-card sticky top-0 z-10">
+   104→      <div className="container mx-auto max-w-6xl px-4 py-4 flex items-center justify-between flex-wrap gap-3">
+   105→        <div className="flex items-center gap-3">
+   106→          <div className="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center">
+   107→            <Wand2 className="w-5 h-5 text-white" />
+   108→          </div>
+   109→          <div>
+   110→            <h1 className="text-lg font-semibold tracking-tight">Lead Profiler</h1>
+   111→            <p className="text-xs text-muted-foreground">Research compression for cold WhatsApp openers</p>
+   112→          </div>
+   113→        </div>
+   114→        <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+   115→          <button
+   116→            onClick={() => setTab("profiler")}
+   117→            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+   118→              tab === "profiler" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+   119→            }`}
+   120→          >
+   121→            Lead Profiler
+   122→          </button>
+   123→          <button
+   124→            onClick={() => setTab("audit")}
+   125→            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+   126→              tab === "audit" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+   127→            }`}
+   128→          >
+   129→            Prospect Audit
+   130→          </button>
+   131→        </div>
+   132→      </div>
+   133→    </header>
+   134→  );
+   135→}
+   136→
+   137→// ---------------------------------------------------------------------------
+   138→// Lead Profiler tab
+   139→// ---------------------------------------------------------------------------
+   140→
+   141→function LeadProfiler() {
+   142→  const [observation, setObservation] = useState<LeadObservation>(EMPTY_DATA);
+   143→  const [userServices, setUserServices] = useState<UserServices>(DEFAULT_USER_SERVICES);
+   144→  const [steps, setSteps] = useState<Record<StepName, StepState>>({
+   145→    step1_culture_map: { status: "pending" },
+   146→    step2_disc: { status: "pending" },
+   147→    step3a_status_anxiety: { status: "pending" },
+   148→    step3b_laws: { status: "pending" },
+   149→    step3_reconciliation: { status: "pending" },
+   150→    step4_influence: { status: "pending" },
+   151→    step5_spin: { status: "pending" },
+   152→  });
+   153→  const [isRunning, setIsRunning] = useState(false);
+   154→  const [leadImages, setLeadImages] = useState<UploadedImage[]>([]);
+   155→  const [isExtracting, setIsExtracting] = useState(false);
+   156→  const [vlmExtraction, setVlmExtraction] = useState<Record<string, unknown> | null>(null);
+   157→  const [portfolioUrl, setPortfolioUrl] = useState("");
+   158→  const [isReadingPortfolio, setIsReadingPortfolio] = useState(false);
+   159→  const resultsRef = useRef<HTMLDivElement>(null);
+   160→
+   161→  const updateNote = useCallback((key: keyof LeadObservation["observation_notes"], value: string) => {
+   162→    setObservation((prev) => ({ ...prev, observation_notes: { ...prev.observation_notes, [key]: value } }));
+   163→  }, []);
+   164→
+   165→  const callStep = useCallback(
+   166→    async (step: StepName, accumulated: Record<string, Record<string, unknown> | undefined>) => {
+   167→      const res = await fetch("/api/profile-lead", {
+   168→        method: "POST",
+   169→        headers: { "Content-Type": "application/json" },
+   170→        body: JSON.stringify({ step, observation, userServices, ...accumulated }),
+   171→      });
+   172→      if (!res.ok) {
+   173→        const errBody = await res.json().catch(() => ({ error: "Network error" }));
+   174→        throw new Error(errBody.error ?? `HTTP ${res.status}`);
+   175→      }
+   176→      return (await res.json()) as { step: StepName; output: Record<string, unknown>; duration_ms: number };
+   177→    },
+   178→    [observation, userServices],
+   179→  );
+   180→
+   181→  const runPipeline = useCallback(async () => {
+   182→    if (!observation.lead_name.trim() || !observation.profession.trim()) {
+   183→      toast.error("Lead name and profession are required");
+   184→      return;
+   185→    }
+   186→    if (!userServices.primary.trim()) {
+   187→      toast.error("Fill in 'What You Sell' first — the opener needs to know what you offer");
+   188→      return;
+   189→    }
+   190→
+   191→    setIsRunning(true);
+   192→    setSteps({
+   193→      step1_culture_map: { status: "pending" },
+   194→      step2_disc: { status: "pending" },
+   195→      step3a_status_anxiety: { status: "pending" },
+   196→      step3b_laws: { status: "pending" },
+   197→      step3_reconciliation: { status: "pending" },
+   198→      step4_influence: { status: "pending" },
+   199→      step5_spin: { status: "pending" },
+   200→    });
+   201→
+   202→    const accumulated: Record<string, Record<string, unknown> | undefined> = {};
+   203→    const stepToBodyKey: Record<StepName, string> = {
+   204→      step1_culture_map: "step1",
+   205→      step2_disc: "step2",
+   206→      step3a_status_anxiety: "step3a",
+   207→      step3b_laws: "step3b",
+   208→      step3_reconciliation: "step3_reconciled",
+   209→      step4_influence: "step4",
+   210→      step5_spin: "step5",
+   211→    };
+   212→
+   213→    try {
+   214→      for (const step of STEP_ORDER) {
+   215→        if (step === "step3b_laws") continue;
+   216→
+   217→        setSteps((prev) => ({ ...prev, [step]: { status: "running" } }));
+   218→
+   219→        if (step === "step3a_status_anxiety") {
+   220→          setSteps((prev) => ({ ...prev, step3b_laws: { status: "running" } }));
+   221→          try {
+   222→            const [r3a, r3b] = await Promise.all([
+   223→              callStep("step3a_status_anxiety", accumulated),
+   224→              callStep("step3b_laws", accumulated),
+   225→            ]);
+   226→            accumulated.step3a = r3a.output;
+   227→            accumulated.step3b = r3b.output;
+   228→            setSteps((prev) => ({
+   229→              ...prev,
+   230→              step3a_status_anxiety: { status: "done", output: r3a.output, duration_ms: r3a.duration_ms },
+   231→              step3b_laws: { status: "done", output: r3b.output, duration_ms: r3b.duration_ms },
+   232→            }));
+   233→          } catch (err) {
+   234→            const msg = err instanceof Error ? err.message : "Unknown error";
+   235→            setSteps((prev) => ({
+   236→              ...prev,
+   237→              step3a_status_anxiety: { status: "error", error: msg },
+   238→              step3b_laws: { status: "error", error: msg },
+   239→            }));
+   240→            throw err;
+   241→          }
+   242→          continue;
+   243→        }
+   244→
+   245→        try {
+   246→          const result = await callStep(step, accumulated);
+   247→          accumulated[stepToBodyKey[step]] = result.output;
+   248→          setSteps((prev) => ({
+   249→            ...prev,
+   250→            [step]: { status: "done", output: result.output, duration_ms: result.duration_ms },
+   251→          }));
+   252→        } catch (err) {
+   253→          const msg = err instanceof Error ? err.message : "Unknown error";
+   254→          setSteps((prev) => ({ ...prev, [step]: { status: "error", error: msg } }));
+   255→          throw err;
+   256→        }
+   257→      }
+   258→
+   259→      toast.success("Profile generated!");
+   260→      setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 200);
+   261→    } catch (err) {
+   262→      const msg = err instanceof Error ? err.message : "Pipeline failed";
+   263→      toast.error(`Pipeline failed: ${msg}`);
+   264→    } finally {
+   265→      setIsRunning(false);
+   266→    }
+   267→  }, [observation, userServices, callStep]);
+   268→
+   269→  const readPortfolio = useCallback(async () => {
+   270→    if (!portfolioUrl.trim()) {
+   271→      toast.error("Enter your portfolio URL first");
+   272→      return;
+   273→    }
+   274→    setIsReadingPortfolio(true);
+   275→    try {
+   276→      const res = await fetch("/api/read-portfolio", {
+   277→        method: "POST",
+   278→        headers: { "Content-Type": "application/json" },
+   279→        body: JSON.stringify({ url: portfolioUrl }),
+   280→      });
+   281→      if (!res.ok) {
+   282→        const err = await res.json().catch(() => ({ error: "Failed" }));
+   283→        throw new Error(err.error ?? `HTTP ${res.status}`);
+   284→      }
+   285→      const data = await res.json();
+   286→      const ex = data.extracted;
+   287→      setUserServices({
+   288→        primary: ex.primary || "",
+   289→        secondary: ex.secondary || "",
+   290→        past_work_examples: ex.past_work_examples || [],
+   291→        track_record: ex.track_record || "",
+   292→        service_depth: ex.service_depth || "",
+   293→      });
+   294→      toast.success(`Portfolio read: ${data.page_title?.slice(0, 50) ?? "page loaded"}`);
+   295→      if (ex.extraction_notes) toast.info(ex.extraction_notes);
+   296→    } catch (err) {
+   297→      toast.error(`Portfolio read failed: ${err instanceof Error ? err.message : "unknown"}`);
+   298→    } finally {
+   299→      setIsReadingPortfolio(false);
+   300→    }
+   301→  }, [portfolioUrl]);
+   302→
+   303→  const extractFromImages = useCallback(async () => {
+   304→    if (leadImages.length === 0) {
+   305→      toast.error("Upload at least one screenshot first");
+   306→      return;
+   307→    }
+   308→    setIsExtracting(true);
+   309→    try {
+   310→      const res = await fetch("/api/analyze-lead-images", {
+   311→        method: "POST",
+   312→        headers: { "Content-Type": "application/json" },
+   313→        body: JSON.stringify({
+   314→          images: leadImages.map((img) => ({ dataUrl: img.dataUrl, name: img.name })),
+   315→        }),
+   316→      });
+   317→      if (!res.ok) {
+   318→        const err = await res.json().catch(() => ({ error: "Failed" }));
+   319→        throw new Error(err.error ?? `HTTP ${res.status}`);
+   320→      }
+   321→      const data = await res.json();
+   322→      setVlmExtraction(data.extracted);
+   323→      toast.success(`VLM analyzed ${data.images_analyzed} screenshot(s)`);
+   324→    } catch (err) {
+   325→      toast.error(`Image analysis failed: ${err instanceof Error ? err.message : "unknown"}`);
+   326→    } finally {
+   327→      setIsExtracting(false);
+   328→    }
+   329→  }, [leadImages]);
+   330→
+   331→  const acceptVlmField = useCallback(
+   332→    (category: string, field: string, value: string) => {
+   333→      if (category === "observation_notes") {
+   334→        setObservation((prev) => ({
+   335→          ...prev,
+   336→          observation_notes: { ...prev.observation_notes, [field]: value },
+   337→        }));
+   338→      } else if (category === "digital_presence_audit") {
+   339→        setObservation((prev) => ({
+   340→          ...prev,
+   341→          digital_presence_audit: {
+   342→            ...prev.digital_presence_audit,
+   343→            [field]: value,
+   344→          },
+   345→        }));
+   346→      }
+   347→      toast.success(`Accepted: ${field}`);
+   348→    },
+   349→    [],
+   350→  );
+   351→
+   352→  const reset = useCallback(() => {
+   353→    setObservation(EMPTY_DATA);
+   354→    setUserServices(DEFAULT_USER_SERVICES);
+   355→    setLeadImages([]);
+   356→    setVlmExtraction(null);
+   357→    setPortfolioUrl("");
+   358→    setSteps({
+   359→      step1_culture_map: { status: "pending" },
+   360→      step2_disc: { status: "pending" },
+   361→      step3a_status_anxiety: { status: "pending" },
+   362→      step3b_laws: { status: "pending" },
+   363→      step3_reconciliation: { status: "pending" },
+   364→      step4_influence: { status: "pending" },
+   365→      step5_spin: { status: "pending" },
+   366→    });
+   367→  }, []);
+   368→
+   369→  const allDone = steps.step5_spin.status === "done" && steps.step4_influence.status === "done";
+   370→  const openerData = steps.step5_spin.output as Record<string, unknown> | undefined;
+   371→  const completedCount = STEP_ORDER.filter((s) => steps[s].status === "done").length;
+   372→
+   373→  return (
+   374→    <div className="space-y-6">
+   375→      {/* Hero */}
+   376→      <div className="max-w-3xl">
+   377→        <h2 className="text-3xl font-bold tracking-tight mb-2">
+   378→          5-minute observation in. Pitch-ready Arabic opener out.
+   379→        </h2>
+   380→        <p className="text-muted-foreground">
+   381→          Paste your social-media observation notes, upload screenshots for VLM cross-check,
+   382→          and the 5-step chain produces a draft WhatsApp opener designed to feel like it came
+   383→          from someone who already understood them — not a cold pitch.
+   384→        </p>
+   385→      </div>
+   386→
+   387→      <div className="grid lg:grid-cols-5 gap-6">
+   388→        {/* Input form — 3 cols */}
+   389→        <div className="lg:col-span-3 space-y-6">
+   390→          {/* What You Sell */}
+   391→          <Card className="border-emerald-200">
+   392→            <CardHeader>
+   393→              <CardTitle className="flex items-center gap-2">
+   394→                <span>What You Sell</span>
+   395→                <Badge variant="secondary" className="text-xs">fill once</Badge>
+   396→              </CardTitle>
+   397→              <CardDescription>
+   398→                Your real services and track record. The opener draws ONLY from this — never invents social proof.
+   399→              </CardDescription>
+   400→            </CardHeader>
+   401→            <CardContent className="space-y-4">
+   402→              {/* Portfolio URL auto-fill */}
+   403→              <div className="space-y-2">
+   404→                <Label htmlFor="portfolio_url" className="text-sm font-medium flex items-center gap-1.5">
+   405→                  <Link2 className="w-3.5 h-3.5" /> Auto-fill from your portfolio URL
+   406→                </Label>
+   407→                <div className="flex gap-2">
+   408→                  <Input
+   409→                    id="portfolio_url"
+   410→                    value={portfolioUrl}
+   411→                    onChange={(e) => setPortfolioUrl(e.target.value)}
+   412→                    placeholder="https://your-portfolio-or-website.com"
+   413→                    disabled={isReadingPortfolio}
+   414→                  />
+   415→                  <Button
+   416→                    onClick={readPortfolio}
+   417→                    disabled={isReadingPortfolio || !portfolioUrl.trim()}
+   418→                    variant="outline"
+   419→                    size="default"
+   420→                  >
+   421→                    {isReadingPortfolio ? (
+   422→                      <><Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> Reading...</>
+   423→                    ) : (
+   424→                      <><Scan className="w-4 h-4 mr-1.5" /> Auto-fill</>
+   425→                    )}
+   426→                  </Button>
+   427→                </div>
+   428→                <p className="text-xs text-muted-foreground">
+   429→                  Paste your portfolio/website URL. The tool reads the page and extracts your real services + past work.
+   430→                </p>
+   431→              </div>
+   432→
+   433→              <Separator />
+   434→
+   435→              <div className="space-y-2">
+   436→                <Label htmlFor="us_primary">Primary service *</Label>
+   437→                <Textarea
+   438→                  id="us_primary"
+   439→                  value={userServices.primary}
+   440→                  onChange={(e) => setUserServices((p) => ({ ...p, primary: e.target.value }))}
+   441→                  placeholder="Custom web tools — landing pages, dashboards, functional apps"
+   442→                  disabled={isRunning}
+   443→                  rows={2}
+   444→                />
+   445→              </div>
+   446→
+   447→              <div className="space-y-2">
+   448→                <Label htmlFor="us_track">Real track record</Label>
+   449→                <Textarea
+   450→                  id="us_track"
+   451→                  value={userServices.track_record}
+   452→                  onChange={(e) => setUserServices((p) => ({ ...p, track_record: e.target.value }))}
+   453→                  placeholder="3 years building web tools for Gulf SMB owners. ~15 clients across dental, retail, e-commerce."
+   454→                  disabled={isRunning}
+   455→                  rows={2}
+   456→                />
+   457→              </div>
+   458→
+   459→              <div className="space-y-2">
+   460→                <Label htmlFor="us_examples">Past work examples (one per line)</Label>
+   461→                <Textarea
+   462→                  id="us_examples"
+   463→                  value={userServices.past_work_examples.join("\n")}
+   464→                  onChange={(e) =>
+   465→                    setUserServices((p) => ({
+   466→                      ...p,
+   467→                      past_work_examples: e.target.value.split("\n").filter((s) => s.trim()),
+   468→                    }))
+   469→                  }
+   470→                  placeholder={"Booking dashboard for a Riyadh dental clinic\nProduct page funnel for a Jeddah dropshipper"}
+   471→                  disabled={isRunning}
+   472→                  rows={4}
+   473→                  className="text-sm"
+   474→                />
+   475→                <p className="text-xs text-muted-foreground">
+   476→                  These are the ONLY social proof the tool can use. If empty, Social Proof lever is forbidden.
+   477→                </p>
+   478→              </div>
+   479→
+   480→              <div className="space-y-2">
+   481→                <Label htmlFor="us_depth">Service depth — what makes you different</Label>
+   482→                <Textarea
+   483→                  id="us_depth"
+   484→                  value={userServices.service_depth}
+   485→                  onChange={(e) => setUserServices((p) => ({ ...p, service_depth: e.target.value }))}
+   486→                  placeholder="I build real functional tools with working backends — not just landing pages."
+   487→                  disabled={isRunning}
+   488→                  rows={2}
+   489→                />
+   490→              </div>
+   491→            </CardContent>
+   492→          </Card>
+   493→
+   494→          {/* Lead Observation */}
+   495→          <Card>
+   496→            <CardHeader>
+   497→              <CardTitle className="flex items-center gap-2">
+   498→                <span>Lead Observation</span>
+   499→                <Badge variant="secondary" className="text-xs">5 min manual</Badge>
+   500→              </CardTitle>
+   501→              <CardDescription>
+   502→                Take the 5-minute scroll. Paste shorthand notes. Optionally upload screenshots for VLM cross-check.
+   503→              </CardDescription>
+   504→            </CardHeader>
+   505→            <CardContent className="space-y-4">
+   506→              <div className="grid sm:grid-cols-2 gap-4">
+   507→                <div className="space-y-2">
+   508→                  <Label htmlFor="lead_name">Lead name *</Label>
+   509→                  <Input
+   510→                    id="lead_name"
+   511→                    value={observation.lead_name}
+   512→                    onChange={(e) => setObservation((p) => ({ ...p, lead_name: e.target.value }))}
+   513→                    placeholder="Dr. Ahmed Al-Rashid"
+   514→                    disabled={isRunning}
+   515→                  />
+   516→                </div>
+   517→                <div className="space-y-2">
+   518→                  <Label htmlFor="profession">Profession *</Label>
+   519→                  <Input
+   520→                    id="profession"
+   521→                    value={observation.profession}
+   522→                    onChange={(e) => setObservation((p) => ({ ...p, profession: e.target.value }))}
+   523→                    placeholder="Dental clinic owner (Jeddah)"
+   524→                    disabled={isRunning}
+   525→                  />
+   526→                </div>
+   527→              </div>
+   528→
+   529→              <div className="space-y-2">
+   530→                <Label htmlFor="apparent_subculture">Apparent sub-culture</Label>
+   531→                <Input
+   532→                  id="apparent_subculture"
+   533→                  value={observation.apparent_subculture}
+   534→                  onChange={(e) => setObservation((p) => ({ ...p, apparent_subculture: e.target.value }))}
+   535→                  placeholder="Saudi national, Jeddah-based, UK educated"
+   536→                  disabled={isRunning}
+   537→                />
+   538→              </div>
+   539→
+   540→              <div className="space-y-2">
+   541→                <Label htmlFor="westernization_signals">Westernization signals</Label>
+   542→                <Textarea
+   543→                  id="westernization_signals"
+   544→                  value={observation.westernization_signals}
+   545→                  onChange={(e) => setObservation((p) => ({ ...p, westernization_signals: e.target.value }))}
+   546→                  placeholder="English fluency, references to Western brands/frameworks, education markers"
+   547→                  disabled={isRunning}
+   548→                  rows={2}
+   549→                />
+   550→              </div>
+   551→
+   552→              <Separator />
+   553→
+   554→              {/* Digital Presence Audit */}
+   555→              <div className="space-y-3">
+   556→                <div className="flex items-center gap-2 flex-wrap">
+   557→                  <Label className="text-base font-semibold">Digital presence audit</Label>
+   558→                  <Badge variant="secondary" className="text-xs">30 sec factual check</Badge>
+   559→                </div>
+   560→                <p className="text-xs text-muted-foreground -mt-1">
+   561→                  Quick factual inventory — drives the cost_of_absence hook for activation selling.
+   562→                </p>
+   563→
+   564→                <div className="grid sm:grid-cols-2 gap-3">
+   565→                  <div className="space-y-1.5">
+   566→                    <Label className="text-sm">Has website?</Label>
+   567→                    <Select
+   568→                      value={observation.digital_presence_audit.has_website}
+   569→                      onValueChange={(v) =>
+   570→                        setObservation((prev) => ({
+   571→                          ...prev,
+   572→                          digital_presence_audit: { ...prev.digital_presence_audit, has_website: v as "yes" | "no" | "weak" },
+   573→                        }))
+   574→                      }
+   575→                      disabled={isRunning}
+   576→                    >
+   577→                      <SelectTrigger><SelectValue /></SelectTrigger>
+   578→                      <SelectContent>
+   579→                        <SelectItem value="no">No website</SelectItem>
+   580→                        <SelectItem value="weak">Weak (just a link)</SelectItem>
+   581→                        <SelectItem value="yes">Yes, real website</SelectItem>
+   582→                      </SelectContent>
+   583→                    </Select>
+   584→                  </div>
+   585→
+   586→                  <div className="space-y-1.5">
+   587→                    <Label className="text-sm">Booking/payment link?</Label>
+   588→                    <Select
+   589→                      value={observation.digital_presence_audit.has_booking_or_payment_link}
+   590→                      onValueChange={(v) =>
+   591→                        setObservation((prev) => ({
+   592→                          ...prev,
+   593→                          digital_presence_audit: { ...prev.digital_presence_audit, has_booking_or_payment_link: v as "yes" | "no" },
+   594→                        }))
+   595→                      }
+   596→                      disabled={isRunning}
+   597→                    >
+   598→                      <SelectTrigger><SelectValue /></SelectTrigger>
+   599→                      <SelectContent>
+   600→                        <SelectItem value="no">No — DM/call only</SelectItem>
+   601→                        <SelectItem value="yes">Yes — online booking/payment</SelectItem>
+   602→                      </SelectContent>
+   603→                    </Select>
+   604→                  </div>
+   605→
+   606→                  <div className="space-y-1.5">
+   607→                    <Label className="text-sm">Google reviews?</Label>
+   608→                    <Select
+   609→                      value={observation.digital_presence_audit.has_google_reviews}
+   610→                      onValueChange={(v) =>
+   611→                        setObservation((prev) => ({
+   612→                          ...prev,
+   613→                          digital_presence_audit: { ...prev.digital_presence_audit, has_google_reviews: v as "yes" | "no" },
+   614→                        }))
+   615→                      }
+   616→                      disabled={isRunning}
+   617→                    >
+   618→                      <SelectTrigger><SelectValue /></SelectTrigger>
+   619→                      <SelectContent>
+   620→                        <SelectItem value="no">No Google reviews</SelectItem>
+   621→                        <SelectItem value="yes">Yes, has Google reviews</SelectItem>
+   622→                      </SelectContent>
+   623→                    </Select>
+   624→                  </div>
+   625→
+   626→                  <div className="space-y-1.5">
+   627→                    <Label className="text-sm">Primary call-to-action</Label>
+   628→                    <Select
+   629→                      value={observation.digital_presence_audit.primary_call_to_action}
+   630→                      onValueChange={(v) =>
+   631→                        setObservation((prev) => ({
+   632→                          ...prev,
+   633→                          digital_presence_audit: { ...prev.digital_presence_audit, primary_call_to_action: v as "dm" | "call" | "link" | "none" | "other" },
+   634→                        }))
+   635→                      }
+   636→                      disabled={isRunning}
+   637→                    >
+   638→                      <SelectTrigger><SelectValue /></SelectTrigger>
+   639→                      <SelectContent>
+   640→                        <SelectItem value="dm">DM to order/book</SelectItem>
+   641→                        <SelectItem value="call">Call us</SelectItem>
+   642→                        <SelectItem value="link">Click a link</SelectItem>
+   643→                        <SelectItem value="none">No CTA visible</SelectItem>
+   644→                        <SelectItem value="other">Other</SelectItem>
+   645→                      </SelectContent>
+   646→                    </Select>
+   647→                  </div>
+   648→                </div>
+   649→
+   650→                <div className="space-y-1.5">
+   651→                  <Label className="text-sm">Competitor digital presence (optional)</Label>
+   652→                  <Textarea
+   653→                    value={observation.digital_presence_audit.competitor_digital_presence ?? ""}
+   654→                    onChange={(e) =>
+   655→                      setObservation((prev) => ({
+   656→                        ...prev,
+   657→                        digital_presence_audit: { ...prev.digital_presence_audit, competitor_digital_presence: e.target.value },
+   658→                      }))
+   659→                    }
+   660→                    placeholder="e.g., Competitor X launched a website with online ordering 3 months ago"
+   661→                    disabled={isRunning}
+   662→                    rows={2}
+   663→                    className="text-sm"
+   664→                  />
+   665→                </div>
+   666→
+   667→                <div className="space-y-1.5">
+   668→                  <Label className="text-sm">Customer complaint pattern (optional)</Label>
+   669→                  <Textarea
+   670→                    value={observation.digital_presence_audit.customer_complaint_pattern ?? ""}
+   671→                    onChange={(e) =>
+   672→                      setObservation((prev) => ({
+   673→                        ...prev,
+   674→                        digital_presence_audit: { ...prev.digital_presence_audit, customer_complaint_pattern: e.target.value },
+   675→                      }))
+   676→                    }
+   677→                    placeholder="e.g., Customers comment 'why don't you have a website?'"
+   678→                    disabled={isRunning}
+   679→                    rows={2}
+   680→                    className="text-sm"
+   681→                  />
+   682→                </div>
+   683→              </div>
+   684→
+   685→              <Separator />
+   686→
+   687→              {/* Image upload for VLM cross-check */}
+   688→              <div className="space-y-3">
+   689→                <div className="flex items-center gap-2 flex-wrap">
+   690→                  <Label className="text-base font-semibold">Screenshot cross-check (optional)</Label>
+   691→                  <Badge variant="secondary" className="text-xs">VLM extraction</Badge>
+   692→                </div>
+   693→                <p className="text-xs text-muted-foreground -mt-1">
+   694→                  Upload screenshots of the lead's profile. The VLM extracts observations you can accept/reject as a cross-check.
+   695→                </p>
+   696→                <ImageUploader images={leadImages} onChange={setLeadImages} maxImages={6} disabled={isRunning || isExtracting} />
+   697→                {leadImages.length > 0 && (
+   698→                  <Button onClick={extractFromImages} disabled={isExtracting} variant="outline" className="w-full">
+   699→                    {isExtracting ? (
+   700→                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Analyzing screenshots...</>
+   701→                    ) : (
+   702→                      <><Scan className="w-4 h-4 mr-2" /> Extract observations from {leadImages.length} screenshot(s)</>
+   703→                    )}
+   704→                  </Button>
+   705→                )}
+   706→
+   707→                {/* VLM extraction results */}
+   708→                {vlmExtraction && (
+   709→                  <VlmExtractionPanel extraction={vlmExtraction} onAccept={acceptVlmField} />
+   710→                )}
+   711→              </div>
+   712→
+   713→              <Separator />
+   714→
+   715→              {/* Observation notes */}
+   716→              <div className="space-y-3">
+   717→                <Label className="text-base font-semibold">Observation notes (6 categories)</Label>
+   718→                {([
+   719→                  ["pace", "Pace signals", "Posting frequency, reply speed, content cadence"],
+   720→                  ["people_orientation", "People orientation", "Warmth vs. skepticism in captions and replies"],
+   721→                  ["content_shape", "Content shape", "Carousels, reels, formal posts, BTS, polished vs. raw"],
+   722→                  ["engagement", "Engagement style", "Reply patterns, tone, selectivity"],
+   723→                  ["self_presentation", "Self-presentation", "Front-and-center vs. behind-the-brand"],
+   724→                  ["pressure_tells", "Pressure tells", "Stories, rants, brags, withdrawal under stress"],
+   725→                ] as const).map(([key, label, placeholder]) => (
+   726→                  <div key={key} className="space-y-1.5">
+   727→                    <Label htmlFor={`note-${key}`} className="text-sm font-medium">{label}</Label>
+   728→                    <Textarea
+   729→                      id={`note-${key}`}
+   730→                      value={observation.observation_notes[key]}
+   731→                      onChange={(e) => updateNote(key, e.target.value)}
+   732→                      placeholder={placeholder}
+   733→                      disabled={isRunning}
+   734→                      rows={2}
+   735→                      className="text-sm"
+   736→                    />
+   737→                  </div>
+   738→                ))}
+   739→              </div>
+   740→
+   741→              <Separator />
+   742→
+   743→              <div className="space-y-2">
+   744→                <Label htmlFor="additional_context">Additional context (optional)</Label>
+   745→                <Textarea
+   746→                  id="additional_context"
+   747→                  value={observation.additional_context ?? ""}
+   748→                  onChange={(e) => setObservation((p) => ({ ...p, additional_context: e.target.value }))}
+   749→                  placeholder="Competitors, family dynamics, recent changes, anything else relevant"
+   750→                  disabled={isRunning}
+   751→                  rows={3}
+   752→                />
+   753→              </div>
+   754→
+   755→              <div className="flex items-center gap-3 pt-2">
+   756→                <Button
+   757→                  onClick={runPipeline}
+   758→                  disabled={isRunning || !observation.lead_name.trim() || !observation.profession.trim() || !userServices.primary.trim()}
+   759→                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
+   760→                  size="lg"
+   761→                >
+   762→                  {isRunning ? (
+   763→                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Running pipeline...</>
+   764→                  ) : (
+   765→                    <><Sparkles className="w-4 h-4 mr-2" /> Generate Profile</>
+   766→                  )}
+   767→                </Button>
+   768→                <Button variant="ghost" size="sm" onClick={reset} disabled={isRunning}>
+   769→                  <RotateCcw className="w-4 h-4 mr-1.5" /> Reset
+   770→                </Button>
+   771→                {completedCount > 0 && !isRunning && (
+   772→                  <span className="text-sm text-muted-foreground">{completedCount}/{STEP_ORDER.length} steps complete</span>
+   773→                )}
+   774→              </div>
+   775→            </CardContent>
+   776→          </Card>
+   777→        </div>
+   778→
+   779→        {/* Progress sidebar — 2 cols */}
+   780→        <div className="lg:col-span-2">
+   781→          <Card className="sticky top-24">
+   782→            <CardHeader>
+   783→              <CardTitle className="text-base">Pipeline Progress</CardTitle>
+   784→              <CardDescription>5 steps run sequentially. Step 3a + 3b run in parallel.</CardDescription>
+   785→            </CardHeader>
+   786→            <CardContent className="space-y-1">
+   787→              {STEP_ORDER.map((step) => {
+   788→                const state = steps[step];
+   789→                const isParallel = step === "step3a_status_anxiety" || step === "step3b_laws";
+   790→                return (
+   791→                  <div
+   792→                    key={step}
+   793→                    className={`flex items-start gap-3 p-3 rounded-md border transition-colors ${
+   794→                      state.status === "running" ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/20"
+   795→                      : state.status === "done" ? "border-emerald-200 bg-emerald-50/50 dark:bg-emerald-950/10"
+   796→                      : state.status === "error" ? "border-red-300 bg-red-50 dark:bg-red-950/20"
+   797→                      : "border-border"
+   798→                    }`}
+   799→                  >
+   800→                    <div className="mt-0.5">
+   801→                      {state.status === "running" && <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />}
+   802→                      {state.status === "done" && <Check className="w-4 h-4 text-emerald-600" />}
+   803→                      {state.status === "error" && <AlertTriangle className="w-4 h-4 text-red-600" />}
+   804→                      {state.status === "pending" && <div className="w-4 h-4 rounded-full border-2 border-muted-foreground/30" />}
+   805→                    </div>
+   806→                    <div className="flex-1 min-w-0">
+   807→                      <div className="flex items-center gap-2 flex-wrap">
+   808→                        <span className="text-sm font-medium">{STEP_LABELS[step]}</span>
+   809→                        {isParallel && <Badge variant="outline" className="text-[10px] py-0 px-1.5">parallel</Badge>}
+   810→                        {state.duration_ms && (
+   811→                          <span className="text-[11px] text-muted-foreground">{(state.duration_ms / 1000).toFixed(1)}s</span>
+   812→                        )}
+   813→                      </div>
+   814→                      <p className="text-xs text-muted-foreground mt-0.5">
+   815→                        {state.status === "error" ? state.error : STEP_DESCRIPTIONS[step]}
+   816→                      </p>
+   817→                    </div>
+   818→                  </div>
+   819→                );
+   820→              })}
+   821→            </CardContent>
+   822→          </Card>
+   823→        </div>
+   824→      </div>
+   825→
+   826→      {/* Results */}
+   827→      <div ref={resultsRef} className="mt-10 space-y-6">
+   828→        {allDone && openerData ? (
+   829→          <OpenerDisplay openerData={openerData} steps={steps} />
+   830→        ) : (
+   831→          !isRunning && completedCount === 0 && (
+   832→            <Card className="border-dashed">
+   833→              <CardContent className="py-12 text-center text-muted-foreground">
+   834→                <ChevronRight className="w-8 h-8 mx-auto mb-3 opacity-30" />
+   835→                <p className="text-sm">
+   836→                  Fill in the observation notes and click <span className="font-medium text-foreground">Generate Profile</span>.
+   837→                </p>
+   838→              </CardContent>
+   839→            </Card>
+   840→          )
+   841→        )}
+   842→      </div>
+   843→    </div>
+   844→  );
+   845→}
+   846→
+   847→// ---------------------------------------------------------------------------
+   848→// VLM Extraction Panel — shows extracted observations with accept buttons
+   849→// ---------------------------------------------------------------------------
+   850→
+   851→function VlmExtractionPanel({
+   852→  extraction,
+   853→  onAccept,
+   854→}: {
+   855→  extraction: Record<string, unknown>;
+   856→  onAccept: (category: string, field: string, value: string) => void;
+   857→}) {
+   858→  const obs = (extraction.observation_notes ?? {}) as Record<string, string>;
+   859→  const audit = (extraction.digital_presence_audit ?? {}) as Record<string, string>;
+   860→  const confidence = extraction.extraction_confidence as string | undefined;
+   861→  const couldNotDetermine = (extraction.what_i_could_not_determine ?? []) as string[];
+   862→
+   863→  return (
+   864→    <div className="mt-3 border-2 border-blue-200 rounded-md p-4 bg-blue-50/50 dark:bg-blue-950/10 space-y-3">
+   865→      <div className="flex items-center gap-2 flex-wrap">
+   866→        <Scan className="w-4 h-4 text-blue-600" />
+   867→        <span className="text-sm font-semibold text-blue-900 dark:text-blue-100">VLM also observed...</span>
+   868→        {confidence && <Badge variant="outline" className="text-xs">confidence: {confidence}</Badge>}
+   869→      </div>
+   870→      <p className="text-xs text-blue-700 dark:text-blue-300">
+   871→        Review each extracted field. Click "Accept" to merge into your manual notes (you can still edit after).
+   872→      </p>
+   873→
+   874→      {Object.entries(obs).map(([key, value]) => {
+   875→        if (!value || value.includes("not visible")) return null;
+   876→        return (
+   877→          <div key={key} className="flex items-start justify-between gap-2 text-xs bg-white dark:bg-zinc-900 p-2 rounded border">
+   878→            <div className="flex-1">
+   879→              <span className="font-medium text-blue-800 dark:text-blue-200">{key.replace(/_/g, " ")}:</span>{" "}
+   880→              <span className="text-foreground">{value}</span>
+   881→            </div>
+   882→            <Button
+   883→              size="sm"
+   884→              variant="ghost"
+   885→              className="h-6 px-2 text-xs"
+   886→              onClick={() => onAccept("observation_notes", key, value)}
+   887→            >
+   888→              <ArrowRight className="w-3 h-3 mr-1" /> Accept
+   889→            </Button>
+   890→          </div>
+   891→        );
+   892→      })}
+   893→
+   894→      {audit.bio_text && !audit.bio_text.includes("not visible") && (
+   895→        <div className="flex items-start justify-between gap-2 text-xs bg-white dark:bg-zinc-900 p-2 rounded border">
+   896→          <div className="flex-1">
+   897→            <span className="font-medium text-blue-800 dark:text-blue-200">Bio text:</span>{" "}
+   898→            <span className="text-foreground font-mono">{audit.bio_text}</span>
+   899→          </div>
+   900→        </div>
+   901→      )}
+   902→
+   903→      {couldNotDetermine.length > 0 && (
+   904→        <div className="text-xs text-blue-600 dark:text-blue-400 mt-2">
+   905→          <span className="font-medium">Could not determine from screenshots:</span>{" "}
+   906→          {couldNotDetermine.join(", ")}
+   907→        </div>
+   908→      )}
+   909→    </div>
+   910→  );
+   911→}
+   912→
+   913→// ---------------------------------------------------------------------------
+   914→// Opener Display — shows the final opener with all inspection panels
+   915→// ---------------------------------------------------------------------------
+   916→
+   917→function OpenerDisplay({
+   918→  openerData,
+   919→  steps,
+   920→}: {
+   921→  openerData: Record<string, unknown>;
+   922→  steps: Record<StepName, StepState>;
+   923→}) {
+   924→  const opener = openerData.opener_draft as string | undefined;
+   925→  const alt = openerData.alternative_opener as string | undefined;
+   926→  const warnings = (openerData.warnings ?? []) as string[];
+   927→  const wordCount = openerData.word_count as number | undefined;
+   928→  const confidence = openerData.confidence as string | undefined;
+   929→  const openerLanguage = openerData.opener_language as string | undefined;
+   930→  const openerRegister = openerData.opener_register as string | undefined;
+   931→  const hook = openerData.hook as string | undefined;
+   932→  const hookType = openerData.hook_type as string | undefined;
+   933→  const offer = openerData.offer as string | undefined;
+   934→  const vocabUsed = openerData.vocabulary_used as string | undefined;
+   935→  const factuality = openerData.factuality_check as Record<string, unknown> | undefined;
+   936→  const claimsWithSources = (factuality?.claims_with_sources ?? []) as Array<Record<string, string>>;
+   937→  const fabricatedClaims = (factuality?.fabricated_claims ?? []) as string[];
+   938→  const allTraced = factuality?.all_claims_traced as string | undefined;
+   939→  const isArabic = openerLanguage === "arabic";
+   940→
+   941→  const chainSummary = {
+   942→    culture: (steps.step1_culture_map.output as { sub_culture?: string } | undefined)?.sub_culture,
+   943→    disc: (steps.step2_disc.output as { primary_dimension?: string; disc_style?: string } | undefined),
+   944→    drive: (steps.step3a_status_anxiety.output as { primary_drive?: string } | undefined)?.primary_drive,
+   945→    law: (steps.step3b_laws.output as { dominant_law?: string } | undefined)?.dominant_law,
+   946→    lever: (steps.step4_influence.output as { primary_lever?: string; social_proof_available?: string } | undefined),
+   947→  };
+   948→
+   949→  return (
+   950→    <>
+   951→      {/* Final opener */}
+   952→      <Card className="border-emerald-500 border-2 bg-emerald-50/30 dark:bg-emerald-950/10">
+   953→        <CardHeader>
+   954→          <div className="flex items-center justify-between flex-wrap gap-3">
+   955→            <div>
+   956→              <CardTitle className="flex items-center gap-2 flex-wrap">
+   957→                <Sparkles className="w-5 h-5 text-emerald-600" />
+   958→                Draft WhatsApp Opener
+   959→                {openerLanguage && (
+   960→                  <Badge variant="default" className="text-xs">
+   961→                    {isArabic ? "العربية" : "English"}
+   962→                  </Badge>
+   963→                )}
+   964→                {hookType && <Badge variant="outline" className="text-xs">hook: {hookType}</Badge>}
+   965→              </CardTitle>
+   966→              <CardDescription className="mt-1">
+   967→                Ready to send. {wordCount ?? 0} words.
+   968→                {confidence && <> Confidence: <span className="font-medium">{confidence}</span></>}
+   969→                {openerRegister && isArabic && <> · Register: <span className="font-medium">{openerRegister}</span></>}
+   970→              </CardDescription>
+   971→            </div>
+   972→            <CopyButton text={opener ?? ""} label="Copy opener" />
+   973→          </div>
+   974→        </CardHeader>
+   975→        <CardContent>
+   976→          <div
+   977→            className="bg-white dark:bg-zinc-900 border rounded-md p-4 text-sm leading-relaxed whitespace-pre-wrap"
+   978→            dir={isArabic ? "rtl" : "ltr"}
+   979→            style={{
+   980→              fontFamily: isArabic ? "'Noto Sans Arabic', 'Segoe UI', system-ui, sans-serif" : "inherit",
+   981→              fontSize: "16px",
+   982→              lineHeight: 1.7,
+   983→            }}
+   984→          >
+   985→            {opener}
+   986→          </div>
+   987→
+   988→          {/* Hook inspection */}
+   989→          {hook && (
+   990→            <div className="mt-4 p-3 rounded-md bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200">
+   991→              <div className="text-xs text-emerald-700 dark:text-emerald-300 uppercase tracking-wide font-semibold mb-1">
+   992→                The Hook (first ~14 words)
+   993→              </div>
+   994→              <div className="text-sm font-medium text-emerald-900 dark:text-emerald-100" dir={isArabic ? "rtl" : "ltr"}>
+   995→                {hook}
+   996→              </div>
+   997→            </div>
+   998→          )}
+   999→
+  1000→          {/* Offer + vocabulary */}
+  1001→          <div className="mt-3 grid sm:grid-cols-2 gap-3">
+  1002→            {offer && (
+  1003→              <div className="p-3 rounded-md bg-blue-50 dark:bg-blue-950/30 border border-blue-200">
+  1004→                <div className="text-xs text-blue-700 dark:text-blue-300 uppercase tracking-wide font-semibold mb-1">Offer Used</div>
+  1005→                <div className="text-sm text-blue-900 dark:text-blue-100">{offer}</div>
+  1006→              </div>
+  1007→            )}
+  1008→            {vocabUsed && (
+  1009→              <div className="p-3 rounded-md bg-purple-50 dark:bg-purple-950/30 border border-purple-200">
+  1010→                <div className="text-xs text-purple-700 dark:text-purple-300 uppercase tracking-wide font-semibold mb-1">Vocabulary Mirrored</div>
+  1011→                <div className="text-sm text-purple-900 dark:text-purple-100" dir={isArabic ? "rtl" : "ltr"}>{vocabUsed}</div>
+  1012→              </div>
+  1013→            )}
+  1014→          </div>
+  1015→
+  1016→          {/* Factuality check */}
+  1017→          {factuality && (
+  1018→            <div className={`mt-4 p-3 rounded-md border ${allTraced === "yes" ? "bg-green-50 dark:bg-green-950/30 border-green-300" : "bg-red-50 dark:bg-red-950/30 border-red-300"}`}>
+  1019→              <div className={`text-xs uppercase tracking-wide font-semibold mb-2 ${allTraced === "yes" ? "text-green-700 dark:text-green-300" : "text-red-700 dark:text-red-300"}`}>
+  1020→                Factuality Check · {allTraced === "yes" ? "✓ All claims traced" : "✗ FABRICATED CLAIMS DETECTED"}
+  1021→              </div>
+  1022→              {claimsWithSources.length > 0 && (
+  1023→                <div className="space-y-2">
+  1024→                  {claimsWithSources.map((c, i) => (
+  1025→                    <div key={i} className="text-xs">
+  1026→                      <div className="font-medium text-foreground">"{c.claim}"</div>
+  1027→                      <div className="text-muted-foreground ml-3 mt-0.5">
+  1028→                        source:{" "}
+  1029→                        <span className={`font-medium ${c.source === "NONE" || c.source_detail === "FABRICATED" ? "text-red-600 dark:text-red-400" : "text-green-700 dark:text-green-400"}`}>
+  1030→                          {c.source === "NONE" ? "FABRICATED" : c.source}
+  1031→                        </span>
+  1032→                        {c.source_detail && c.source !== "NONE" && c.source_detail !== "FABRICATED" && <> — {c.source_detail.slice(0, 120)}</>}
+  1033→                      </div>
+  1034→                    </div>
+  1035→                  ))}
+  1036→                </div>
+  1037→              )}
+  1038→              {fabricatedClaims.length > 0 && (
+  1039→                <Alert variant="destructive" className="mt-2">
+  1040→                  <AlertTriangle className="w-4 h-4" />
+  1041→                  <AlertTitle>Fabricated claims — DO NOT SEND</AlertTitle>
+  1042→                  <AlertDescription>
+  1043→                    <ul className="list-disc list-inside mt-1 text-xs">
+  1044→                      {fabricatedClaims.map((c, i) => <li key={i}>{c}</li>)}
+  1045→                    </ul>
+  1046→                  </AlertDescription>
+  1047→                </Alert>
+  1048→              )}
+  1049→            </div>
+  1050→          )}
+  1051→
+  1052→          {/* Warnings */}
+  1053→          {warnings.length > 0 && (
+  1054→            <Alert className="mt-4 border-amber-300 bg-amber-50 dark:bg-amber-950/20">
+  1055→              <AlertTriangle className="w-4 h-4 text-amber-600" />
+  1056→              <AlertTitle className="text-amber-900 dark:text-amber-200">Warnings — read before sending</AlertTitle>
+  1057→              <AlertDescription className="text-amber-900 dark:text-amber-200">
+  1058→                <ul className="list-disc list-inside mt-1 space-y-1 text-sm">
+  1059→                  {warnings.map((w, i) => <li key={i}>{w}</li>)}
+  1060→                </ul>
+  1061→              </AlertDescription>
+  1062→            </Alert>
+  1063→          )}
+  1064→        </CardContent>
+  1065→      </Card>
+  1066→
+  1067→      {/* Alternative opener */}
+  1068→      {alt && (
+  1069→        <Card>
+  1070→          <CardHeader>
+  1071→            <div className="flex items-center justify-between flex-wrap gap-3">
+  1072→              <div>
+  1073→                <CardTitle className="text-base">Alternative Opener (A/B test)</CardTitle>
+  1074→                <CardDescription>A second version with a different hook or angle.</CardDescription>
+  1075→              </div>
+  1076→              <CopyButton text={alt} label="Copy alternative" small />
+  1077→            </div>
+  1078→          </CardHeader>
+  1079→          <CardContent>
+  1080→            <div
+  1081→              className="bg-muted/50 border rounded-md p-4 text-sm leading-relaxed whitespace-pre-wrap"
+  1082→              dir={isArabic ? "rtl" : "ltr"}
+  1083→              style={{ fontFamily: isArabic ? "'Noto Sans Arabic', 'Segoe UI', system-ui, sans-serif" : "inherit" }}
+  1084→            >
+  1085→              {alt}
+  1086→            </div>
+  1087→          </CardContent>
+  1088→        </Card>
+  1089→      )}
+  1090→
+  1091→      {/* Chain summary */}
+  1092→      <Card>
+  1093→        <CardHeader>
+  1094→          <CardTitle className="text-base">Chain Summary</CardTitle>
+  1095→        </CardHeader>
+  1096→        <CardContent>
+  1097→          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+  1098→            <SummaryItem label="Culture" value={chainSummary.culture} />
+  1099→            <SummaryItem
+  1100→              label="DiSC"
+  1101→              value={chainSummary.disc ? `${chainSummary.disc.primary_dimension} (${chainSummary.disc.disc_style})` : undefined}
+  1102→            />
+  1103→            <SummaryItem label="Status drive" value={chainSummary.drive} />
+  1104→            <SummaryItem label="Dominant law" value={chainSummary.law} />
+  1105→            <SummaryItem label="Persuasion lever" value={chainSummary.lever?.primary_lever} />
+  1106→            <SummaryItem
+  1107→              label="Social proof available"
+  1108→              value={chainSummary.lever?.social_proof_available}
+  1109→            />
+  1110→          </div>
+  1111→        </CardContent>
+  1112→      </Card>
+  1113→
+  1114→      {/* Step-by-step outputs */}
+  1115→      <Card>
+  1116→        <CardHeader>
+  1117→          <CardTitle className="text-base">Step-by-step Outputs</CardTitle>
+  1118→          <CardDescription>Inspect each step's full JSON output for debugging.</CardDescription>
+  1119→        </CardHeader>
+  1120→        <CardContent>
+  1121→          <Accordion type="multiple" className="w-full">
+  1122→            {STEP_ORDER.map((step) => {
+  1123→              const state = steps[step];
+  1124→              if (state.status !== "done" || !state.output) return null;
+  1125→              return (
+  1126→                <AccordionItem key={step} value={step}>
+  1127→                  <AccordionTrigger className="text-sm">
+  1128→                    <div className="flex items-center gap-3">
+  1129→                      <span className="font-medium">{STEP_LABELS[step]}</span>
+  1130→                      {state.duration_ms && <span className="text-xs text-muted-foreground">{(state.duration_ms / 1000).toFixed(1)}s</span>}
+  1131→                    </div>
+  1132→                  </AccordionTrigger>
+  1133→                  <AccordionContent>
+  1134→                    <pre className="text-xs bg-muted/50 p-3 rounded-md overflow-x-auto max-h-96">
+  1135→                      {JSON.stringify(state.output, null, 2)}
+  1136→                    </pre>
+  1137→                  </AccordionContent>
+  1138→                </AccordionItem>
+  1139→              );
+  1140→            })}
+  1141→          </Accordion>
+  1142→        </CardContent>
+  1143→      </Card>
+  1144→    </>
+  1145→  );
+  1146→}
+  1147→
+  1148→// ---------------------------------------------------------------------------
+  1149→// Prospect Audit tab
+  1150→// ---------------------------------------------------------------------------
+  1151→
+  1152→function ProspectAudit() {
+  1153→  const [images, setImages] = useState<UploadedImage[]>([]);
+  1154→  const [isRunning, setIsRunning] = useState(false);
+  1155→  const [audit, setAudit] = useState<Record<string, unknown> | null>(null);
+  1156→
+  1157→  const runAudit = useCallback(async () => {
+  1158→    if (images.length === 0) {
+  1159→      toast.error("Upload at least one screenshot of the prospect's posts");
+  1160→      return;
+  1161→    }
+  1162→    setIsRunning(true);
+  1163→    try {
+  1164→      const res = await fetch("/api/prospect-content-audit", {
+  1165→        method: "POST",
+  1166→        headers: { "Content-Type": "application/json" },
+  1167→        body: JSON.stringify({
+  1168→          images: images.map((img) => ({ dataUrl: img.dataUrl, name: img.name })),
+  1169→        }),
+  1170→      });
+  1171→      if (!res.ok) {
+  1172→        const err = await res.json().catch(() => ({ error: "Failed" }));
+  1173→        throw new Error(err.error ?? `HTTP ${res.status}`);
+  1174→      }
+  1175→      const data = await res.json();
+  1176→      setAudit(data.audit);
+  1177→      toast.success(`Audit complete — ${data.images_analyzed} images analyzed`);
+  1178→    } catch (err) {
+  1179→      toast.error(`Audit failed: ${err instanceof Error ? err.message : "unknown"}`);
+  1180→    } finally {
+  1181→      setIsRunning(false);
+  1182→    }
+  1183→  }, [images]);
+  1184→
+  1185→  const reset = useCallback(() => {
+  1186→    setImages([]);
+  1187→    setAudit(null);
+  1188→  }, []);
+  1189→
+  1190→  return (
+  1191→    <div className="space-y-6">
+  1192→      <div className="max-w-3xl">
+  1193→        <h2 className="text-3xl font-bold tracking-tight mb-2">Prospect Content Audit</h2>
+  1194→        <p className="text-muted-foreground">
+  1195→          Upload screenshots of a prospect's social media posts. The VLM analyzes their content strategy,
+  1196→          brand voice, engagement patterns, and gaps — then recommends whether and how to pitch them.
+  1197→        </p>
+  1198→      </div>
+  1199→
+  1200→      <Card>
+  1201→        <CardHeader>
+  1202→          <CardTitle className="flex items-center gap-2">
+  1203→            <ImageIcon className="w-5 h-5" />
+  1204→            Upload Prospect's Posts
+  1205→          </CardTitle>
+  1206→          <CardDescription>
+  1207→            Screenshot their main feed, individual posts, comments, Stories — anything that shows their content strategy.
+  1208→            3-8 screenshots gives the best analysis.
+  1209→          </CardDescription>
+  1210→        </CardHeader>
+  1211→        <CardContent className="space-y-4">
+  1212→          <ImageUploader images={images} onChange={setImages} maxImages={12} disabled={isRunning} />
+  1213→
+  1214→          <div className="flex items-center gap-3">
+  1215→            <Button
+  1216→              onClick={runAudit}
+  1217→              disabled={isRunning || images.length === 0}
+  1218→              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+  1219→              size="lg"
+  1220→            >
+  1221→              {isRunning ? (
+  1222→                <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Analyzing content...</>
+  1223→              ) : (
+  1224→                <><Scan className="w-4 h-4 mr-2" /> Run Content Audit</>
+  1225→              )}
+  1226→            </Button>
+  1227→            <Button variant="ghost" size="sm" onClick={reset} disabled={isRunning}>
+  1228→              <RotateCcw className="w-4 h-4 mr-1.5" /> Reset
+  1229→            </Button>
+  1230→          </div>
+  1231→        </CardContent>
+  1232→      </Card>
+  1233→
+  1234→      {audit && <AuditReport audit={audit} />}
+  1235→    </div>
+  1236→  );
+  1237→}
+  1238→
+  1239→// ---------------------------------------------------------------------------
+  1240→// Audit Report Display
+  1241→// ---------------------------------------------------------------------------
+  1242→
+  1243→function AuditReport({ audit }: { audit: Record<string, unknown> }) {
+  1244→  const confidence = audit.audit_confidence as string | undefined;
+  1245→  const themes = (audit.content_themes ?? []) as Array<Record<string, string>>;
+  1246→  const visualStyle = audit.visual_style as Record<string, string> | undefined;
+  1247→  const postingStrategy = audit.posting_strategy as Record<string, unknown> | undefined;
+  1248→  const engagement = audit.engagement_patterns as Record<string, string> | undefined;
+  1249→  const brandVoice = audit.brand_voice as Record<string, unknown> | undefined;
+  1250→  const gaps = audit.gaps_and_opportunities as Record<string, string[]> | undefined;
+  1251→  const recommendation = audit.sales_recommendation as Record<string, string> | undefined;
+  1252→  const couldNotDetermine = (audit.what_i_could_not_determine ?? []) as string[];
+  1253→
+  1254→  return (
+  1255→    <div className="space-y-4">
+  1256→      {/* Sales recommendation — most important, show first */}
+  1257→      {recommendation && (
+  1258→        <Card className="border-emerald-500 border-2 bg-emerald-50/30 dark:bg-emerald-950/10">
+  1259→          <CardHeader>
+  1260→            <CardTitle className="flex items-center gap-2">
+  1261→              <Sparkles className="w-5 h-5 text-emerald-600" />
+  1262→              Sales Recommendation
+  1263→            </CardTitle>
+  1264→            {confidence && <Badge variant="outline" className="text-xs">audit confidence: {confidence}</Badge>}
+  1265→          </CardHeader>
+  1266→          <CardContent className="space-y-3">
+  1267→            <div className="grid sm:grid-cols-2 gap-3">
+  1268→              <div className="p-3 rounded-md bg-white dark:bg-zinc-900 border">
+  1269→                <div className="text-xs text-muted-foreground uppercase tracking-wide">Should pitch?</div>
+  1270→                <div className="text-lg font-bold mt-1">{recommendation.should_pitch}</div>
+  1271→              </div>
+  1272→              <div className="p-3 rounded-md bg-white dark:bg-zinc-900 border">
+  1273→                <div className="text-xs text-muted-foreground uppercase tracking-wide">Rough DiSC style</div>
+  1274→                <div className="text-lg font-bold mt-1">{recommendation.rough_disc_style ?? "?"}</div>
+  1275→              </div>
+  1276→            </div>
+  1277→            {recommendation.why && (
+  1278→              <div><span className="text-sm font-medium">Why: </span><span className="text-sm">{recommendation.why}</span></div>
+  1279→            )}
+  1280→            {recommendation.pitch_angle && (
+  1281→              <div><span className="text-sm font-medium">Pitch angle: </span><span className="text-sm">{recommendation.pitch_angle}</span></div>
+  1282→            )}
+  1283→            {recommendation.likely_pain_point && (
+  1284→              <div><span className="text-sm font-medium">Likely pain: </span><span className="text-sm">{recommendation.likely_pain_point}</span></div>
+  1285→            )}
+  1286→            {recommendation.recommended_register && (
+  1287→              <div><span className="text-sm font-medium">Recommended register: </span><span className="text-sm">{recommendation.recommended_register}</span></div>
+  1288→            )}
+  1289→          </CardContent>
+  1290→        </Card>
+  1291→      )}
+  1292→
+  1293→      {/* Gaps and opportunities */}
+  1294→      {gaps && (
+  1295→        <Card>
+  1296→          <CardHeader><CardTitle className="text-base">Gaps & Opportunities</CardTitle></CardHeader>
+  1297→          <CardContent className="space-y-4">
+  1298→            {gaps.missing_content?.length > 0 && (
+  1299→              <div>
+  1300→                <div className="text-sm font-medium mb-1">Missing content:</div>
+  1301→                <ul className="list-disc list-inside text-sm text-muted-foreground space-y-0.5">
+  1302→                  {gaps.missing_content.map((g, i) => <li key={i}>{g}</li>)}
+  1303→                </ul>
+  1304→              </div>
+  1305→            )}
+  1306→            {gaps.operational_pain_points?.length > 0 && (
+  1307→              <div>
+  1308→                <div className="text-sm font-medium mb-1">Operational pain points:</div>
+  1309→                <ul className="list-disc list-inside text-sm text-muted-foreground space-y-0.5">
+  1310→                  {gaps.operational_pain_points.map((g, i) => <li key={i}>{g}</li>)}
+  1311→                </ul>
+  1312→              </div>
+  1313→            )}
+  1314→            {gaps.digital_presence_gaps?.length > 0 && (
+  1315→              <div>
+  1316→                <div className="text-sm font-medium mb-1">Digital presence gaps:</div>
+  1317→                <ul className="list-disc list-inside text-sm text-muted-foreground space-y-0.5">
+  1318→                  {gaps.digital_presence_gaps.map((g, i) => <li key={i}>{g}</li>)}
+  1319→                </ul>
+  1320→              </div>
+  1321→            )}
+  1322→            {gaps.services_to_pitch?.length > 0 && (
+  1323→              <div className="p-3 rounded-md bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200">
+  1324→                <div className="text-sm font-medium mb-1 text-emerald-900 dark:text-emerald-100">Services to pitch:</div>
+  1325→                <ul className="list-disc list-inside text-sm text-emerald-800 dark:text-emerald-200 space-y-0.5">
+  1326→                  {gaps.services_to_pitch.map((g, i) => <li key={i}>{g}</li>)}
+  1327→                </ul>
+  1328→              </div>
+  1329→            )}
+  1330→          </CardContent>
+  1331→        </Card>
+  1332→      )}
+  1333→
+  1334→      {/* Content themes */}
+  1335→      {themes.length > 0 && (
+  1336→        <Card>
+  1337→          <CardHeader><CardTitle className="text-base">Content Themes</CardTitle></CardHeader>
+  1338→          <CardContent className="space-y-2">
+  1339→            {themes.map((t, i) => (
+  1340→              <div key={i} className="flex items-start gap-3 p-2 rounded-md border">
+  1341→                <Badge variant="secondary" className="text-xs">{t.estimated_percentage}</Badge>
+  1342→                <div className="flex-1">
+  1343→                  <div className="text-sm font-medium">{t.theme}</div>
+  1344→                  {t.example_post && <div className="text-xs text-muted-foreground mt-0.5">{t.example_post}</div>}
+  1345→                </div>
+  1346→              </div>
+  1347→            ))}
+  1348→          </CardContent>
+  1349→        </Card>
+  1350→      )}
+  1351→
+  1352→      {/* Brand voice */}
+  1353→      {brandVoice && (
+  1354→        <Card>
+  1355→          <CardHeader><CardTitle className="text-base">Brand Voice</CardTitle></CardHeader>
+  1356→          <CardContent className="space-y-2 text-sm">
+  1357→            {brandVoice.tone && <div><span className="font-medium">Tone:</span> {String(brandVoice.tone)}</div>}
+  1358→            {brandVoice.language_register && <div><span className="font-medium">Language:</span> {String(brandVoice.language_register)}</div>}
+  1359→            {brandVoice.audience_address && <div><span className="font-medium">Audience address:</span> {String(brandVoice.audience_address)}</div>}
+  1360→            {Array.isArray(brandVoice.signature_phrases) && brandVoice.signature_phrases.length > 0 && (
+  1361→              <div>
+  1362→                <span className="font-medium">Signature phrases:</span>
+  1363→                <div className="flex flex-wrap gap-1 mt-1">
+  1364→                  {brandVoice.signature_phrases.map((p, i) => (
+  1365→                    <Badge key={i} variant="outline" className="text-xs">{String(p)}</Badge>
+  1366→                  ))}
+  1367→                </div>
+  1368→              </div>
+  1369→            )}
+  1370→          </CardContent>
+  1371→        </Card>
+  1372→      )}
+  1373→
+  1374→      {/* Visual style + posting strategy + engagement */}
+  1375→      <div className="grid md:grid-cols-3 gap-4">
+  1376→        {visualStyle && (
+  1377→          <Card>
+  1378→            <CardHeader><CardTitle className="text-sm">Visual Style</CardTitle></CardHeader>
+  1379→            <CardContent className="text-xs space-y-1">
+  1380→              <div>Polish: {visualStyle.polish_level}</div>
+  1381→              <div>Consistency: {visualStyle.consistency}</div>
+  1382→              {visualStyle.colors_or_design_notes && <div className="text-muted-foreground mt-1">{visualStyle.colors_or_design_notes}</div>}
+  1383→            </CardContent>
+  1384→          </Card>
+  1385→        )}
+  1386→        {postingStrategy && (
+  1387→          <Card>
+  1388→            <CardHeader><CardTitle className="text-sm">Posting Strategy</CardTitle></CardHeader>
+  1389→            <CardContent className="text-xs space-y-1">
+  1390→              <div>Pattern: {String(postingStrategy.pattern ?? "?")}</div>
+  1391→              {Array.isArray(postingStrategy.formats_used) && (
+  1392→                <div>Formats: {postingStrategy.formats_used.join(", ")}</div>
+  1393→              )}
+  1394→            </CardContent>
+  1395→          </Card>
+  1396→        )}
+  1397→        {engagement && (
+  1398→          <Card>
+  1399→            <CardHeader><CardTitle className="text-sm">Engagement</CardTitle></CardHeader>
+  1400→            <CardContent className="text-xs space-y-1">
+  1401→              <div>Comment volume: {engagement.comment_volume}</div>
+  1402→              <div>Negative comments: {engagement.negative_comments_visible}</div>
+  1403→              {engagement.reply_behavior && <div className="text-muted-foreground mt-1">{engagement.reply_behavior}</div>}
+  1404→            </CardContent>
+  1405→          </Card>
+  1406→        )}
+  1407→      </div>
+  1408→
+  1409→      {/* What couldn't be determined */}
+  1410→      {couldNotDetermine.length > 0 && (
+  1411→        <Card>
+  1412→          <CardHeader><CardTitle className="text-sm">What the VLM Could Not Determine</CardTitle></CardHeader>
+  1413→          <CardContent>
+  1414→            <ul className="list-disc list-inside text-xs text-muted-foreground space-y-0.5">
+  1415→              {couldNotDetermine.map((c, i) => <li key={i}>{c}</li>)}
+  1416→            </ul>
+  1417→          </CardContent>
+  1418→        </Card>
+  1419→      )}
+  1420→
+  1421→      {/* Full JSON for debugging */}
+  1422→      <Accordion type="single" collapsible>
+  1423→        <AccordionItem value="full">
+  1424→          <AccordionTrigger className="text-sm">Full audit JSON (debugging)</AccordionTrigger>
+  1425→          <AccordionContent>
+  1426→            <pre className="text-xs bg-muted/50 p-3 rounded-md overflow-x-auto max-h-96">
+  1427→              {JSON.stringify(audit, null, 2)}
+  1428→            </pre>
+  1429→          </AccordionContent>
+  1430→        </AccordionItem>
+  1431→      </Accordion>
+  1432→    </div>
+  1433→  );
+  1434→}
+  1435→
+  1436→// ---------------------------------------------------------------------------
+  1437→// Shared small components
+  1438→// ---------------------------------------------------------------------------
+  1439→
+  1440→function SummaryItem({ label, value }: { label: string; value?: string }) {
+  1441→  return (
+  1442→    <div className="p-3 rounded-md border bg-muted/30">
+  1443→      <div className="text-xs text-muted-foreground uppercase tracking-wide">{label}</div>
+  1444→      <div className="text-sm font-medium mt-1">{value ?? "—"}</div>
+  1445→    </div>
+  1446→  );
+  1447→}
+  1448→
+  1449→function CopyButton({ text, label, small }: { text: string; label: string; small?: boolean }) {
+  1450→  const [copied, setCopied] = useState(false);
+  1451→  const handleCopy = useCallback(async () => {
+  1452→    try {
+  1453→      await navigator.clipboard.writeText(text);
+  1454→      setCopied(true);
+  1455→      toast.success("Copied to clipboard");
+  1456→      setTimeout(() => setCopied(false), 2000);
+  1457→    } catch {
+  1458→      toast.error("Failed to copy");
+  1459→    }
+  1460→  }, [text]);
+  1461→  return (
+  1462→    <Button variant="outline" size={small ? "sm" : "default"} onClick={handleCopy}>
+  1463→      {copied ? <><Check className="w-4 h-4 mr-1.5" />Copied</> : <><Copy className="w-4 h-4 mr-1.5" />{label}</>}
+  1464→    </Button>
+  1465→  );
+  1466→}
+  1467→

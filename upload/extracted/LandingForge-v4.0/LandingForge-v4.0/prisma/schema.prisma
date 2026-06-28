@@ -1,0 +1,79 @@
+// LandingForge v4.0 — Prisma schema
+// A multi-page, multi-site no-code landing page builder
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Site {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  themeId     String?
+  theme       Theme?   @relation(fields: [themeId], references: [id])
+  pages       Page[]
+  events      AnalyticsEvent[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Page {
+  id          String   @id @default(cuid())
+  siteId      String
+  site        Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  name        String
+  slug        String
+  path        String   @default("/")
+  isHome      Boolean  @default(false)
+  seo         String?  // JSON: { title, description, ogImage }
+  sections    String   @default("[]") // JSON array of Section
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([siteId, slug])
+}
+
+model Theme {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  // JSON: { primary, accent, bg, fg, muted, font, radius, ... }
+  tokens      String
+  isBuiltin   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Template {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  category    String   // "saas" | "portfolio" | "agency" | "ecommerce" | "startup"
+  description String?
+  thumbnail   String?
+  // JSON: full site blueprint — pages, sections, theme tokens
+  blueprint   String
+  isBuiltin   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  siteId    String
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  type      String   // "view" | "click" | "convert" | "bounce" | "export"
+  path      String?
+  sectionId String?
+  meta      String?  // JSON
+  createdAt DateTime @default(now())
+
+  @@index([siteId, createdAt])
+  @@index([siteId, type])
+}

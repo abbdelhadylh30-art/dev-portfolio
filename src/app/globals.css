@@ -1,0 +1,190 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* Dark Vercel-style portfolio theme — matches reference (bg #08080C, text #FAF8F4) */
+:root {
+  --radius: 0.625rem;
+
+  /* The reference uses a near-black background with warm cream text */
+  --background: #08080c;
+  --foreground: #faf8f4;
+
+  --card: #0e0e14;
+  --card-foreground: #faf8f4;
+
+  --popover: #0e0e14;
+  --popover-foreground: #faf8f4;
+
+  /* Primary = warm cream — used for solid CTAs against dark bg */
+  --primary: #faf8f4;
+  --primary-foreground: #08080c;
+
+  /* Secondary = elevated panel */
+  --secondary: #14141c;
+  --secondary-foreground: #faf8f4;
+
+  --muted: #14141c;
+  --muted-foreground: #8a8a96;
+
+  /* Accent = warm cream tint for subtle highlights */
+  --accent: #1a1a23;
+  --accent-foreground: #faf8f4;
+
+  --destructive: #e40014;
+
+  /* Borders are very subtle warm white */
+  --border: rgba(250, 248, 244, 0.08);
+  --input: rgba(250, 248, 244, 0.12);
+  --ring: rgba(250, 248, 244, 0.25);
+
+  /* Chart palette — warm/cool mix for capabilities bars */
+  --chart-1: #faf8f4;
+  --chart-2: #a1a1aa;
+  --chart-3: #5c8def;
+  --chart-4: #f59e0b;
+  --chart-5: #10b981;
+
+  --sidebar: #0e0e14;
+  --sidebar-foreground: #faf8f4;
+  --sidebar-primary: #faf8f4;
+  --sidebar-primary-foreground: #08080c;
+  --sidebar-accent: #1a1a23;
+  --sidebar-accent-foreground: #faf8f4;
+  --sidebar-border: rgba(250, 248, 244, 0.08);
+  --sidebar-ring: rgba(250, 248, 244, 0.25);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom scrollbar — slim, matches dark theme */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #08080c;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(250, 248, 244, 0.12);
+    border-radius: 999px;
+    border: 2px solid #08080c;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(250, 248, 244, 0.25);
+  }
+
+  /* Selection */
+  ::selection {
+    background: rgba(250, 248, 244, 0.15);
+    color: #faf8f4;
+  }
+}
+
+@layer utilities {
+  /* Subtle grain texture overlay for that "expensive" dark feel */
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  /* Reveal-on-scroll helper (used as fallback if JS disabled) */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Section heading underline accent */
+  .section-marker {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #faf8f4;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+
+  /* Marquee animation for tech ticker */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+
+  /* Soft pulse for status dot */
+  @keyframes soft-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+  .animate-soft-pulse {
+    animation: soft-pulse 2.2s ease-in-out infinite;
+  }
+}
