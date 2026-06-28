@@ -16,10 +16,10 @@ export const profile = {
   location: "Your City, Country",
   availability: "Open to freelance & full-time roles",
   email: "you@example.com",
-  phone: "",
-  linkedin: "",
-  github: "",
-} as const;
+  phone: "" as string,
+  linkedin: "" as string,
+  github: "" as string,
+};
 
 export const philosophy = [
   {
