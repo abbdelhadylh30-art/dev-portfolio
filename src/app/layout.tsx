@@ -14,11 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mohamed Medhat Ahmed — Full-Stack Developer & Product Engineer",
+  title: "Full-Stack Developer & Product Engineer",
   description:
-    "Portfolio of Mohamed Medhat Ahmed — a full-stack developer building developer tools, landing page studios, and AI-powered web apps with Next.js, React, and TypeScript.",
+    "Portfolio of a full-stack developer building developer tools, landing page studios, and AI-powered web apps with Next.js, React, and TypeScript.",
   keywords: [
-    "Mohamed Medhat Ahmed",
     "Full-Stack Developer",
     "Next.js",
     "React",
@@ -27,17 +26,17 @@ export const metadata: Metadata = {
     "Developer Tools",
     "Portfolio",
   ],
-  authors: [{ name: "Mohamed Medhat Ahmed" }],
+  authors: [{ name: "Portfolio" }],
   openGraph: {
-    title: "Mohamed Medhat Ahmed — Full-Stack Developer & Product Engineer",
+    title: "Full-Stack Developer & Product Engineer",
     description:
-      "Builder of Forge Studio, PixelForge, LandingForge, and Lead Profiler. Next.js 16, React 19, TypeScript.",
+      "Builder of Forge Studio, PixelForge, LandingForge, Lead Profiler, and client portfolios. Next.js 16, React 19, TypeScript.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mohamed Medhat Ahmed — Full-Stack Developer",
-    description: "Builder of Forge Studio, PixelForge, LandingForge, and Lead Profiler.",
+    title: "Full-Stack Developer & Product Engineer",
+    description: "Builder of Forge Studio, PixelForge, LandingForge, and client portfolios.",
   },
 };
 

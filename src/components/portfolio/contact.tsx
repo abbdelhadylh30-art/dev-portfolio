@@ -12,24 +12,24 @@ const channels = [
     href: `mailto:${profile.email}`,
   },
   {
+    icon: Phone,
+    label: "Phone",
+    value: profile.phone,
+    href: profile.phone ? `tel:${profile.phone.replace(/\s/g, "")}` : "",
+  },
+  {
     icon: Linkedin,
     label: "LinkedIn",
-    value: "Mohamed Medhat Ahmed",
+    value: "View profile",
     href: profile.linkedin,
   },
   {
     icon: Github,
     label: "GitHub",
-    value: "@mohamed-medhat",
+    value: "View profile",
     href: profile.github,
   },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: profile.phone,
-    href: `tel:${profile.phone.replace(/\s/g, "")}`,
-  },
-];
+].filter((ch) => ch.href);
 
 export function Contact() {
   return (

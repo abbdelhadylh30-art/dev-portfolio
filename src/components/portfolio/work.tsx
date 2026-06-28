@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { projects, type Project } from "@/lib/portfolio-data";
 import { SectionHeader } from "./about";
 
@@ -13,7 +13,7 @@ export function Work() {
         <SectionHeader
           index="02"
           eyebrow="Selected work"
-          title="Four tools. One studio."
+          title="Five projects. One stack."
         />
 
         <motion.p
@@ -107,6 +107,24 @@ function CaseStudy({ project, flip }: { project: Project; flip: boolean }) {
             ))}
           </div>
         </div>
+
+        {/* Live links */}
+        {project.links && project.links.length > 0 && (
+          <div className="mt-6 flex flex-wrap gap-2">
+            {project.links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-1.5 rounded-full bg-primary text-primary-foreground px-4 py-2 text-xs font-medium hover:bg-primary/90 transition-colors"
+              >
+                {link.label}
+                <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Right column — screenshots + narrative */}

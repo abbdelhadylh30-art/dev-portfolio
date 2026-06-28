@@ -112,7 +112,7 @@ export function Hero() {
           className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-px bg-border/60 border border-border rounded-2xl overflow-hidden"
         >
           {[
-            { label: "Shipped projects", value: "4" },
+            { label: "Shipped projects", value: "5" },
             { label: "Audit checks", value: "30+" },
             { label: "Quick-fixes", value: "38" },
             { label: "Section types", value: "12" },

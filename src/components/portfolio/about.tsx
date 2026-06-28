@@ -6,10 +6,10 @@ import { profile, philosophy } from "@/lib/portfolio-data";
 
 const contactItems = [
   { icon: Mail, label: "Email", value: profile.email, href: `mailto:${profile.email}` },
-  { icon: Phone, label: "Phone", value: profile.phone, href: `tel:${profile.phone.replace(/\s/g, "")}` },
-  { icon: Linkedin, label: "LinkedIn", value: "Mohamed Medhat Ahmed", href: profile.linkedin },
-  { icon: Github, label: "GitHub", value: "@mohamed-medhat", href: profile.github },
-];
+  { icon: Phone, label: "Phone", value: profile.phone, href: profile.phone ? `tel:${profile.phone.replace(/\s/g, "")}` : "" },
+  { icon: Linkedin, label: "LinkedIn", value: "View profile", href: profile.linkedin },
+  { icon: Github, label: "GitHub", value: "View profile", href: profile.github },
+].filter((item) => item.href);
 
 export function About() {
   return (
@@ -35,8 +35,9 @@ export function About() {
 
             <p className="mt-5 text-base text-muted-foreground leading-relaxed">
               My instinct is to build tools that compound. PixelForge begot LandingForge, which begot Forge
-              Studio. Each project took a previous one as raw material. That&apos;s the only way I know to
-              move fast without leaving wreckage behind.
+              Studio. Each project took a previous one as raw material. I also take on selective client
+              work — like the marketing portfolio at the bottom of this page — when the brief is interesting
+              enough to interrupt the mainline.
             </p>
 
             {/* Contact list */}

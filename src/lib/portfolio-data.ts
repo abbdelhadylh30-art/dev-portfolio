@@ -4,16 +4,21 @@
  */
 
 export const profile = {
-  name: "Mohamed Medhat Ahmed",
-  initials: "MM",
+  // ──────────────────────────────────────────────────────────────────
+  // TODO: replace these placeholders with your own identity & links.
+  //       This file is the single source of truth — edit it once and
+  //       every section (nav, hero, about, contact) updates.
+  // ──────────────────────────────────────────────────────────────────
+  name: "Your Name",
+  initials: "YN",
   role: "Full-Stack Developer & Product Engineer",
   tagline: "I build developer tools, landing page studios, and AI-powered web apps end-to-end — from Prisma schema to the last pixel.",
-  location: "Cairo, Egypt",
+  location: "Your City, Country",
   availability: "Open to freelance & full-time roles",
-  email: "Mohamed.ahmed9009mm@gmail.com",
-  phone: "+20 112 535 3053",
-  linkedin: "https://www.linkedin.com/in/mohamed-medhat-ahmed",
-  github: "https://github.com/mohamed-medhat",
+  email: "you@example.com",
+  phone: "",
+  linkedin: "",
+  github: "",
 } as const;
 
 export const philosophy = [
@@ -216,6 +221,53 @@ export const projects: Project[] = [
       { label: "Latency", value: "Streamed" },
     ],
     screenshots: [],
+  },
+  {
+    index: "05",
+    name: "Mohamed Medhat — Portfolio",
+    category: "CLIENT PROJECT · MARKETING PORTFOLIO",
+    year: "2025",
+    status: "live",
+    summary:
+      "A dark, editorial portfolio for a marketing & business development specialist. Six sections — About, Experience, Work, Skills, Academic, Contact — built around the client's existing case studies and a strict Vercel-style aesthetic.",
+    problem:
+      "Mohamed is a marketer, not a developer. He had the case studies, the experience history, and the skills — but no place to point recruiters or potential clients that felt as premium as the brands he'd audited. He needed a portfolio that matched the editorial quality of his brand audits (Pablo & Abdo, Maine, Pizza Station).",
+    approach:
+      "I treated the portfolio itself as a brand exercise: near-black background, warm cream text, tight type hierarchy, and a sticky section nav that lets the visitor jump anywhere in one click. Every section follows the same rhythm — index number, eyebrow, headline — so the page reads like a magazine spread. The Work section uses hover-reveal cards with the case-study tags the client already used in his decks (Brand Audit, Competitive Analysis, Campaign Design).",
+    outcome:
+      "A single-page Next.js app deployed to Vercel. The client's case studies (Pablo & Abdo, The Origin Story, Maine, Pizza Station, AI Research) render as full-bleed cards with category labels. The Skills section is split into 5 categories — Marketing & Campaigns, Digital & Paid Media, Business Development, Analytics & Tools, Languages — matching the client's mental model. Lighthouse clean, mobile-perfect, deployable to any static host.",
+    features: [
+      "Single-page scroll with sticky section nav (About / Experience / Work / Skills / Contact)",
+      "Dark editorial aesthetic — #08080C bg, #FAF8F4 text, Geist font",
+      "Hero with large name + dual CTAs (View my work / Get in touch)",
+      "About section with contact card + 4 philosophy statements",
+      "Experience timeline with 5 roles (CRM, Sales & Marketing, 3 internships)",
+      "Selected Work — 5 case studies with hover-reveal detail cards",
+      "Skills dashboard — 5 categorized columns",
+      "Academic background — Dual Degree (Marketing & International Business)",
+      "Contact section with email / LinkedIn / phone channels",
+      "Back-to-top button in footer",
+      "Responsive — mobile menu, single-column layouts at <768px",
+      "Deployed to Vercel with custom domain",
+    ],
+    stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Geist Font", "Vercel"],
+    metrics: [
+      { label: "Sections", value: "6" },
+      { label: "Case studies", value: "5" },
+      { label: "Skill categories", value: "5" },
+      { label: "Roles", value: "5" },
+    ],
+    screenshots: [
+      { src: "/projects/mohamed-medhat-portfolio/hero.png", caption: "Hero — large name, dual CTAs, sticky nav" },
+      { src: "/projects/mohamed-medhat-portfolio/about.png", caption: "About — contact card + 4 philosophy statements" },
+      { src: "/projects/mohamed-medhat-portfolio/experience.png", caption: "Experience — 5-role professional history" },
+      { src: "/projects/mohamed-medhat-portfolio/work.png", caption: "Selected Work — 5 case studies with hover-reveal" },
+      { src: "/projects/mohamed-medhat-portfolio/skills.png", caption: "Skills dashboard — 5 categorized columns" },
+      { src: "/projects/mohamed-medhat-portfolio/contact.png", caption: "Contact — email, LinkedIn, phone channels" },
+    ],
+    links: [
+      { label: "Live site", href: "https://portfolio-z258.vercel.app/" },
+    ],
   },
 ];
 
