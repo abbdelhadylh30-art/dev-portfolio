@@ -1,0 +1,460 @@
+{
+    "lead_observation": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "description": "Output of the analyze-lead-images route.",
+        "properties": {
+            "digital_presence_audit": {
+                "additionalProperties": false,
+                "description": "Audit of the bio / link-in-bio.",
+                "properties": {
+                    "bio_text": {
+                        "description": "Transcribed bio text.",
+                        "type": "string"
+                    },
+                    "follower_count": {
+                        "description": "Follower count if visible, else 'not visible'.",
+                        "type": "string"
+                    },
+                    "has_booking_or_payment_link": {
+                        "description": "Booking or payment link present?",
+                        "enum": [
+                            "yes",
+                            "no",
+                            "cannot_determine"
+                        ],
+                        "type": "string"
+                    },
+                    "has_google_reviews": {
+                        "description": "Google reviews visible?",
+                        "enum": [
+                            "yes",
+                            "no",
+                            "cannot_determine"
+                        ],
+                        "type": "string"
+                    },
+                    "has_website": {
+                        "description": "Bio link present?",
+                        "enum": [
+                            "yes",
+                            "no",
+                            "cannot_determine"
+                        ],
+                        "type": "string"
+                    },
+                    "primary_call_to_action": {
+                        "description": "Primary CTA in bio.",
+                        "enum": [
+                            "dm",
+                            "call",
+                            "link",
+                            "none",
+                            "cannot_determine"
+                        ],
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "has_website",
+                    "has_booking_or_payment_link",
+                    "has_google_reviews",
+                    "primary_call_to_action",
+                    "bio_text",
+                    "follower_count"
+                ],
+                "type": "object"
+            },
+            "extraction_confidence": {
+                "description": "Confidence level reported by the LLM.",
+                "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                ],
+                "type": "string"
+            },
+            "observation_notes": {
+                "additionalProperties": false,
+                "description": "Free-text observation notes per category.",
+                "properties": {
+                    "content_shape": {
+                        "description": "Types of posts, production quality, content mix.",
+                        "type": "string"
+                    },
+                    "engagement": {
+                        "description": "Comment patterns, reply behavior, visible complaints.",
+                        "type": "string"
+                    },
+                    "pace": {
+                        "description": "Visible posting frequency, reply speed, story frequency.",
+                        "type": "string"
+                    },
+                    "people_orientation": {
+                        "description": "Tone of captions and replies, visible warmth/formality.",
+                        "type": "string"
+                    },
+                    "pressure_tells": {
+                        "description": "Visible stress signals, rants, inconsistencies.",
+                        "type": "string"
+                    },
+                    "self_presentation": {
+                        "description": "Face visible? professional/casual? brand/personality?",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "pace",
+                    "people_orientation",
+                    "content_shape",
+                    "engagement",
+                    "self_presentation",
+                    "pressure_tells"
+                ],
+                "type": "object"
+            },
+            "screenshot_summary": {
+                "description": "One sentence per screenshot describing what it showed.",
+                "type": "string"
+            },
+            "what_i_could_not_determine": {
+                "description": "List of things the LLM couldn't see in the screenshots.",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            }
+        },
+        "required": [
+            "extraction_confidence",
+            "observation_notes",
+            "digital_presence_audit",
+            "screenshot_summary",
+            "what_i_could_not_determine"
+        ],
+        "title": "LeadObservation",
+        "type": "object"
+    },
+    "prospect_audit": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "description": "Output of the prospect-content-audit route.",
+        "properties": {
+            "audit_confidence": {
+                "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                ],
+                "type": "string"
+            },
+            "brand_voice": {
+                "additionalProperties": false,
+                "properties": {
+                    "audience_address": {
+                        "type": "string"
+                    },
+                    "language_register": {
+                        "type": "string"
+                    },
+                    "signature_phrases": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "tone": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "tone",
+                    "language_register",
+                    "signature_phrases",
+                    "audience_address"
+                ],
+                "type": "object"
+            },
+            "content_themes": {
+                "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "estimated_percentage": {
+                            "maximum": 100,
+                            "minimum": 0,
+                            "type": "integer"
+                        },
+                        "example_post": {
+                            "type": "string"
+                        },
+                        "theme": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "theme",
+                        "estimated_percentage",
+                        "example_post"
+                    ],
+                    "type": "object"
+                },
+                "type": "array"
+            },
+            "engagement_patterns": {
+                "additionalProperties": false,
+                "properties": {
+                    "comment_volume": {
+                        "enum": [
+                            "low",
+                            "medium",
+                            "high",
+                            "cannot_determine"
+                        ],
+                        "type": "string"
+                    },
+                    "negative_comments_visible": {
+                        "enum": [
+                            "yes",
+                            "no",
+                            "cannot_determine"
+                        ],
+                        "type": "string"
+                    },
+                    "reply_behavior": {
+                        "type": "string"
+                    },
+                    "user_generated_content": {
+                        "enum": [
+                            "yes",
+                            "no",
+                            "cannot_determine"
+                        ],
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "comment_volume",
+                    "reply_behavior",
+                    "negative_comments_visible",
+                    "user_generated_content"
+                ],
+                "type": "object"
+            },
+            "gaps_and_opportunities": {
+                "additionalProperties": false,
+                "properties": {
+                    "digital_presence_gaps": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "missing_content": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "operational_pain_points": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "services_to_pitch": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "missing_content",
+                    "operational_pain_points",
+                    "digital_presence_gaps",
+                    "services_to_pitch"
+                ],
+                "type": "object"
+            },
+            "posting_strategy": {
+                "additionalProperties": false,
+                "properties": {
+                    "formats_used": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "pattern": {
+                        "enum": [
+                            "consistent",
+                            "sporadic",
+                            "campaign-based"
+                        ],
+                        "type": "string"
+                    },
+                    "recurring_series": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "formats_used",
+                    "pattern",
+                    "recurring_series"
+                ],
+                "type": "object"
+            },
+            "sales_recommendation": {
+                "additionalProperties": false,
+                "properties": {
+                    "likely_pain_point": {
+                        "type": "string"
+                    },
+                    "pitch_angle": {
+                        "type": "string"
+                    },
+                    "recommended_register": {
+                        "type": "string"
+                    },
+                    "rough_disc_style": {
+                        "enum": [
+                            "D",
+                            "i",
+                            "S",
+                            "C",
+                            "Di",
+                            "iD",
+                            "iS",
+                            "Si",
+                            "SC",
+                            "CS",
+                            "DC",
+                            "CD",
+                            "unknown"
+                        ],
+                        "type": "string"
+                    },
+                    "should_pitch": {
+                        "enum": [
+                            "yes",
+                            "no",
+                            "maybe"
+                        ],
+                        "type": "string"
+                    },
+                    "why": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "should_pitch",
+                    "why",
+                    "pitch_angle",
+                    "likely_pain_point",
+                    "rough_disc_style",
+                    "recommended_register"
+                ],
+                "type": "object"
+            },
+            "visual_style": {
+                "additionalProperties": false,
+                "properties": {
+                    "colors_or_design_notes": {
+                        "type": "string"
+                    },
+                    "consistency": {
+                        "enum": [
+                            "consistent",
+                            "inconsistent"
+                        ],
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "polish_level": {
+                        "enum": [
+                            "polished",
+                            "semi-polished",
+                            "raw"
+                        ],
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "description",
+                    "polish_level",
+                    "consistency",
+                    "colors_or_design_notes"
+                ],
+                "type": "object"
+            },
+            "what_i_could_not_determine": {
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            }
+        },
+        "required": [
+            "audit_confidence",
+            "content_themes",
+            "visual_style",
+            "posting_strategy",
+            "engagement_patterns",
+            "brand_voice",
+            "gaps_and_opportunities",
+            "sales_recommendation",
+            "what_i_could_not_determine"
+        ],
+        "title": "ProspectAudit",
+        "type": "object"
+    },
+    "user_services": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "description": "Output of the read-portfolio route.",
+        "properties": {
+            "extraction_notes": {
+                "description": "One-sentence note on what was found.",
+                "type": "string"
+            },
+            "past_work_examples": {
+                "description": "Concrete, verifiable past work items.",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "primary": {
+                "description": "One sentence: what they sell.",
+                "type": "string"
+            },
+            "secondary": {
+                "description": "Secondary service line, if any.",
+                "type": "string"
+            },
+            "service_depth": {
+                "description": "What makes their work different.",
+                "type": "string"
+            },
+            "track_record": {
+                "description": "Years of experience, # clients, etc. — only if explicitly stated.",
+                "type": "string"
+            }
+        },
+        "required": [
+            "primary",
+            "secondary",
+            "past_work_examples",
+            "track_record",
+            "service_depth",
+            "extraction_notes"
+        ],
+        "title": "UserServices",
+        "type": "object"
+    }
+}

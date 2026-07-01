@@ -1,0 +1,47 @@
+{
+  "audit_confidence": "medium",
+  "content_themes": [
+    { "theme": "Educational tips", "estimated_percentage": 40, "example_post": "5 ways to write a hook" },
+    { "theme": "Behind-the-scenes", "estimated_percentage": 25, "example_post": "Filming setup" },
+    { "theme": "Promotional", "estimated_percentage": 20, "example_post": "Booking 2 more clients" },
+    { "theme": "Personal stories", "estimated_percentage": 15, "example_post": "3 years ago today" }
+  ],
+  "visual_style": {
+    "description": "Warm earth tones, consistent serif typography.",
+    "polish_level": "polished",
+    "consistency": "consistent",
+    "colors_or_design_notes": "Terracotta-to-cream gradient on carousel covers."
+  },
+  "posting_strategy": {
+    "formats_used": ["carousel", "single image", "reel/video"],
+    "pattern": "consistent",
+    "recurring_series": ["Tip Tuesday", "Client Spotlight Friday"]
+  },
+  "engagement_patterns": {
+    "comment_volume": "medium",
+    "reply_behavior": "Replies to ~50% of comments, warmly but briefly.",
+    "negative_comments_visible": "no",
+    "user_generated_content": "yes"
+  },
+  "brand_voice": {
+    "tone": "warm, educational",
+    "language_register": "english",
+    "signature_phrases": ["DM to apply", "screenshot this", "save for later"],
+    "audience_address": "friends"
+  },
+  "gaps_and_opportunities": {
+    "missing_content": ["No testimonials page", "No case studies"],
+    "operational_pain_points": ["Slow DM replies"],
+    "digital_presence_gaps": ["No booking link in bio", "No email list"],
+    "services_to_pitch": ["Booking dashboard", "Testimonial collection form"]
+  },
+  "sales_recommendation": {
+    "should_pitch": "yes",
+    "why": "Visible scaling pain and clear service gaps.",
+    "pitch_angle": "Position as DM-reply-time-saver.",
+    "likely_pain_point": "Manual DM management is eating content time.",
+    "rough_disc_style": "i",
+    "recommended_register": "Warm, first-person, mirror 'friends'."
+  },
+  "what_i_could_not_determine": ["Exact follower count", "Monthly revenue"]
+}

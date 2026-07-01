@@ -43,15 +43,25 @@ export function NavBar() {
       }`}
     >
       <nav className="mx-auto max-w-6xl px-5 sm:px-8 h-16 flex items-center justify-between">
-        {/* Brand */}
+        {/* Brand — animated AG monogram */}
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="flex items-center gap-1.5 group"
+          className="flex items-center gap-2 group"
           aria-label="Back to top"
         >
-          <span className="font-mono text-sm font-bold tracking-tight">
-            {profile.initials}
-            <span className="text-muted-foreground">·</span>
+          <span className="relative w-7 h-7 rounded-md overflow-hidden ring-1 ring-border group-hover:ring-foreground/30 transition-all">
+            <svg viewBox="0 0 500 500" className="w-full h-full" aria-hidden="true">
+              <defs>
+                <style>{`.nav-ag{font-family:'Geist','DejaVu Sans',sans-serif;font-size:260px;font-weight:700;fill:#faf8f4}.nav-dot{fill:#10b981}`}</style>
+              </defs>
+              <rect width="500" height="500" fill="#08080c"/>
+              <rect x="2" y="2" width="496" height="496" fill="none" stroke="#faf8f4" stroke-width="2" stroke-opacity="0.15"/>
+              <text className="nav-ag" x="250" y="250" textAnchor="middle" dominantBaseline="central">AG</text>
+              <circle className="nav-dot" cx="430" cy="430" r="28">
+                <animate attributeName="r" values="28;32;28" dur="2.2s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="1;0.5;1" dur="2.2s" repeatCount="indefinite"/>
+              </circle>
+            </svg>
           </span>
           <span className="hidden sm:inline text-xs text-muted-foreground font-mono group-hover:text-foreground transition-colors">
             full-stack dev

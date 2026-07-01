@@ -1,0 +1,21 @@
+{
+  "extraction_confidence": "high",
+  "observation_notes": {
+    "pace": "~3 posts/week visible in feed",
+    "people_orientation": "warm, addresses audience as 'friends'",
+    "content_shape": "mix of carousels and reels",
+    "engagement": "avg 20-40 comments per post, replies to most",
+    "self_presentation": "face visible in 70% of posts",
+    "pressure_tells": "one apology post about slow DM replies"
+  },
+  "digital_presence_audit": {
+    "has_website": "yes",
+    "has_booking_or_payment_link": "no",
+    "has_google_reviews": "cannot_determine",
+    "primary_call_to_action": "dm",
+    "bio_text": "Helping small businesses grow. DM for collabs.",
+    "follower_count": "8,432"
+  },
+  "screenshot_summary": "Profile header with bio, grid of 9 posts, and a comments section.",
+  "what_i_could_not_determine": ["whether the lead has an email list"]
+}

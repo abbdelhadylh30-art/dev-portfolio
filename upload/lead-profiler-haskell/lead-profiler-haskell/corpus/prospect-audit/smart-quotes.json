@@ -1,0 +1,45 @@
+{
+  "audit_confidence": "medium",
+  "content_themes": [
+    { "theme": "Educational \u2014 tips", "estimated_percentage": 40, "example_post": "\u201c5 ways to write a hook\u201d" },
+    { "theme": "Behind-the-scenes", "estimated_percentage": 30, "example_post": "Filming setup" }
+  ],
+  "visual_style": {
+    "description": "Warm earth tones \u2014 consistent serif typography.",
+    "polish_level": "polished",
+    "consistency": "consistent",
+    "colors_or_design_notes": "Terracotta-to-cream gradient."
+  },
+  "posting_strategy": {
+    "formats_used": ["carousel", "single image", "reel/video"],
+    "pattern": "consistent",
+    "recurring_series": ["Tip Tuesday"]
+  },
+  "engagement_patterns": {
+    "comment_volume": "medium",
+    "reply_behavior": "Replies to ~50% of comments, warmly but briefly.",
+    "negative_comments_visible": "no",
+    "user_generated_content": "yes"
+  },
+  "brand_voice": {
+    "tone": "warm, educational",
+    "language_register": "english",
+    "signature_phrases": ["DM to apply", "screenshot this"],
+    "audience_address": "friends"
+  },
+  "gaps_and_opportunities": {
+    "missing_content": ["No testimonials page"],
+    "operational_pain_points": ["Slow DM replies"],
+    "digital_presence_gaps": ["No booking link in bio"],
+    "services_to_pitch": ["Booking dashboard"]
+  },
+  "sales_recommendation": {
+    "should_pitch": "yes",
+    "why": "Visible scaling pain.",
+    "pitch_angle": "Position as DM-reply-time-saver.",
+    "likely_pain_point": "Manual DM management.",
+    "rough_disc_style": "i",
+    "recommended_register": "Warm, mirror \u201cfriends\u201d."
+  },
+  "what_i_could_not_determine": ["Revenue"]
+}

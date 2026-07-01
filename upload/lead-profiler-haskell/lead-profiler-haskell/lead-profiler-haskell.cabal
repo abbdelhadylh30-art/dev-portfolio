@@ -1,0 +1,150 @@
+cabal-version:      3.0
+name:               lead-profiler-haskell
+version:            0.1.0.0
+synopsis:           Haskell hardening layer for the lead-profiler Next.js tool
+description:
+  A standalone Haskell library that hardens the JSON-parsing layer of the
+  lead-profiler Next.js app. The original TypeScript API routes
+  (@analyze-lead-images@, @prospect-content-audit@, @read-portfolio@) all
+  rely on @JSON.parse@ plus a fragile @{/}+@}@ substring fallback to digest
+  VLM/LLM output. This library replaces that with:
+  .
+  * A lenient pre-processor that strips markdown fences, removes trailing
+    commas, normalises smart quotes, and quotes bare keys.
+  * Strict algebraic-data-type schemas for all three routes, parsed via
+    @aeson@ with field-level error accumulation.
+  * A defaults layer that fills in missing or @unknown@ fields with honest
+    sentinel values, so downstream code never has to handle @undefined@.
+  * A code generator that emits TypeScript types, JSON Schema, and sample
+    fixtures from the same ADTs — single source of truth, no schema drift.
+  .
+  The deliverable is a library + test suite proving the pipeline correctly
+  digests a corpus of broken LLM outputs.
+
+homepage:           https://example.invalid/lead-profiler-haskell
+license:            MIT
+license-file:       LICENSE
+author:             lead-profiler-haskell authors
+maintainer:         lead-profiler-haskell@example.invalid
+category:           Data, JSON, Web
+build-type:         Simple
+extra-doc-files:    README.md
+extra-source-files:
+  corpus/lead-observation/*.json
+  corpus/lead-observation/*.txt
+  corpus/prospect-audit/*.json
+  corpus/prospect-audit/*.txt
+  corpus/user-services/*.json
+  corpus/user-services/*.txt
+
+common warnings
+    ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates
+                 -Wincomplete-uni-patterns -Wmissing-export-lists
+                 -Wredundant-constraints -Wpartial-fields
+
+library
+    import:           warnings
+    exposed-modules:
+        LeadProfiler.Prelude
+        LeadProfiler.Lenient
+        LeadProfiler.Schemas.LeadObservation
+        LeadProfiler.Schemas.ProspectAudit
+        LeadProfiler.Schemas.UserServices
+        LeadProfiler.Schemas.Common
+        LeadProfiler.Validate
+        LeadProfiler.Defaults
+        LeadProfiler.Emit.TypeScript
+        LeadProfiler.Emit.JsonSchema
+        LeadProfiler.Emit.Fixtures
+        LeadProfiler.Emit
+    build-depends:
+        base               >= 4.18 && < 5
+      , text               >= 2.0  && < 2.2
+      , bytestring         >= 0.12 && < 0.13
+      , containers         >= 0.6  && < 0.8
+      , unordered-containers >= 0.2 && < 0.3
+      , vector             >= 0.13 && < 0.14
+      , scientific         >= 0.3  && < 0.4
+      , aeson              >= 2.1  && < 2.3
+      , aeson-pretty       >= 0.8  && < 0.9
+      , attoparsec         >= 0.14 && < 0.23
+      , hashable           >= 1.4  && < 1.6
+      , transformers       >= 0.6  && < 0.7
+      , mtl                >= 2.3  && < 2.4
+      , directory          >= 1.3  && < 1.4
+      , filepath           >= 1.4  && < 1.6
+      , template-haskell   >= 2.20 && < 2.24
+      , time               >= 1.12 && < 1.15
+    hs-source-dirs:   src
+    default-language: Haskell2010
+    default-extensions:
+        OverloadedStrings
+        LambdaCase
+        TupleSections
+        ScopedTypeVariables
+        DeriveGeneric
+        DeriveAnyClass
+        DerivingStrategies
+        GeneralizedNewtypeDeriving
+        FlexibleContexts
+        FlexibleInstances
+        MultiParamTypeClasses
+        ConstraintKinds
+        DataKinds
+        TypeApplications
+
+executable lead-profiler-haskell
+    import:           warnings
+    main-is:          Main.hs
+    hs-source-dirs:   app
+    build-depends:
+        base
+      , lead-profiler-haskell
+      , text
+      , bytestring
+      , aeson
+      , aeson-pretty
+      , directory
+      , filepath
+    default-language: Haskell2010
+    default-extensions:
+        OverloadedStrings
+        LambdaCase
+        ScopedTypeVariables
+
+test-suite lead-profiler-haskell-test
+    import:           warnings
+    type:             exitcode-stdio-1.0
+    main-is:          Spec.hs
+    hs-source-dirs:   test
+    other-modules:
+        LeadProfiler.LenientSpec
+        LeadProfiler.Schemas.LeadObservationSpec
+        LeadProfiler.Schemas.ProspectAuditSpec
+        LeadProfiler.Schemas.UserServicesSpec
+        LeadProfiler.ValidateSpec
+        LeadProfiler.DefaultsSpec
+        LeadProfiler.EmitSpec
+    build-depends:
+        base
+      , lead-profiler-haskell
+      , text
+      , bytestring
+      , aeson
+      , aeson-pretty
+      , containers
+      , unordered-containers
+      , vector
+      , scientific
+      , directory
+      , filepath
+      , hspec
+      , hspec-expectations
+      , QuickCheck
+      , quickcheck-instances
+    default-language: Haskell2010
+    default-extensions:
+        OverloadedStrings
+        LambdaCase
+        ScopedTypeVariables
+        TupleSections

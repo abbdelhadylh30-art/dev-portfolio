@@ -176,27 +176,7 @@ function CaseStudy({ project, flip }: { project: Project; flip: boolean }) {
             )}
           </div>
         ) : (
-          // Stylized fallback for projects without screenshots
-          <div className="rounded-xl border border-border bg-card aspect-[16/10] flex items-center justify-center relative overflow-hidden">
-            <div
-              aria-hidden
-              className="absolute inset-0 opacity-30"
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(250,248,244,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(250,248,244,0.05) 1px, transparent 1px)",
-                backgroundSize: "32px 32px",
-              }}
-            />
-            <div className="relative text-center px-6">
-              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-3">
-                Single-page workflow
-              </div>
-              <div className="text-2xl font-bold tracking-tight">{project.name}</div>
-              <div className="mt-2 text-sm text-muted-foreground">
-                Paste URL · drop images · run pipeline · paste opener
-              </div>
-            </div>
-          </div>
+          <ProjectFallback project={project} />
         )}
 
         {/* Narrative accordion */}
@@ -374,5 +354,66 @@ function Lightbox({
         <ChevronRight className="w-5 h-5" />
       </button>
     </motion.div>
+  );
+}
+
+function ProjectFallback({ project }: { project: Project }) {
+  if (project.name.toLowerCase().includes("haskell")) {
+    const codeLines = [
+      { num: 1, content: "data ExtractWarning", dim: false },
+      { num: 2, content: "  = HadLeadingOrTrailingProse", dim: false },
+      { num: 3, content: "  | HadCodeFence", dim: false },
+      { num: 4, content: "  | HadTrailingComma", dim: false },
+      { num: 5, content: "  | HadSmartQuotes", dim: false },
+      { num: 6, content: "  | HadSingleQuotes", dim: false },
+      { num: 7, content: "  | HadBareKey", dim: false },
+      { num: 8, content: "  | HadZeroWidthChars", dim: false },
+      { num: 9, content: "  | UsedBalancedSliceFallback", dim: false },
+      { num: 10, content: '  deriving (Eq, Show, Ord, Bounded, Enum)', dim: true },
+      { num: 11, content: "", dim: false },
+      { num: 12, content: "extractJson :: Text -> Either String ExtractResult", dim: true },
+      { num: 13, content: 'extractJson raw =', dim: true },
+      { num: 14, content: '  let cleaned = raw', dim: true },
+      { num: 15, content: '        & normaliseZeroWidthChars', dim: true },
+      { num: 16, content: '        & stripCodeFences', dim: true },
+      { num: 17, content: '        & findBalancedJsonObject', dim: true },
+      { num: 18, content: '        & normaliseSmartQuotes', dim: true },
+      { num: 19, content: '        & normaliseBareKeys', dim: true },
+      { num: 20, content: '        & normaliseTrailingCommas', dim: true },
+    ];
+    return (
+      <div className="rounded-xl border border-border bg-[#0a0c10] aspect-[16/10] overflow-hidden relative font-mono">
+        <div className="flex items-center gap-2 px-4 py-2.5 border-b border-border bg-card/60">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+          <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
+          <span className="ml-3 text-[11px] text-muted-foreground tracking-wide">src/LeadProfiler/Lenient.hs</span>
+          <span className="ml-auto text-[10px] text-muted-foreground uppercase tracking-wider">Haskell · 2,426 LOC · 102 tests</span>
+        </div>
+        <div className="px-4 py-3 text-[11px] leading-[1.55] overflow-hidden">
+          {codeLines.map((line) => (
+            <div key={line.num} className={`flex gap-3 ${line.dim ? "text-muted-foreground/60" : "text-foreground/90"}`}>
+              <span className="text-muted-foreground/40 w-5 text-right select-none tabular-nums">{line.num}</span>
+              <span className="whitespace-pre">{line.content || " "}</span>
+            </div>
+          ))}
+          <div className="flex gap-3 mt-1 text-emerald-400/80">
+            <span className="text-muted-foreground/40 w-5 text-right select-none tabular-nums">21</span>
+            <span className="whitespace-pre">{'-- 102 examples, 0 failures (0.0227s)'}</span>
+          </div>
+        </div>
+        <div aria-hidden className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: "linear-gradient(rgba(250,248,244,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(250,248,244,0.5) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
+      </div>
+    );
+  }
+  return (
+    <div className="rounded-xl border border-border bg-card aspect-[16/10] flex items-center justify-center relative overflow-hidden">
+      <div aria-hidden className="absolute inset-0 opacity-30" style={{ backgroundImage: "linear-gradient(rgba(250,248,244,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(250,248,244,0.05) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
+      <div className="relative text-center px-6">
+        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-3">{project.category}</div>
+        <div className="text-2xl font-bold tracking-tight">{project.name}</div>
+        <div className="mt-2 text-sm text-muted-foreground">{project.metrics.map((m) => `${m.value} ${m.label.toLowerCase()}`).join(" · ")}</div>
+      </div>
+    </div>
   );
 }

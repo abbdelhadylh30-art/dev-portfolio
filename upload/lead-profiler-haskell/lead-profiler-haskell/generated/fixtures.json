@@ -1,0 +1,126 @@
+{
+    "lead_observation": {
+        "digital_presence_audit": {
+            "bio_text": "Helping small businesses grow with content. DM for collabs.",
+            "follower_count": "8,432",
+            "has_booking_or_payment_link": "no",
+            "has_google_reviews": "cannot_determine",
+            "has_website": "yes",
+            "primary_call_to_action": "dm"
+        },
+        "extraction_confidence": "medium",
+        "observation_notes": {
+            "content_shape": "Mix of single-photo posts (~60%) and reels (~40%). Production is polished, with consistent typography overlays.",
+            "engagement": "Average ~30 comments per post. Lead replies to ~half of comments, mostly with a heart emoji or short thanks.",
+            "pace": "Feed shows ~12 posts in the last 30 days, suggesting roughly 3 posts/week.",
+            "people_orientation": "Captions are warm and use first-person plural (\"we\", \"our team\"). Replies to comments thank the commenter by name.",
+            "pressure_tells": "One post from last week is a caption apologising for slow DM replies — visible scaling pain.",
+            "self_presentation": "Lead's face appears in ~70% of posts, in professional but approachable settings (office, casual headshots)."
+        },
+        "screenshot_summary": "Screenshot 1: profile header with bio and follower count. Screenshot 2: grid of 9 recent posts. Screenshot 3: comments on a recent post.",
+        "what_i_could_not_determine": [
+            "Whether the lead has a separate business email",
+            "Whether the website has a booking system"
+        ]
+    },
+    "prospect_audit": {
+        "audit_confidence": "medium",
+        "brand_voice": {
+            "audience_address": "friends",
+            "language_register": "english",
+            "signature_phrases": [
+                "DM to apply",
+                "screenshot this",
+                "save for later"
+            ],
+            "tone": "warm, educational"
+        },
+        "content_themes": [
+            {
+                "estimated_percentage": 40,
+                "example_post": "Carousel: \"5 ways to write a hook that stops the scroll.\"",
+                "theme": "Educational tips"
+            },
+            {
+                "estimated_percentage": 25,
+                "example_post": "Reel: filming setup for an upcoming client launch.",
+                "theme": "Behind-the-scenes"
+            },
+            {
+                "estimated_percentage": 20,
+                "example_post": "Single image: \"Booking 2 more clients for August — DM to apply.\"",
+                "theme": "Promotional"
+            },
+            {
+                "estimated_percentage": 15,
+                "example_post": "Photo with caption: \"3 years ago today I quit my job...\"",
+                "theme": "Personal stories"
+            }
+        ],
+        "engagement_patterns": {
+            "comment_volume": "medium",
+            "negative_comments_visible": "no",
+            "reply_behavior": "Replies to ~50% of comments, warmly but briefly.",
+            "user_generated_content": "yes"
+        },
+        "gaps_and_opportunities": {
+            "digital_presence_gaps": [
+                "No booking link in bio",
+                "No email list"
+            ],
+            "missing_content": [
+                "No testimonials page",
+                "No case studies"
+            ],
+            "operational_pain_points": [
+                "Slow DM replies (apologised in a post)"
+            ],
+            "services_to_pitch": [
+                "Booking dashboard",
+                "Testimonial collection form"
+            ]
+        },
+        "posting_strategy": {
+            "formats_used": [
+                "carousel",
+                "single image",
+                "reel/video"
+            ],
+            "pattern": "consistent",
+            "recurring_series": [
+                "Tip Tuesday",
+                "Client Spotlight Friday"
+            ]
+        },
+        "sales_recommendation": {
+            "likely_pain_point": "Manual DM management is eating content production time.",
+            "pitch_angle": "Position the booking dashboard as a DM-reply-time-saver.",
+            "recommended_register": "Warm, first-person, mirror their use of \"friends\".",
+            "rough_disc_style": "i",
+            "should_pitch": "yes",
+            "why": "Visible scaling pain (slow DMs) and clear service gaps (no booking link)."
+        },
+        "visual_style": {
+            "colors_or_design_notes": "Signature terracotta-to-cream gradient on carousel covers.",
+            "consistency": "consistent",
+            "description": "Warm earth tones (terracotta, cream, sage). Consistent serif typography. Photography is bright and natural-lit.",
+            "polish_level": "polished"
+        },
+        "what_i_could_not_determine": [
+            "Exact follower count",
+            "Monthly revenue"
+        ]
+    },
+    "user_services": {
+        "extraction_notes": "Extracted 3 case studies from the portfolio page.",
+        "past_work_examples": [
+            "Booking dashboard for a Riyadh dental clinic",
+            "Landing page for a Jeddah-based fitness coach",
+            "Internal inventory tracker for a Dammam restaurant chain"
+        ],
+        "primary": "Custom web tools — landing pages, dashboards, functional apps.",
+        "secondary": "Brand identity design (logos, colour systems).",
+        "service_depth": "We build real functional tools, not just landing pages.",
+        "track_record": "8 years of experience, 60+ shipped projects across MENA."
+    }
+}

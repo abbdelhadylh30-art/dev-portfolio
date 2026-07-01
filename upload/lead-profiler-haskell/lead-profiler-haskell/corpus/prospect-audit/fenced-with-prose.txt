@@ -1,0 +1,48 @@
+Here's the audit you asked for. ```json
+{
+  "audit_confidence": "medium",
+  "content_themes": [
+    { "theme": "Educational", "estimated_percentage": 40, "example_post": "Tips carousel" },
+    { "theme": "Behind-the-scenes", "estimated_percentage": 30, "example_post": "Filming setup" }
+  ],
+  "visual_style": {
+    "description": "Warm tones.",
+    "polish_level": "polished",
+    "consistency": "consistent",
+    "colors_or_design_notes": "Terracotta palette."
+  },
+  "posting_strategy": {
+    "formats_used": ["carousel", "reel"],
+    "pattern": "consistent",
+    "recurring_series": ["Tip Tuesday"]
+  },
+  "engagement_patterns": {
+    "comment_volume": "medium",
+    "reply_behavior": "Replies to ~half.",
+    "negative_comments_visible": "no",
+    "user_generated_content": "yes"
+  },
+  "brand_voice": {
+    "tone": "warm",
+    "language_register": "english",
+    "signature_phrases": ["DM to apply"],
+    "audience_address": "friends"
+  },
+  "gaps_and_opportunities": {
+    "missing_content": ["No testimonials"],
+    "operational_pain_points": ["Slow DMs"],
+    "digital_presence_gaps": ["No booking link"],
+    "services_to_pitch": ["Booking dashboard"]
+  },
+  "sales_recommendation": {
+    "should_pitch": "yes",
+    "why": "Scaling pain visible.",
+    "pitch_angle": "Time-saver angle.",
+    "likely_pain_point": "DM overload.",
+    "rough_disc_style": "i",
+    "recommended_register": "Warm."
+  },
+  "what_i_could_not_determine": ["Revenue"]
+}
+```
+That should cover everything!

@@ -1,0 +1,25 @@
+{
+  "extraction_confidence": "high",
+  "observation_notes": {
+    "pace": "~3 posts/week",
+    "people_orientation": "warm",
+    "content_shape": "carousel-heavy",
+    "engagement": "medium",
+    "self_presentation": "professional",
+    "pressure_tells": "not visible"
+  },
+  "digital_presence_audit": {
+    "has_website": "yes",
+    "has_booking_or_payment_link": "no",
+    "has_google_reviews": "cannot_determine",
+    "primary_call_to_action": "dm",
+    "bio_text": "Helping businesses grow",
+    "follower_count": "8432"
+  },
+  "screenshot_summary": "Profile screenshot.",
+  "what_i_could_not_determine": [],
+  "extra_llm_advice": "I noticed the lead uses emoji frequently. This suggests a playful communication style.",
+  "follow_up_questions": ["Would you like me to analyse the comments too?"]
+}
+
+(P.S. The profile seems active and engaged. Good prospect!)
