@@ -1,6 +1,6 @@
 import { profile } from "@/lib/portfolio-data";
 
-export const SITE_URL = "https://my-project-nu-livid.vercel.app";
+export const SITE_URL = "https://abdelhady-gabriel.vercel.app";
 
 export const primaryKeywords = [
   "Abdelhady Gabriel",
