@@ -4,19 +4,15 @@
  */
 
 export const profile = {
-  // ──────────────────────────────────────────────────────────────────
-  // TODO: replace these placeholders with your own identity & links.
-  //       This file is the single source of truth — edit it once and
-  //       every section (nav, hero, about, contact) updates.
-  // ──────────────────────────────────────────────────────────────────
-  name: "Your Name",
-  initials: "YN",
+  name: "Abdelhady Gabriel",
+  initials: "AG",
   role: "Full-Stack Developer & Product Engineer",
   tagline: "I build developer tools, landing page studios, and AI-powered web apps end-to-end — from Prisma schema to the last pixel.",
-  location: "Your City, Country",
+  location: "Egypt",
   availability: "Open to freelance & full-time roles",
-  email: "you@example.com",
-  phone: "" as string,
+  email: "abbelhadylh31@gmail.com",
+  phone: "01032246016",
+  whatsapp: "https://wa.me/201032246016",
   linkedin: "" as string,
   github: "" as string,
 };

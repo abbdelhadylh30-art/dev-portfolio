@@ -1,12 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Phone, Linkedin, Github, MapPin } from "lucide-react";
+import { Mail, Phone, Linkedin, Github, MapPin, MessageCircle } from "lucide-react";
 import { profile, philosophy } from "@/lib/portfolio-data";
 
 const contactItems = [
   { icon: Mail, label: "Email", value: profile.email, href: `mailto:${profile.email}` },
   { icon: Phone, label: "Phone", value: profile.phone, href: profile.phone ? `tel:${profile.phone.replace(/\s/g, "")}` : "" },
+  { icon: MessageCircle, label: "WhatsApp", value: profile.phone, href: (profile as { whatsapp?: string }).whatsapp || "" },
   { icon: Linkedin, label: "LinkedIn", value: "View profile", href: profile.linkedin },
   { icon: Github, label: "GitHub", value: "View profile", href: profile.github },
 ].filter((item) => item.href);
