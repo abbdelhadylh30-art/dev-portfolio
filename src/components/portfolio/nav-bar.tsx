@@ -30,8 +30,15 @@ export function NavBar() {
 
   const handleClick = (href: string) => {
     setOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Defer the scroll until after the menu close animation starts,
+    // otherwise the collapsing menu intercepts the scroll on mobile.
+    setTimeout(() => {
+      const el = document.querySelector(href);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 72; // 72px = header height + breathing room
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    }, 150);
   };
 
   return (
