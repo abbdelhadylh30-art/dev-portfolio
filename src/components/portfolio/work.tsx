@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
-import { projects, type Project } from "@/lib/portfolio-data";
+import { projects, type Project, type SubProject } from "@/lib/portfolio-data";
 import { SectionHeader } from "./about";
 
 export function Work() {
@@ -13,7 +13,7 @@ export function Work() {
         <SectionHeader
           index="02"
           eyebrow="Selected work"
-          title="Five projects. One stack."
+          title="Three projects. One stack."
         />
 
         <motion.p
@@ -201,6 +201,31 @@ function CaseStudy({ project, flip }: { project: Project; flip: boolean }) {
           </ul>
         </div>
       </div>
+
+      {/* Sub-projects — rendered full-width below the two-column case study */}
+      {project.subProjects && project.subProjects.length > 0 && (
+        <div className="lg:col-span-12 mt-8">
+          <div className="rounded-2xl border border-border bg-card/30 overflow-hidden">
+            {/* Header */}
+            <div className="px-6 sm:px-8 py-5 border-b border-border flex items-center gap-3">
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+                Built from
+              </span>
+              <span className="h-px flex-1 bg-border" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                {project.subProjects.length} component tools
+              </span>
+            </div>
+
+            {/* Sub-project cards */}
+            <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border">
+              {project.subProjects.map((sub, i) => (
+                <SubProjectCard key={sub.name} sub={sub} index={i} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Lightbox */}
       <AnimatePresence>
@@ -415,5 +440,111 @@ function ProjectFallback({ project }: { project: Project }) {
         <div className="mt-2 text-sm text-muted-foreground">{project.metrics.map((m) => `${m.value} ${m.label.toLowerCase()}`).join(" · ")}</div>
       </div>
     </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SubProjectCard — renders a component tool within a flagship case study
+// ─────────────────────────────────────────────────────────────────────────────
+function SubProjectCard({ sub, index }: { sub: SubProject; index: number }) {
+  const [localLightbox, setLocalLightbox] = useState<number | null>(null);
+  const hasShots = sub.screenshots.length > 0;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
+      className="p-6 sm:p-8"
+    >
+      {/* Role badge + name */}
+      <div className="flex items-center gap-2 mb-2">
+        <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-muted-foreground px-2 py-1 rounded border border-border bg-secondary/50">
+          {sub.role}
+        </span>
+      </div>
+      <h4 className="text-xl font-bold tracking-tight">{sub.name}</h4>
+      <div className="mt-1 text-xs text-muted-foreground font-mono">{sub.year}</div>
+
+      {/* Summary */}
+      <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{sub.summary}</p>
+
+      {/* Metrics */}
+      <div className="mt-5 grid grid-cols-2 gap-2">
+        {sub.metrics.map((m) => (
+          <div key={m.label} className="rounded-md border border-border bg-secondary/30 px-3 py-2">
+            <div className="text-base font-bold tracking-tight tabular-nums">{m.value}</div>
+            <div className="text-[9px] uppercase tracking-wider text-muted-foreground font-mono">{m.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Screenshot thumbnails */}
+      {hasShots && (
+        <div className="mt-5 grid grid-cols-3 gap-2">
+          {sub.screenshots.slice(0, 3).map((shot, idx) => (
+            <button
+              key={idx}
+              onClick={() => setLocalLightbox(idx)}
+              className="group relative aspect-[4/3] overflow-hidden rounded-md border border-border bg-card"
+            >
+              <img
+                src={shot.src}
+                alt={`${sub.name} — ${shot.caption}`}
+                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors" />
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Feature list */}
+      <div className="mt-5">
+        <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground mb-2">
+          Key features
+        </div>
+        <ul className="space-y-1">
+          {sub.features.slice(0, 5).map((f) => (
+            <li key={f} className="flex items-start gap-2 text-xs text-muted-foreground leading-snug">
+              <span className="mt-1 inline-block w-0.5 h-0.5 rounded-full bg-foreground/50 flex-shrink-0" />
+              <span>{f}</span>
+            </li>
+          ))}
+          {sub.features.length > 5 && (
+            <li className="text-[10px] text-muted-foreground/60 font-mono pl-3">
+              + {sub.features.length - 5} more
+            </li>
+          )}
+        </ul>
+      </div>
+
+      {/* Stack */}
+      <div className="mt-4 flex flex-wrap gap-1">
+        {sub.stack.map((tech) => (
+          <span
+            key={tech}
+            className="rounded border border-border bg-secondary/30 px-1.5 py-0.5 text-[10px] font-medium text-foreground/70"
+          >
+            {tech}
+          </span>
+        ))}
+      </div>
+
+      {/* Local lightbox */}
+      <AnimatePresence>
+        {localLightbox !== null && hasShots && (
+          <Lightbox
+            screenshots={sub.screenshots}
+            index={localLightbox}
+            projectName={sub.name}
+            onClose={() => setLocalLightbox(null)}
+            onIndex={setLocalLightbox}
+          />
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }

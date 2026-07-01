@@ -40,6 +40,17 @@ export const philosophy = [
   },
 ] as const;
 
+export type SubProject = {
+  name: string;
+  role: string;
+  year: string;
+  summary: string;
+  features: string[];
+  stack: string[];
+  metrics: { label: string; value: string }[];
+  screenshots: { src: string; caption: string }[];
+};
+
 export type Project = {
   index: string;
   name: string;
@@ -55,6 +66,7 @@ export type Project = {
   metrics: { label: string; value: string }[];
   screenshots: { src: string; caption: string }[];
   links?: { label: string; href: string }[];
+  subProjects?: SubProject[];
 };
 
 export const projects: Project[] = [
@@ -65,13 +77,13 @@ export const projects: Project[] = [
     year: "2025",
     status: "flagship",
     summary:
-      "A unified studio that fuses a no-code landing page builder with a 5-category page auditor — connected by a bidirectional transfer bridge. Build a page, audit it, apply 38 one-click fixes, ship.",
+      "A unified studio that fuses a no-code landing page builder with a 5-category page auditor — connected by a bidirectional transfer bridge. Forge Studio didn't replace its two component tools; it merged them. Build a page, audit it, apply 38 one-click fixes, ship — without ever leaving the tab.",
     problem:
-      "Page builders and page auditors are usually two separate products. You build in one, copy-paste HTML into the other, lose your place, fix issues manually, and never close the loop. Forge Studio kills that round-trip.",
+      "Page builders and page auditors are usually two separate products. You build in one, copy-paste HTML into the other, lose your place, fix issues manually, and never close the loop. I'd already shipped both halves independently — LandingForge (the builder) and PixelForge (the auditor) — but the round-trip between them was the actual problem. Forge Studio kills that round-trip.",
     approach:
-      "I took the two tools I'd already shipped — LandingForge v4.0 (builder) and PixelForge v19 (auditor) — and fused them under a single Dashboard. A shared Zustand store holds the in-flight HTML. Click \"Audit this page\" in the builder and the auditor opens pre-loaded with your rendered HTML, already scored. Click \"Edit in builder\" in the auditor and the builder opens with the imported HTML rendered as an editable section. Two tools, one workflow.",
+      "I took the two tools I'd already shipped and fused them under a single Dashboard. A shared Zustand store holds the in-flight HTML. Click \"Audit this page\" in the builder and the auditor opens pre-loaded with your rendered HTML, already scored. Click \"Edit in builder\" in the auditor and the builder opens with the imported HTML rendered as an editable section. Two tools, one workflow. The compounding concept: each sub-project took the previous one as raw material, and the flagship took both as raw material.",
     outcome:
-      "One app where you can draft a SaaS landing page from a template, score it 63/100, click \"Fix All Safe\" to jump to 91/100, then export a self-contained HTML file — without ever leaving the tab. The transfer bridge made both tools feel like features of a single product instead of two products stapled together.",
+      "One app where you can draft a SaaS landing page from a template, score it 63/100, click \"Fix All Safe\" to jump to 91/100, then export a self-contained HTML file — without ever leaving the tab. The transfer bridge made both tools feel like features of a single product instead of two products stapled together. This is what I mean by \"tools should compound\": one plus one equals three.",
     features: [
       "Bidirectional Builder ↔ Auditor transfer bridge",
       "12 section types with JSON-schema-driven auto-inspector forms",
@@ -88,10 +100,10 @@ export const projects: Project[] = [
     ],
     stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind 4", "shadcn/ui", "Prisma", "Zustand", "dnd-kit", "z-ai-web-dev-sdk", "recharts"],
     metrics: [
-      { label: "Section types", value: "12" },
+      { label: "Component tools", value: "2" },
       { label: "Quick-fixes", value: "38" },
       { label: "Audit checks", value: "30+" },
-      { label: "Templates", value: "5" },
+      { label: "Section types", value: "12" },
     ],
     screenshots: [
       { src: "/projects/forge-studio/01-dashboard.png", caption: "Dashboard — Builder + Auditor tool cards, quick stats, template grid" },
@@ -99,96 +111,75 @@ export const projects: Project[] = [
       { src: "/projects/forge-studio/03-auditor.png", caption: "Auditor — 5-category score gauge, issues list, quick-fixes" },
       { src: "/projects/forge-studio/04-templates.png", caption: "Templates gallery — 5 pre-built multi-page sites" },
     ],
+    subProjects: [
+      {
+        name: "LandingForge v4.0",
+        role: "THE BUILDER · BUILT FIRST",
+        year: "2025",
+        summary:
+          "A no-code landing page builder. Drag-drop section reordering, 12 section types, 5 templates, 7 theme presets, multi-page sites, and a pure string-templated HTML export pipeline with zero runtime dependencies. Started as an 18,000-line vanilla-JS monolith (v3.5), reimagined as a modular Next.js 16 app where adding a section type is ~30 lines of code.",
+        features: [
+          "12 section types: Navbar, Hero, LogoCloud, Features, Stats, Gallery, Testimonials, Pricing, FAQ, CTA, Newsletter, Footer",
+          "5 pre-built templates as JSON blueprints (SaaS, Portfolio, Agency, E-commerce, Startup)",
+          "7 theme presets with live CSS variable theming",
+          "Auto-generated inspector forms from FieldSchema",
+          "50-step undo/redo history + keyboard shortcuts",
+          "Standalone HTML export (zero runtime deps) + ZIP bundle (custom CRC32 STORE-method writer)",
+          "Analytics dashboard: KPI cards, area/bar/donut/funnel charts",
+        ],
+        stack: ["Next.js 16", "React 19", "TypeScript", "Zustand", "dnd-kit", "recharts"],
+        metrics: [
+          { label: "Section types", value: "12" },
+          { label: "Templates", value: "5" },
+          { label: "Themes", value: "7" },
+          { label: "Undo depth", value: "50" },
+        ],
+        screenshots: [
+          { src: "/projects/landingforge/01-editor.png", caption: "Editor — section library, canvas, inspector panel" },
+          { src: "/projects/landingforge/02-templates.png", caption: "Templates gallery — 5 pre-built sites" },
+          { src: "/projects/landingforge/03-analytics.png", caption: "Analytics dashboard — KPIs, area, bar, donut, funnel" },
+          { src: "/projects/landingforge/04-preview.png", caption: "Live preview — iframe-rendered page" },
+          { src: "/projects/landingforge/05-dark-theme.png", caption: "Midnight theme — live CSS variable theming" },
+          { src: "/projects/landingforge/06-mobile-preview.png", caption: "Mobile preview width — responsive at every breakpoint" },
+        ],
+      },
+      {
+        name: "PixelForge v19",
+        role: "THE AUDITOR · BUILT SECOND",
+        year: "2025",
+        summary:
+          "A 1:1 Next.js 16 reimplementation of an 8,934-line single-file vanilla-JS audit tool. Five scoring categories, 30+ checks, 38 quick-fixes, 10 tools, an 8-step guided walkthrough, and a dark dev-tool aesthetic. Started as a single HTML file with 217 functions, no types, no tests — ported with full feature parity on a modern stack.",
+        features: [
+          "5 scoring categories with exact v19 point weights (SEO 20 + Content 25 + A11y 25 + Structure 20 + Perf 30)",
+          "30+ audit checks (SEO meta, content, A11y WCAG 4.5:1, structure, perf)",
+          "38 quick-fixes operating on iframe DOM + \"Fix All Safe\" in optimal order",
+          "Mobile/desktop split scoring with penalty formula",
+          "4 right-panel tabs: Score / Edit / OG / Share",
+          "8-step guided walkthrough with spotlight + arrows",
+          "10-tool grid: PDF report, white-label, platform exports, heatmap sim",
+          "A/B variant scoring + competitor comparison",
+          "80-deep undo/redo with per-change revert changelog",
+          "Server-side URL fetch proxy with HTML sanitizer",
+        ],
+        stack: ["Next.js 16", "React 19", "TypeScript", "Zustand", "z-ai-web-dev-sdk", "canvas API"],
+        metrics: [
+          { label: "Functions ported", value: "217" },
+          { label: "Quick-fixes", value: "38" },
+          { label: "Audit checks", value: "30+" },
+          { label: "Tools", value: "10" },
+        ],
+        screenshots: [
+          { src: "/projects/pixelforge/01-initial-audit.png", caption: "Initial audit — 5-category score gauge + issues list" },
+          { src: "/projects/pixelforge/02-after-fix-all.png", caption: "After \"Fix All Safe\" — 63 → 91, 26 fixes applied" },
+          { src: "/projects/pixelforge/03-tools-modal.png", caption: "Tools modal — 10-tool grid (PDF, white-label, platforms...)" },
+          { src: "/projects/pixelforge/04-guide-walkthrough.png", caption: "Guided walkthrough — 8-step spotlight on issue elements" },
+          { src: "/projects/pixelforge/05-mobile-preview.png", caption: "Mobile preview — CSS phone shell with notch" },
+        ],
+      },
+    ],
   },
   {
     index: "02",
-    name: "PixelForge v19",
-    category: "LANDING PAGE AUDITOR",
-    year: "2025",
-    status: "live",
-    summary:
-      "A 1:1 Next.js 16 reimplementation of an 8,934-line single-file vanilla-JS audit tool. Five scoring categories, 30+ checks, 38 quick-fixes, 10 tools, an 8-step guided walkthrough, and a dark dev-tool aesthetic.",
-    problem:
-      "The original PixelForge was a single HTML file — 217 functions, no types, no tests, no separation of concerns. It worked, but it was unmaintainable and un-extendable. I wanted it on a modern stack without losing a single rule or point weight.",
-    approach:
-      "I cataloged all 217 functions and ported the scoring engine to TypeScript with exact v19 point weights (SEO 20 + Content 25 + A11y 25 + Structure 20 + Performance 30 = 120, scaled to 100). Mobile/desktop split scoring kept the v19 penalty formula. The iframe editor with click-to-select was rebuilt as a React component, and all 38 quick-fixes were ported to operate on the iframe DOM. A server-side /api/fetch-url route replaced the client-side CORS hackery.",
-    outcome:
-      "Feature parity with v19 — every rule, every point weight, every UI affordance — on a modern Next.js 16 + TypeScript stack. Loading the demo scores 63/100, clicking \"Fix All Safe\" jumps it to 91/100 (+28 points, 26 fixes applied), and the changelog FAB shows every change with per-change revert. Lint: 0 errors.",
-    features: [
-      "5 scoring categories with exact v19 point weights",
-      "30+ audit checks (SEO meta, content, A11y WCAG 4.5:1, structure, perf)",
-      "38 quick-fixes operating on iframe DOM",
-      "\"Fix All Safe\" applies auto-fixable issues in optimal order",
-      "Mobile/desktop split scoring with penalty formula",
-      "4 right-panel tabs: Score / Edit / OG / Share",
-      "8-step guided walkthrough with spotlight + arrows",
-      "10-tool grid: PDF report, white-label, platform exports, heatmap sim",
-      "A/B variant scoring with winner declaration",
-      "Competitor comparison (fetch + score side-by-side)",
-      "80-deep undo/redo with per-change revert changelog",
-      "Server-side URL fetch proxy with HTML sanitizer",
-    ],
-    stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind 4", "shadcn/ui", "Prisma", "Zustand", "z-ai-web-dev-sdk", "canvas API"],
-    metrics: [
-      { label: "Functions ported", value: "217" },
-      { label: "Quick-fixes", value: "38" },
-      { label: "Audit checks", value: "30+" },
-      { label: "Tools", value: "10" },
-    ],
-    screenshots: [
-      { src: "/projects/pixelforge/01-initial-audit.png", caption: "Initial audit — 5-category score gauge + issues list" },
-      { src: "/projects/pixelforge/02-after-fix-all.png", caption: "After \"Fix All Safe\" — 63 → 91, 26 fixes applied" },
-      { src: "/projects/pixelforge/03-tools-modal.png", caption: "Tools modal — 10-tool grid (PDF, white-label, platforms...)" },
-      { src: "/projects/pixelforge/04-guide-walkthrough.png", caption: "Guided walkthrough — 8-step spotlight on issue elements" },
-      { src: "/projects/pixelforge/05-mobile-preview.png", caption: "Mobile preview — CSS phone shell with notch" },
-    ],
-  },
-  {
-    index: "03",
-    name: "LandingForge v4.0",
-    category: "NO-CODE PAGE BUILDER",
-    year: "2025",
-    status: "live",
-    summary:
-      "A no-code landing page builder reimagined as a modern Next.js 16 app. Drag-drop section reordering, 12 section types, 5 templates, 7 theme presets, multi-page sites, and a pure string-templated HTML export pipeline.",
-    problem:
-      "The original LandingForge v3.5 was an 18,000-line vanilla-JS monolith — no modules, no types, no real state management. Adding a new section type meant touching a dozen files in a tangled codebase. I wanted a builder where adding a section was ~30 lines of code.",
-    approach:
-      "I designed a FieldSchema-driven section system: every section is a self-contained React component with a JSON schema, and the inspector form is auto-generated from that schema. Zustand holds the editor state with 50-step undo/redo. The export pipeline is pure server-side string templating — no React on the rendered page — so exported pages have zero runtime dependencies and work anywhere.",
-    outcome:
-      "Adding a new section type is now ~30 lines (one component + one schema entry). 5 pre-built templates (Northwind SaaS, Atelier Portfolio, Globex Agency, Hooli E-commerce, Tidewave Startup) ship as JSON blueprints. Export produces a 23KB standalone HTML file or a 24KB ZIP bundle valid for Netlify/Vercel drop-deploy. The analytics dashboard ships with 5 chart types via recharts.",
-    features: [
-      "12 section types: Navbar, Hero, LogoCloud, Features, Stats, Gallery, Testimonials, Pricing, FAQ, CTA, Newsletter, Footer",
-      "5 pre-built templates as JSON blueprints",
-      "7 theme presets with live CSS variable theming",
-      "Drag-and-drop section reordering (dnd-kit)",
-      "Auto-generated inspector forms from FieldSchema",
-      "Repeatable list editors (add/remove/reorder per item)",
-      "Multi-page sites with page switcher",
-      "50-step undo/redo history + keyboard shortcuts",
-      "Device preview: desktop / tablet / mobile",
-      "Standalone HTML export (zero runtime deps)",
-      "ZIP bundle export (custom STORE-method writer with CRC32)",
-      "Analytics dashboard: KPI cards, area/bar/donut/funnel charts",
-    ],
-    stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind 4", "shadcn/ui", "Prisma", "Zustand", "dnd-kit", "recharts", "z-ai-web-dev-sdk"],
-    metrics: [
-      { label: "Section types", value: "12" },
-      { label: "Templates", value: "5" },
-      { label: "Themes", value: "7" },
-      { label: "Undo depth", value: "50" },
-    ],
-    screenshots: [
-      { src: "/projects/landingforge/01-editor.png", caption: "Editor — section library, canvas, inspector panel" },
-      { src: "/projects/landingforge/02-templates.png", caption: "Templates gallery — 5 pre-built sites" },
-      { src: "/projects/landingforge/03-analytics.png", caption: "Analytics dashboard — KPIs, area, bar, donut, funnel" },
-      { src: "/projects/landingforge/04-preview.png", caption: "Live preview — iframe-rendered page" },
-      { src: "/projects/landingforge/05-dark-theme.png", caption: "Midnight theme — live CSS variable theming" },
-      { src: "/projects/landingforge/06-mobile-preview.png", caption: "Mobile preview width — responsive at every breakpoint" },
-    ],
-  },
-  {
-    index: "04",
     name: "Lead Profiler",
     category: "LEAD RESEARCH TOOL",
     year: "2025",
@@ -223,7 +214,7 @@ export const projects: Project[] = [
     screenshots: [],
   },
   {
-    index: "05",
+    index: "03",
     name: "Mohamed Medhat — Portfolio",
     category: "CLIENT PROJECT · MARKETING PORTFOLIO",
     year: "2025",
