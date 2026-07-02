@@ -20,7 +20,7 @@ export function Industries() {
     >
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <SectionHeader
-          index="03"
+          index="02"
           eyebrow="Industries I serve"
           title="Built for your industry."
         />

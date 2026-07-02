@@ -89,10 +89,10 @@ export function Hero() {
           className="mt-10 flex flex-wrap items-center gap-3"
         >
           <button
-            onClick={() => scrollTo("#work")}
+            onClick={() => scrollTo("#industries")}
             className="group inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-5 py-3 text-sm font-medium hover:bg-primary/90 transition-all hover:gap-3"
           >
-            View my work
+            What I build for you
             <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
           </button>
           <button

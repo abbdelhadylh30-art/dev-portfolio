@@ -12,7 +12,7 @@ export function Capabilities() {
     >
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <SectionHeader
-          index="03"
+          index="04"
           eyebrow="Capabilities"
           title="What I reach for, daily."
         />

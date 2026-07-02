@@ -15,7 +15,7 @@ export function NavBar() {
       setScrolled(window.scrollY > 24);
 
       // Track active section
-      const sections = ["about", "work", "capabilities", "industries", "contact"];
+      const sections = ["about", "industries", "work", "capabilities", "contact"];
       let current = "";
       for (const id of sections) {
         const el = document.getElementById(id);

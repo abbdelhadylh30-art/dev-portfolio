@@ -11,9 +11,9 @@ export function Work() {
     <section id="work" className="relative py-24 sm:py-32 scroll-mt-16 border-t border-border">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <SectionHeader
-          index="02"
-          eyebrow="Selected work"
-          title="Three projects. One stack."
+          index="03"
+          eyebrow="Full-stack proof"
+          title="Built end-to-end. Shipped."
         />
 
         <motion.p
@@ -23,9 +23,10 @@ export function Work() {
           transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
           className="mt-6 max-w-2xl text-base text-muted-foreground leading-relaxed"
         >
-          Each project below is a real, deployable Next.js app — not a demo, not a tutorial. They share
-          a stack, share patterns, and in the case of Forge Studio, share a single binary. Click any
-          project to drill into the case study.
+          Anyone can promise a website. These are the apps I&apos;ve actually built — full-stack,
+          from Prisma schema to the last pixel of margin. Frontend, backend, database, deployment,
+          SEO, the export button. When you hire me for your industry, this is the depth that backs
+          the promise.
         </motion.p>
 
         <div className="mt-16 flex flex-col gap-16 sm:gap-24">
