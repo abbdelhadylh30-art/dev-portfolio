@@ -326,5 +326,6 @@ export const navItems = [
   { label: "About", href: "#about" },
   { label: "Work", href: "#work" },
   { label: "Capabilities", href: "#capabilities" },
+  { label: "Industries", href: "#industries" },
   { label: "Contact", href: "#contact" },
 ] as const;
