@@ -2,20 +2,18 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { industries, industrySlugs } from "@/lib/industries-data";
 import { IndustryPage } from "@/components/industry/industry-page";
-import { profile } from "@/lib/portfolio-data";
 
 export function generateStaticParams() {
   return industrySlugs.map((slug) => ({ industry: slug }));
 }
 
-export function generateMetadata({ params }: { params: Promise<{ industry: string }> }): Promise<Metadata> | Metadata {
-  // params is a Promise in Next.js 16 — but generateMetadata can be sync
-  // We'll handle it as a regular object since generateStaticParams pre-renders all pages
-  return generateMetadataSync(params as unknown as { industry: string });
-}
-
-function generateMetadataSync({ industry }: { industry: string }): Metadata {
-  const ind = industries.find((i) => i.slug === industry);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ industry: string }>;
+}): Promise<Metadata> {
+  const { industry: slug } = await params;
+  const ind = industries.find((i) => i.slug === slug);
   if (!ind) return { title: "Not found" };
 
   return {
