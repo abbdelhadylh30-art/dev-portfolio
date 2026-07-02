@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { profile, navItems } from "@/lib/portfolio-data";
 
+type NavItem = { label: string; href: string; external?: boolean };
+
 export function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -14,8 +16,8 @@ export function NavBar() {
     const onScroll = () => {
       setScrolled(window.scrollY > 24);
 
-      // Track active section
-      const sections = ["about", "industries", "work", "capabilities", "contact"];
+      // Track active section (only for anchor links, not external)
+      const sections = ["about", "industries", "contact"];
       let current = "";
       for (const id of sections) {
         const el = document.getElementById(id);
@@ -28,14 +30,18 @@ export function NavBar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleClick = (href: string) => {
+  const handleClick = (href: string, external?: boolean) => {
     setOpen(false);
-    // Defer the scroll until after the menu close animation starts,
-    // otherwise the collapsing menu intercepts the scroll on mobile.
+    if (external) {
+      // External page link — navigate
+      window.location.assign(href);
+      return;
+    }
+    // Anchor link — defer scroll after menu close
     setTimeout(() => {
       const el = document.querySelector(href);
       if (el) {
-        const top = el.getBoundingClientRect().top + window.scrollY - 72; // 72px = header height + breathing room
+        const top = el.getBoundingClientRect().top + window.scrollY - 72;
         window.scrollTo({ top, behavior: "smooth" });
       }
     }, 150);
@@ -77,26 +83,30 @@ export function NavBar() {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-1">
-          {navItems.map((item) => (
-            <button
-              key={item.href}
-              onClick={() => handleClick(item.href)}
-              className={`relative px-3.5 py-2 text-sm font-medium transition-colors rounded-md ${
-                active === item.href.slice(1)
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {item.label}
-              {active === item.href.slice(1) && (
-                <motion.span
-                  layoutId="nav-active"
-                  className="absolute inset-x-3 -bottom-px h-px bg-foreground"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                />
-              )}
-            </button>
-          ))}
+          {(navItems as readonly NavItem[]).map((item) => {
+            const isActive = !item.external && active === item.href.slice(1);
+            return (
+              <button
+                key={item.href}
+                onClick={() => handleClick(item.href, item.external)}
+                className={`relative px-3.5 py-2 text-sm font-medium transition-colors rounded-md inline-flex items-center gap-1 ${
+                  isActive
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {item.label}
+                {item.external && <ArrowUpRight className="w-3 h-3 opacity-60" />}
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-active"
+                    className="absolute inset-x-3 -bottom-px h-px bg-foreground"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </button>
+            );
+          })}
           <button
             onClick={() => handleClick("#contact")}
             className="ml-2 inline-flex items-center gap-1.5 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors"
@@ -127,13 +137,14 @@ export function NavBar() {
             className="md:hidden overflow-hidden border-t border-border bg-background/95 backdrop-blur-xl"
           >
             <div className="px-5 py-4 flex flex-col gap-1">
-              {navItems.map((item) => (
+              {(navItems as readonly NavItem[]).map((item) => (
                 <button
                   key={item.href}
-                  onClick={() => handleClick(item.href)}
-                  className="text-left px-3 py-3 text-base font-medium text-foreground hover:bg-accent rounded-md transition-colors"
+                  onClick={() => handleClick(item.href, item.external)}
+                  className="text-left px-3 py-3 text-base font-medium text-foreground hover:bg-accent rounded-md transition-colors inline-flex items-center gap-2"
                 >
                   {item.label}
+                  {item.external && <ArrowUpRight className="w-4 h-4 opacity-60" />}
                 </button>
               ))}
               <button

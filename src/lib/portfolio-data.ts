@@ -325,7 +325,6 @@ export const skillCategories: SkillCategory[] = [
 export const navItems = [
   { label: "About", href: "#about" },
   { label: "Industries", href: "#industries" },
-  { label: "Work", href: "#work" },
-  { label: "Capabilities", href: "#capabilities" },
+  { label: "Work", href: "/work", external: true },
   { label: "Contact", href: "#contact" },
 ] as const;

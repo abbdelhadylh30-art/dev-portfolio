@@ -39,7 +39,7 @@ export function Work() {
   );
 }
 
-function CaseStudy({ project, flip }: { project: Project; flip: boolean }) {
+export function CaseStudy({ project, flip }: { project: Project; flip: boolean }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
   const hasShots = project.screenshots.length > 0;
 
