@@ -256,6 +256,45 @@ export const projects: Project[] = [
       { label: "Live site", href: "https://portfolio-z258.vercel.app/" },
     ],
   },
+  {
+    index: "04",
+    name: "Knead Bakery — Site Reimagining",
+    category: "CASE STUDY · BAKERY UX REDESIGN",
+    year: "2025",
+    status: "shipped",
+    summary:
+      "A reimagining of order.knead.ae — a real Abu Dhabi bakery currently running on a generic Wix template. I audited the original, identified 8 UX/SEO/performance problems, and rebuilt the site with every design decision documented in the page itself. The case study is the deliverable.",
+    problem:
+      "Knead Bakery sells a 28 AED sourdough loaf made with an 8-year-old starter, 36-hour ferment, and four ingredients. Their website sells it like a parking ticket. Arial font. 1.8 MB of Wix HTML. 12 tracking scripts. 15 flat menu categories with no hierarchy. A 4-hour pickup window buried in small grey text. Hero copy that says 'Click. Order. Enjoy.' — the kind of tagline that could sell anything from bakery orders to bus tickets.",
+    approach:
+      "I treated the reimagining as a public case study — every decision documented with the data behind it. The new site uses Fraunces (an editorial serif designed for food writing) for headlines, Inter for body, a warm cream (#FAF7F2) + espresso (#1A1410) palette derived from bread crust tones, and a single terracotta accent (#C2410C) that means 'oven'. The 15 flat menu categories were regrouped into 4 moments of the day (Morning, Afternoon, Evening, Always) — customers don't think 'I want category H2', they think 'it's morning, I want breakfast'. The 4-hour pickup time was surfaced in the hero instead of buried at checkout, because surprise wait times are the #1 cart abandonment cause. A 'story' section was added before the menu to justify premium pricing with the natural-starter craft.",
+    outcome:
+      "A static Next.js page with zero runtime scripts, ~40 KB HTML (vs 1.8 MB original), target LCP under 1.5s on 4G. The page itself serves as the case study — visitors can scroll from the reimagined hero through the story, the regrouped menu, and finally the full design analysis section with metrics, problems found, and 6 key decisions explained. This is what 'full-stack' means for a client: not just code, but the reasoning that makes the code worth paying for.",
+    features: [
+      "Editorial serif (Fraunces) + clean sans (Inter) — replaces generic Arial",
+      "Warm cream (#FAF7F2) + espresso (#1A1410) + terracotta (#C2410C) palette",
+      "Hero surfaces 4-hour pickup time + address + WhatsApp in one strip",
+      "Story section: 4-ingredient sourdough vs 14+ ingredient supermarket loaf",
+      "Menu regrouped: 15 flat categories → 4 moments of the day (Morning/Afternoon/Evening/Always)",
+      "Each menu item has name, price, description, and 'Add +' interaction",
+      "Full design analysis section: 6 metrics, 8 problems found, 6 key decisions",
+      "Static Next.js — 0 runtime scripts, ~40 KB HTML (vs 1.8 MB Wix original)",
+      "Target LCP < 1.5s on 4G (vs estimated 3-4s on original)",
+      "Mobile-first responsive (single column → 2-col menu on sm+)",
+    ],
+    stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind 4", "Framer Motion", "Fraunces (serif)", "Inter (sans)"],
+    metrics: [
+      { label: "HTML size", value: "1.8MB → 40KB" },
+      { label: "Scripts", value: "12 → 0" },
+      { label: "Menu categories", value: "15 → 4" },
+      { label: "LCP target", value: "<1.5s" },
+    ],
+    screenshots: [],
+    links: [
+      { label: "View reimagined site", href: "/knead" },
+      { label: "Original (Knead)", href: "https://order.knead.ae" },
+    ],
+  },
 ];
 
 export type SkillCategory = {
