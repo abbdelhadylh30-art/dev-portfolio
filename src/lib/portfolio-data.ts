@@ -40,6 +40,56 @@ export const philosophy = [
   },
 ] as const;
 
+/**
+ * Direct quotes from SWEBOK V3.0 (IEEE Computer Society, 2014).
+ * Used to ground the portfolio's engineering claims in the canonical
+ * body of knowledge — not opinion, but industry standard.
+ */
+export const swebokQuotes = [
+  {
+    quote:
+      "Software engineering is the application of a systematic, disciplined, quantifiable approach to the development, operation, and maintenance of software; that is, the application of engineering to software.",
+    source: "SWEBOK V3.0, Introduction — ISO/IEC/IEEE SEVOCAB",
+    ka: "Introduction",
+    usedIn: "hero-tagline",
+  },
+  {
+    quote:
+      "Clients often don't know what is needed or what is feasible. Clients often lack appreciation for the complexities inherent in software engineering, particularly regarding the impact of changing requirements.",
+    source: "SWEBOK V3.0, Ch. 7 — Software Engineering Management, p.133",
+    ka: "Software Engineering Management",
+    usedIn: "about-philosophy",
+  },
+  {
+    quote:
+      "Software testing consists of the dynamic verification that a program provides expected behaviors on a finite set of test cases, suitably selected from the usually infinite execution domain.",
+    source: "SWEBOK V3.0, Ch. 4 — Software Testing, p.82",
+    ka: "Software Testing",
+    usedIn: "work-process",
+  },
+  {
+    quote:
+      "To Phil Crosby, quality was 'conformance to requirements.' Watts Humphrey refers to it as 'fitness for use.' IBM coined 'market-driven quality,' where the 'customer is the final arbiter.'",
+    source: "SWEBOK V3.0, Ch. 10 — Software Quality, p.174",
+    ka: "Software Quality",
+    usedIn: "work-quality",
+  },
+  {
+    quote:
+      "Design is defined as both 'the process of defining the architecture, components, interfaces, and other characteristics of a system' and 'the result of [that] process.'",
+    source: "SWEBOK V3.0, Ch. 2 — Software Design, p.50",
+    ka: "Software Design",
+    usedIn: "work-design-decisions",
+  },
+  {
+    quote:
+      "Software engineering economics is about making decisions related to software engineering in a business context. The success of a software product depends on good business management.",
+    source: "SWEBOK V3.0, Ch. 12 — Software Engineering Economics, p.206",
+    ka: "Software Engineering Economics",
+    usedIn: "work-outcome",
+  },
+] as const;
+
 export type SubProject = {
   name: string;
   role: string;

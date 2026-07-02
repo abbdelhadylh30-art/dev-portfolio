@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
-import { projects, type Project, type SubProject } from "@/lib/portfolio-data";
+import { projects, type Project, type SubProject, swebokQuotes } from "@/lib/portfolio-data";
 import { SectionHeader } from "./about";
 
 export function Work() {
@@ -32,6 +32,33 @@ export function Work() {
           {projects.map((project, i) => (
             <CaseStudy key={project.index} project={project} flip={i % 2 === 1} />
           ))}
+        </div>
+
+        {/* SWEBOK References — grounds the portfolio in the canonical body of knowledge */}
+        <div className="mt-24 pt-12 border-t border-border">
+          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-6">
+            References · SWEBOK V3.0 (IEEE Computer Society, 2014)
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-2xl">
+            The engineering practices documented above aren&apos;t personal preference — they map to the
+            15 Knowledge Areas defined in the <em>Guide to the Software Engineering Body of Knowledge</em>,
+            the IEEE Computer Society&apos;s canonical reference for what constitutes software engineering as a discipline.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {swebokQuotes.map((q, i) => (
+              <div key={i} className="rounded-lg border border-border bg-card/30 p-4">
+                <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground mb-2">
+                  {q.ka}
+                </div>
+                <blockquote className="text-xs italic text-foreground/80 leading-relaxed mb-2">
+                  &ldquo;{q.quote}&rdquo;
+                </blockquote>
+                <div className="text-[10px] font-mono text-muted-foreground/60">
+                  {q.source}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -207,6 +234,13 @@ function CaseStudy({ project, flip }: { project: Project; flip: boolean }) {
             <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-4">
               Process · Software Engineering Management
             </div>
+            {/* SWEBOK quote — grounds the section in the canonical body of knowledge */}
+            <blockquote className="mb-4 pl-3 border-l-2 border-foreground/20 text-xs italic text-muted-foreground leading-relaxed">
+              &ldquo;Clients often don&apos;t know what is needed or what is feasible.&rdquo;
+              <footer className="mt-1 not-italic text-[10px] font-mono text-muted-foreground/60">
+                — SWEBOK V3.0, Ch. 7 (Software Engineering Management), p.133
+              </footer>
+            </blockquote>
             <div className="grid sm:grid-cols-2 gap-4 mb-4">
               <div>
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono mb-1">Timeline</div>
@@ -246,6 +280,12 @@ function CaseStudy({ project, flip }: { project: Project; flip: boolean }) {
             <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-4">
               Design Decisions · Tradeoffs Evaluated
             </div>
+            <blockquote className="mb-4 pl-3 border-l-2 border-foreground/20 text-xs italic text-muted-foreground leading-relaxed">
+              &ldquo;Design is the process of defining the architecture, components, interfaces, and other characteristics of a system.&rdquo;
+              <footer className="mt-1 not-italic text-[10px] font-mono text-muted-foreground/60">
+                — SWEBOK V3.0, Ch. 2 (Software Design), p.50
+              </footer>
+            </blockquote>
             <div className="space-y-3">
               {project.designDecisions.map((dd, i) => (
                 <div key={i} className="border-l-2 border-foreground/20 pl-3">

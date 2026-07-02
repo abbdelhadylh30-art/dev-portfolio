@@ -81,6 +81,19 @@ export function Hero() {
           {profile.tagline}
         </motion.p>
 
+        {/* SWEBOK definition — grounds the role in the canonical standard */}
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+          className="mt-4 max-w-2xl text-xs italic text-muted-foreground/60 leading-relaxed border-l-2 border-border pl-3"
+        >
+          &ldquo;Software engineering is the application of a systematic, disciplined, quantifiable approach to the development, operation, and maintenance of software.&rdquo;
+          <span className="block mt-1 not-italic font-mono text-[10px] text-muted-foreground/40">
+            — ISO/IEC/IEEE SEVOCAB, cited in SWEBOK V3.0
+          </span>
+        </motion.p>
+
         {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
