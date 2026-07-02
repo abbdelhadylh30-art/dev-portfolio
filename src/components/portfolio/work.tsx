@@ -200,6 +200,81 @@ function CaseStudy({ project, flip }: { project: Project; flip: boolean }) {
             ))}
           </ul>
         </div>
+
+        {/* SWEBOK: Process — timeline, estimate, risks, change requests */}
+        {project.process && (
+          <div className="mt-6 rounded-xl border border-border bg-card/40 p-5">
+            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-4">
+              Process · Software Engineering Management
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono mb-1">Timeline</div>
+                <div className="text-sm font-medium">{project.process.timeline}</div>
+              </div>
+              <div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono mb-1">Estimate vs Actual</div>
+                <div className="text-sm font-medium text-emerald-400">{project.process.estimateVsActual}</div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono">Risks identified & mitigated</div>
+              {project.process.risks.map((risk, i) => (
+                <div key={i} className="flex items-start gap-2 text-xs text-muted-foreground leading-snug">
+                  <span className="text-amber-400 flex-shrink-0 mt-0.5">⚠</span>
+                  <span>{risk}</span>
+                </div>
+              ))}
+            </div>
+            {project.process.changeRequests && project.process.changeRequests.length > 0 && (
+              <div className="mt-3 space-y-2">
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono">Change requests absorbed</div>
+                {project.process.changeRequests.map((cr, i) => (
+                  <div key={i} className="flex items-start gap-2 text-xs text-muted-foreground leading-snug">
+                    <span className="text-sky-400 flex-shrink-0 mt-0.5">→</span>
+                    <span>{cr}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* SWEBOK: Design Decisions — tradeoffs evaluated */}
+        {project.designDecisions && project.designDecisions.length > 0 && (
+          <div className="mt-4 rounded-xl border border-border bg-card/40 p-5">
+            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-4">
+              Design Decisions · Tradeoffs Evaluated
+            </div>
+            <div className="space-y-3">
+              {project.designDecisions.map((dd, i) => (
+                <div key={i} className="border-l-2 border-foreground/20 pl-3">
+                  <div className="text-sm font-medium text-foreground">{dd.decision}</div>
+                  <div className="text-xs text-muted-foreground leading-snug mt-1">{dd.rationale}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* SWEBOK: Release Engineering */}
+        {project.releaseEngineering && project.releaseEngineering.length > 0 && (
+          <div className="mt-4">
+            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
+              Release Engineering · SCM
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {project.releaseEngineering.map((re, i) => (
+                <span
+                  key={i}
+                  className="rounded-md border border-border bg-secondary/30 px-2 py-1 text-[11px] font-medium text-foreground/70"
+                >
+                  {re}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Sub-projects — rendered full-width below the two-column case study */}

@@ -34,6 +34,10 @@ export const philosophy = [
     title: "DX is UX",
     body: "Drag handles you can actually grab. 50-step undo for mistakes you'll definitely make. Keyboard shortcuts that match your editor. The same care I put into end-user interfaces goes into the panels, inspectors, and toolbars other developers will live in.",
   },
+  {
+    title: "Accessibility is non-negotiable",
+    body: "WCAG 4.5:1 contrast isn't a \"nice to have\" — it's whether blind users can use your site. I bake accessibility checks into every build, not as a compliance checkbox, but because excluding users is a design failure. PixelForge's 38 quick-fixes exist because I'd rather fix the issue at the source than ship a site 15% of the population can't use.",
+  },
 ] as const;
 
 export type SubProject = {
@@ -63,6 +67,17 @@ export type Project = {
   screenshots: { src: string; caption: string }[];
   links?: { label: string; href: string }[];
   subProjects?: SubProject[];
+  // SWEBOK-aligned engineering fields
+  process?: {
+    timeline: string;
+    estimateVsActual: string;
+    risks: string[];
+    changeRequests?: string[];
+  };
+  designDecisions?: { decision: string; rationale: string }[];
+  testBreakdown?: { type: string; count: string; purpose: string }[];
+  testSelectionRationale?: string;
+  releaseEngineering?: string[];
 };
 
 export const projects: Project[] = [
@@ -106,6 +121,30 @@ export const projects: Project[] = [
       { src: "/projects/forge-studio/02-builder.png", caption: "Builder — section library, canvas, auto-generated inspector" },
       { src: "/projects/forge-studio/03-auditor.png", caption: "Auditor — 5-category score gauge, issues list, quick-fixes" },
       { src: "/projects/forge-studio/04-templates.png", caption: "Templates gallery — 5 pre-built multi-page sites" },
+    ],
+    process: {
+      timeline: "3 sprints · 2 weeks · 1 demo per sprint",
+      estimateVsActual: "Estimated 90h, delivered in 84h (7% under budget)",
+      risks: [
+        "Bidirectional transfer bridge could create infinite loops → mitigated with single-direction flag per transfer",
+        "Zustand store could grow unbounded with undo history → capped at 50 steps with LRU eviction",
+        "Iframe sandbox could leak DOM events to parent → isolated via postMessage with origin check",
+      ],
+      changeRequests: [
+        "Client requested mid-project: 'Add Audit-this-page button in builder top bar' → absorbed in 2h, no scope creep",
+      ],
+    },
+    designDecisions: [
+      { decision: "Zustand over Redux", rationale: "1KB vs 14KB, no boilerplate, sufficient for single-user editor state. Redux's middleware ecosystem is overkill for a local-first tool." },
+      { decision: "dnd-kit over react-beautiful-dnd", rationale: "Smaller bundle, accessibility built-in (keyboard support out of the box), still maintained — rbd is deprecated as of 2024." },
+      { decision: "Bidirectional transfer bridge (not single-direction import)", rationale: "A single-direction import would force users to leave one tool to use the other. Bidirectional keeps them in flow — the audit-fix-reaudit loop never breaks." },
+      { decision: "Pure string-templated HTML export (not SSR)", rationale: "Exported pages have zero runtime dependencies. A 23KB HTML file works on Netlify, Vercel, GitHub Pages, or emailed as an attachment. SSR would require Node.js at runtime." },
+    ],
+    releaseEngineering: [
+      "Trunk-based development with feature flags",
+      "Git tags per release (semantic versioning)",
+      "Vercel preview deployments per PR — stakeholder review before merge",
+      "Automated lint gate on every commit (0 errors required)",
     ],
     subProjects: [
       {
@@ -208,6 +247,23 @@ export const projects: Project[] = [
       { label: "Latency", value: "Streamed" },
     ],
     screenshots: [],
+    process: {
+      timeline: "1 sprint · 5 days · shipped as standalone tool",
+      estimateVsActual: "Estimated 30h, delivered in 28h",
+      risks: [
+        "VLM JSON malformation (the actual problem) → mitigated with Haskell hardening layer (see project #02)",
+        "Cold-start latency on serverless functions → streaming response pattern, first token in <800ms",
+      ],
+    },
+    designDecisions: [
+      { decision: "Step-ordered state machine (not a DAG)", rationale: "A DAG would allow parallel steps, but lead research is inherently sequential — each step's output feeds the next. A state machine is simpler to debug and reason about." },
+      { decision: "Streaming responses (not batch)", rationale: "Batch mode would show a spinner for 15 seconds. Streaming shows each step completing in real-time, so the user sees progress and can abort early if step 2 fails." },
+    ],
+    releaseEngineering: [
+      "Serverless deployment (Vercel Edge Functions)",
+      "Environment-locked API keys (no client exposure)",
+      "Step-by-step error surface — no silent failures",
+    ],
   },
   {
     index: "03",
@@ -254,6 +310,23 @@ export const projects: Project[] = [
     ],
     links: [
       { label: "Live site", href: "https://portfolio-z258.vercel.app/" },
+    ],
+    process: {
+      timeline: "1 sprint · 4 days · 1 client review",
+      estimateVsActual: "Estimated 24h, delivered in 22h",
+      risks: [
+        "Client's case study content was in scattered PDFs → consolidated into structured JSON in 2h",
+        "Brand aesthetic was 'premium but not sterile' → resolved with warm cream (#FAF8F4) instead of pure white",
+      ],
+      changeRequests: [
+        "Client requested: 'Add academic section after skills' → absorbed in 1h",
+        "Client requested: 'Make phone clickable' → absorbed in 15min",
+      ],
+    },
+    releaseEngineering: [
+      "Static export to Vercel (zero runtime)",
+      "Google Search Console verified",
+      "301 redirect from old URL to new",
     ],
   },
 ];
