@@ -126,6 +126,7 @@ export const kneadMenu = {
       time: "7:00 — 12:00",
       accent: "text-amber-700",
       bg: "bg-amber-50/40",
+      image: "/knead/cat-1.jpg",
       items: [
         { name: "Sourdough Loaf", price: "28 AED", desc: "Natural starter, 24-hour ferment, sea salt. No preservatives." },
         { name: "Butter Croissant", price: "12 AED", desc: "French butter, 36-hour laminate. Crisp shatter, airy crumb." },
@@ -140,6 +141,7 @@ export const kneadMenu = {
       time: "12:00 — 17:00",
       accent: "text-orange-700",
       bg: "bg-orange-50/40",
+      image: "/knead/cat-2.jpg",
       items: [
         { name: "Beef Sourdough Sandwich", price: "38 AED", desc: "Slow-braised beef, caramelized onion, horseradish cream." },
         { name: "Chicken Shawarma Wrap", price: "26 AED", desc: "Marinated chicken, garlic toum, pickles, house flatbread." },
@@ -154,6 +156,7 @@ export const kneadMenu = {
       time: "17:00 — 22:00",
       accent: "text-rose-700",
       bg: "bg-rose-50/40",
+      image: "/knead/cat-3.jpg",
       items: [
         { name: "Pistachio Cake", price: "34 AED", desc: "Single-origin pistachio, rose water, cream cheese frosting." },
         { name: "Chocolate Torte", price: "32 AED", desc: "70% dark chocolate, no flour. Gluten-free." },
@@ -168,6 +171,7 @@ export const kneadMenu = {
       time: "All day",
       accent: "text-stone-700",
       bg: "bg-stone-50/40",
+      image: "/knead/cat-4.jpg",
       items: [
         { name: "Kids Croissant", price: "8 AED", desc: "Mini croissant, kid-approved. Almond or plain." },
         { name: "Kids Hot Chocolate", price: "12 AED", desc: "Mild chocolate, whipped cream, mini marshmallows." },

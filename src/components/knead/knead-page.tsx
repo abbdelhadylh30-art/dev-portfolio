@@ -35,12 +35,23 @@ export function KneadPage() {
       </header>
 
       {/* Hero */}
-      <section className="relative min-h-screen flex flex-col justify-center pt-24 pb-16">
+      <section className="relative min-h-screen flex flex-col justify-center pt-24 pb-16 overflow-hidden">
+        {/* Real Knead hero image as background */}
         <div
           aria-hidden
           className="absolute inset-0 -z-10 pointer-events-none"
           style={{
-            background: "radial-gradient(900px 500px at 80% 10%, rgba(194, 65, 12, 0.08), transparent 60%), radial-gradient(600px 400px at 10% 90%, rgba(26, 20, 16, 0.04), transparent 60%)",
+            backgroundImage: "url(/knead/hero-bg.jpg)",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        {/* Dark overlay for text legibility */}
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 pointer-events-none"
+          style={{
+            background: "linear-gradient(135deg, rgba(26, 20, 16, 0.85) 0%, rgba(26, 20, 16, 0.6) 50%, rgba(194, 65, 12, 0.3) 100%)",
           }}
         />
         <div className="mx-auto max-w-6xl w-full px-5 sm:px-8">
@@ -48,20 +59,20 @@ export function KneadPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 rounded-full border border-[#1A1410]/15 bg-white/60 backdrop-blur px-3 py-1.5 mb-8"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/30 backdrop-blur px-3 py-1.5 mb-8"
           >
             <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-60 animate-soft-pulse" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+              <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 animate-soft-pulse" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
             </span>
-            <span className="text-xs font-medium text-[#1A1410]/70">Open now · Pickup ready in 4 hours</span>
+            <span className="text-xs font-medium text-white/90">Open now · Pickup ready in 4 hours</span>
           </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="font-mono text-xs uppercase tracking-[0.25em] text-[#C2410C] mb-5"
+            className="font-mono text-xs uppercase tracking-[0.25em] text-[#FBBF24] mb-5"
           >
             Knead Bakery & Patisserie · Abu Dhabi
           </motion.p>
@@ -70,17 +81,17 @@ export function KneadPage() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="font-serif font-semibold tracking-[-0.03em] text-[clamp(2.75rem,9vw,7rem)] leading-[0.95]"
+            className="font-serif font-semibold tracking-[-0.03em] text-[clamp(2.75rem,9vw,7rem)] leading-[0.95] text-[#FAF7F2]"
           >
             Bread baked<br />
-            <span className="text-[#C2410C] italic">the slow way.</span>
+            <span className="text-[#FBBF24] italic">the slow way.</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.25 }}
-            className="mt-8 max-w-xl text-lg text-[#1A1410]/70 leading-relaxed"
+            className="mt-8 max-w-xl text-lg text-white/80 leading-relaxed"
           >
             Natural starter. No preservatives. No enzymes. Baked fresh daily on Al Meel Street since the early 2000s. Order online, pick up in 4 hours.
           </motion.p>
@@ -93,14 +104,14 @@ export function KneadPage() {
           >
             <a
               href="#menu"
-              className="group inline-flex items-center gap-2 rounded-full bg-[#1A1410] text-[#FAF7F2] px-5 py-3 text-sm font-medium hover:bg-[#1A1410]/90 transition-all hover:gap-3"
+              className="group inline-flex items-center gap-2 rounded-full bg-[#FBBF24] text-[#1A1410] px-5 py-3 text-sm font-medium hover:bg-[#FBBF24]/90 transition-all hover:gap-3"
             >
               Browse the menu
               <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
             </a>
             <a
               href="#story"
-              className="group inline-flex items-center gap-2 rounded-full border border-[#1A1410]/20 bg-white/60 backdrop-blur px-5 py-3 text-sm font-medium text-[#1A1410] hover:bg-white transition-all"
+              className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur px-5 py-3 text-sm font-medium text-white hover:bg-white/20 transition-all"
             >
               Why Knead is different
             </a>
@@ -111,27 +122,27 @@ export function KneadPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.55 }}
-            className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-px bg-[#1A1410]/10 border border-[#1A1410]/10 rounded-2xl overflow-hidden"
+            className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-px bg-white/10 border border-white/15 rounded-2xl overflow-hidden"
           >
-            <div className="bg-white/50 backdrop-blur px-5 py-5 flex items-center gap-3">
-              <Clock className="w-5 h-5 text-[#C2410C] flex-shrink-0" />
+            <div className="bg-black/30 backdrop-blur px-5 py-5 flex items-center gap-3">
+              <Clock className="w-5 h-5 text-[#FBBF24] flex-shrink-0" />
               <div>
-                <div className="text-sm font-semibold">Ready in 4 hours</div>
-                <div className="text-xs text-[#1A1410]/60">Or schedule for tomorrow</div>
+                <div className="text-sm font-semibold text-[#FAF7F2]">Ready in 4 hours</div>
+                <div className="text-xs text-white/70">Or schedule for tomorrow</div>
               </div>
             </div>
-            <div className="bg-white/50 backdrop-blur px-5 py-5 flex items-center gap-3">
-              <MapPin className="w-5 h-5 text-[#C2410C] flex-shrink-0" />
+            <div className="bg-black/30 backdrop-blur px-5 py-5 flex items-center gap-3">
+              <MapPin className="w-5 h-5 text-[#FBBF24] flex-shrink-0" />
               <div>
-                <div className="text-sm font-semibold">76 Al Meel Street</div>
-                <div className="text-xs text-[#1A1410]/60">Abu Dhabi, UAE</div>
+                <div className="text-sm font-semibold text-[#FAF7F2]">76 Al Meel Street</div>
+                <div className="text-xs text-white/70">Abu Dhabi, UAE</div>
               </div>
             </div>
-            <div className="bg-white/50 backdrop-blur px-5 py-5 flex items-center gap-3">
-              <MessageCircle className="w-5 h-5 text-[#C2410C] flex-shrink-0" />
+            <div className="bg-black/30 backdrop-blur px-5 py-5 flex items-center gap-3">
+              <MessageCircle className="w-5 h-5 text-[#FBBF24] flex-shrink-0" />
               <div>
-                <div className="text-sm font-semibold">WhatsApp ordering</div>
-                <div className="text-xs text-[#1A1410]/60">+971 50 123 4567</div>
+                <div className="text-sm font-semibold text-[#FAF7F2]">WhatsApp ordering</div>
+                <div className="text-xs text-white/70">+971 50 123 4567</div>
               </div>
             </div>
           </motion.div>
@@ -185,8 +196,19 @@ export function KneadPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="lg:col-span-5"
+              className="lg:col-span-5 space-y-4"
             >
+              {/* Real Knead food photography */}
+              <div className="rounded-2xl border border-[#1A1410]/15 overflow-hidden">
+                <img
+                  src="/knead/food-arranged.jpg"
+                  alt="Knead Bakery — arranged food photography (from original site)"
+                  className="w-full h-56 object-cover"
+                  loading="lazy"
+                />
+              </div>
+
+              {/* Ingredient card */}
               <div className="rounded-2xl border border-[#1A1410]/15 bg-white/60 backdrop-blur p-6">
                 <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#C2410C] mb-4">
                   Our sourdough · ingredient list
@@ -213,6 +235,14 @@ export function KneadPage() {
                   <div className="text-xs text-[#1A1410]/60">Total ingredients</div>
                   <div className="text-2xl font-serif font-semibold mt-1">4</div>
                   <div className="text-xs text-[#1A1410]/50 mt-1">Compare to a supermarket loaf: 14+ ingredients.</div>
+                </div>
+              </div>
+
+              {/* Original logo for attribution */}
+              <div className="flex items-center gap-3 px-2">
+                <img src="/knead/logo.png" alt="Knead Bakery original logo" className="w-10 h-10 rounded-full object-contain" />
+                <div className="text-xs text-[#1A1410]/50">
+                  Original Knead Bakery logo · <a href="https://order.knead.ae" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#1A1410]">order.knead.ae</a>
                 </div>
               </div>
             </motion.div>
@@ -251,23 +281,36 @@ export function KneadPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5, delay: mIdx * 0.05 }}
-                className={`rounded-2xl border border-[#1A1410]/15 ${moment.bg} p-6 sm:p-8`}
+                className={`rounded-2xl border border-[#1A1410]/15 ${moment.bg} overflow-hidden`}
               >
-                <div className="flex items-baseline justify-between gap-4 mb-6">
-                  <div className="flex items-baseline gap-3">
-                    {mIdx === 0 && <Coffee className={`w-5 h-5 ${moment.accent}`} />}
-                    {mIdx === 1 && <Wheat className={`w-5 h-5 ${moment.accent}`} />}
-                    {mIdx === 2 && <Cake className={`w-5 h-5 ${moment.accent}`} />}
-                    {mIdx === 3 && <Wheat className={`w-5 h-5 ${moment.accent}`} />}
-                    <h3 className="font-serif text-2xl font-semibold tracking-tight">{moment.name}</h3>
+                {/* Food image header */}
+                <div className="relative h-48 sm:h-56 overflow-hidden">
+                  <img
+                    src={moment.image}
+                    alt={`${moment.name} — Knead Bakery food photography`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end justify-between gap-4">
+                    <div className="flex items-baseline gap-3">
+                      {mIdx === 0 && <Coffee className={`w-5 h-5 ${moment.accent} drop-shadow-lg`} />}
+                      {mIdx === 1 && <Wheat className={`w-5 h-5 ${moment.accent} drop-shadow-lg`} />}
+                      {mIdx === 2 && <Cake className={`w-5 h-5 ${moment.accent} drop-shadow-lg`} />}
+                      {mIdx === 3 && <Wheat className={`w-5 h-5 ${moment.accent} drop-shadow-lg`} />}
+                      <h3 className="font-serif text-2xl font-semibold tracking-tight text-white drop-shadow-lg">{moment.name}</h3>
+                    </div>
+                    <span className={`font-mono text-xs uppercase tracking-wider text-white/90 drop-shadow`}>{moment.time}</span>
                   </div>
-                  <span className={`font-mono text-xs uppercase tracking-wider ${moment.accent}`}>{moment.time}</span>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-x-8 gap-y-5">
-                  {moment.items.map((item) => (
-                    <MenuItem key={item.name} item={item} />
-                  ))}
+                {/* Items */}
+                <div className="p-6 sm:p-8">
+                  <div className="grid sm:grid-cols-2 gap-x-8 gap-y-5">
+                    {moment.items.map((item) => (
+                      <MenuItem key={item.name} item={item} />
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             ))}
