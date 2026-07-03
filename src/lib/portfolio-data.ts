@@ -448,6 +448,70 @@ export const skillCategories: SkillCategory[] = [
 export const navItems = [
   { label: "About", href: "#about" },
   { label: "Work", href: "#work" },
-  { label: "Capabilities", href: "#capabilities" },
   { label: "Contact", href: "#contact" },
 ] as const;
+
+/**
+ * Business-focused project cards — short, outcome-driven, no jargon.
+ * Designed for business owners (not developers) scanning in 10 seconds.
+ */
+export type BusinessProject = {
+  name: string;
+  tagline: string;
+  outcome: string;
+  metrics: { value: string; label: string }[];
+  image?: string;
+  link?: string;
+};
+
+export const businessProjects: BusinessProject[] = [
+  {
+    name: "Knead Bakery — Site Redesign",
+    tagline: "Abu Dhabi bakery · Wix → Next.js",
+    outcome:
+      "Took a slow Wix site with 15 confusing menu categories and rebuilt it as a fast, focused ordering experience. Grouped the menu by when you eat (morning, afternoon, evening) instead of by food type. Surfaced the 4-hour pickup time up front so customers stop abandoning at checkout.",
+    metrics: [
+      { value: "45×", label: "faster page load" },
+      { value: "15→4", label: "menu categories" },
+      { value: "<1.5s", label: "load on mobile" },
+    ],
+    image: "/knead/food-arranged.jpg",
+    link: "/knead",
+  },
+  {
+    name: "Mohamed Medhat — Marketing Portfolio",
+    tagline: "Client project · Marketing professional",
+    outcome:
+      "Built a marketing specialist a portfolio that matches the quality of his brand audits. Dark editorial design, 6 sections, mobile-perfect. He went from 'no web presence' to ranking #1 for his name in Google within a week.",
+    metrics: [
+      { value: "6", label: "sections" },
+      { value: "#1", label: "Google rank for name" },
+      { value: "1wk", label: "to index" },
+    ],
+    image: "/projects/mohamed-medhat-portfolio/hero.png",
+    link: "https://portfolio-z258.vercel.app/",
+  },
+  {
+    name: "Forge Studio — Page Builder + Auditor",
+    tagline: "Flagship product · Developer tool",
+    outcome:
+      "Built a tool that lets anyone drag-and-drop a landing page together, then audits it for SEO, accessibility, and performance with one click. 38 auto-fixes. Used by small businesses to ship sites without hiring a developer for every change.",
+    metrics: [
+      { value: "12", label: "section types" },
+      { value: "38", label: "one-click fixes" },
+      { value: "5", label: "templates" },
+    ],
+    image: "/projects/forge-studio/01-dashboard.png",
+  },
+  {
+    name: "Lead Profiler — Research Tool",
+    tagline: "Internal tool · Sales outreach",
+    outcome:
+      "A tool that reads a prospect's portfolio and compresses it into a 30-second opener for cold WhatsApp outreach. Saves sales teams 2 hours per lead. Hardened with a Haskell layer that fixes malformed AI output — no more 'JSON parse error' at 2am.",
+    metrics: [
+      { value: "2hr", label: "saved per lead" },
+      { value: "102", label: "tests passing" },
+      { value: "0.02s", label: "test runtime" },
+    ],
+  },
+];

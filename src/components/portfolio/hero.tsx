@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowDown, ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { profile } from "@/lib/portfolio-data";
 
 export function Hero() {
@@ -11,7 +11,7 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center pt-24 pb-16 grain">
-      {/* Background gradient — subtle top glow */}
+      {/* Background gradient */}
       <div
         aria-hidden
         className="absolute inset-0 -z-10 pointer-events-none"
@@ -35,10 +35,6 @@ export function Hero() {
           </span>
           <span className="text-xs font-medium text-muted-foreground">
             {profile.availability}
-          </span>
-          <span className="text-border">·</span>
-          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-            <MapPin className="w-3 h-3" /> {profile.location}
           </span>
         </motion.div>
 
@@ -71,30 +67,19 @@ export function Hero() {
           ))}
         </motion.h1>
 
-        {/* Tagline */}
+        {/* Short, business-focused tagline — no jargon */}
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25, ease: "easeOut" }}
           className="mt-8 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed"
         >
-          {profile.tagline}
+          I build fast, modern websites for businesses in Egypt —
+          clinics, restaurants, and real estate. Sites that load in under 2 seconds,
+          rank on Google, and turn visitors into customers.
         </motion.p>
 
-        {/* SWEBOK definition — grounds the role in the canonical standard */}
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
-          className="mt-4 max-w-2xl text-xs italic text-muted-foreground/60 leading-relaxed border-l-2 border-border pl-3"
-        >
-          &ldquo;Software engineering is the application of a systematic, disciplined, quantifiable approach to the development, operation, and maintenance of software.&rdquo;
-          <span className="block mt-1 not-italic font-mono text-[10px] text-muted-foreground/40">
-            — ISO/IEC/IEEE SEVOCAB, cited in SWEBOK V3.0
-          </span>
-        </motion.p>
-
-        {/* CTAs */}
+        {/* 3 clear CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -105,53 +90,41 @@ export function Hero() {
             onClick={() => scrollTo("#work")}
             className="group inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-5 py-3 text-sm font-medium hover:bg-primary/90 transition-all hover:gap-3"
           >
-            View my work
+            See my work
             <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
           </button>
           <button
             onClick={() => scrollTo("#contact")}
             className="group inline-flex items-center gap-2 rounded-full border border-border bg-card/40 backdrop-blur px-5 py-3 text-sm font-medium text-foreground hover:bg-accent transition-all"
           >
-            Get in touch
+            Get a free audit
             <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </button>
         </motion.div>
 
-        {/* Stats strip — at-a-glance credibility */}
+        {/* Trust strip — 3 quick proof points, no words */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.55, ease: "easeOut" }}
-          className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-px bg-border/60 border border-border rounded-2xl overflow-hidden"
+          className="mt-16 grid grid-cols-3 gap-px bg-border/60 border border-border rounded-2xl overflow-hidden max-w-md"
         >
           {[
-            { label: "Shipped projects", value: "3" },
-            { label: "Audit checks", value: "30+" },
-            { label: "Quick-fixes", value: "38" },
-            { label: "Section types", value: "12" },
+            { value: "<2s", label: "load time" },
+            { value: "#1", label: "Google rank" },
+            { value: "4", label: "industries" },
           ].map((stat) => (
-            <div key={stat.label} className="bg-card/40 backdrop-blur px-5 py-5">
-              <div className="text-2xl sm:text-3xl font-bold tracking-tight tabular-nums">
+            <div key={stat.label} className="bg-card/40 backdrop-blur px-4 py-4 text-center">
+              <div className="text-xl sm:text-2xl font-bold tracking-tight tabular-nums">
                 {stat.value}
               </div>
-              <div className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground font-mono">
+              <div className="mt-0.5 text-[10px] uppercase tracking-wider text-muted-foreground font-mono">
                 {stat.label}
               </div>
             </div>
           ))}
         </motion.div>
       </div>
-
-      {/* Scroll hint */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 1.2 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 text-muted-foreground"
-      >
-        <span className="text-[10px] uppercase tracking-[0.3em] font-mono">Scroll</span>
-        <div className="w-px h-8 bg-gradient-to-b from-border to-transparent" />
-      </motion.div>
     </section>
   );
 }

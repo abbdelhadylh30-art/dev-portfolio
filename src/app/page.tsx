@@ -2,7 +2,6 @@ import { NavBar } from "@/components/portfolio/nav-bar";
 import { Hero } from "@/components/portfolio/hero";
 import { About } from "@/components/portfolio/about";
 import { Work } from "@/components/portfolio/work";
-import { Capabilities } from "@/components/portfolio/capabilities";
 import { Contact } from "@/components/portfolio/contact";
 
 export default function Home() {
@@ -12,7 +11,6 @@ export default function Home() {
       <Hero />
       <About />
       <Work />
-      <Capabilities />
       <Contact />
     </main>
   );
