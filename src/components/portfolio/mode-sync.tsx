@@ -2,19 +2,28 @@
 
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { setModeCookie, type PortfolioMode } from "@/lib/mode";
+import { setModeCookie } from "@/lib/mode";
+import { useModeTransform } from "@/lib/mode-transform";
 
 /**
  * Deep-link support for the view mode: `/` (or any path) with `?mode=dev`
- * switches the cookie to `dev` and refreshes so the server tree matches.
- * The query param is then stripped from the URL for clean sharing.
- * Renders nothing.
+ * switches to the dev view and refreshes so the server tree matches.
+ * The swap itself is client-side and instant (no ceremony for links);
+ * the cookie write + refresh are best-effort persistence — skipped when
+ * the cookie was blocked so a stale server render can never fight the
+ * live client tree. The query param is stripped from the URL for clean
+ * sharing. Renders nothing.
  */
-export function ModeSync({ mode }: { mode: PortfolioMode }) {
+export function ModeSync() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  /* Wait until the shell has adopted the server (cookie) mode — child
+     effects run BEFORE the parent's hydrate effect, so reading the
+     store on first paint would race against an unhydrated default. */
+  const hydrated = useModeTransform((s) => s.hydrated);
 
   React.useEffect(() => {
+    if (!hydrated) return;
     const raw = searchParams.get("mode");
     if (raw !== "dev" && raw !== "client") return;
 
@@ -22,9 +31,12 @@ export function ModeSync({ mode }: { mode: PortfolioMode }) {
     url.searchParams.delete("mode");
     window.history.replaceState(null, "", url.pathname + (url.search || ""));
 
-    if (raw !== mode) {
-      setModeCookie(raw);
-      router.refresh();
+    const { liveMode, setLiveMode } = useModeTransform.getState();
+    if (raw !== liveMode) {
+      setLiveMode(raw);
+      if (setModeCookie(raw)) {
+        router.refresh();
+      }
       // Next's router state can momentarily restore the ?mode= param
       // during the refresh — strip it again once navigation settles.
       window.setTimeout(() => {
@@ -35,9 +47,10 @@ export function ModeSync({ mode }: { mode: PortfolioMode }) {
         }
       }, 400);
     }
-    // Intentionally runs once on mount — mode/searchParams identity changes
-    // are covered by the early return + replaceState cleanup above.
-  }, []);
+    // Intentionally gated on `hydrated` (runs once after adoption) —
+    // mode/searchParams identity changes are covered by the early
+    // return + replaceState cleanup above.
+  }, [hydrated]);
 
   return null;
 }

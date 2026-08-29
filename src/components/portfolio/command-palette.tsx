@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 import {
   Command,
   CommandDialog,
@@ -16,8 +16,7 @@ import {
   ArrowUp,
   Github,
   Mail,
-  Moon,
-  Sun,
+  Briefcase,
   Sparkles,
   Folder,
   Layout,
@@ -30,12 +29,15 @@ import {
 } from "lucide-react";
 import { useUIStore } from "@/lib/ui-store";
 import {
-  navLinks,
   projects,
   projectFilters,
   profile,
 } from "@/lib/portfolio-data";
+import { usePageRouter } from "@/components/portfolio/page-router";
 import { trackEvent } from "@/lib/analytics";
+import { setModeCookie } from "@/lib/mode";
+import { useModeTransform } from "@/lib/mode-transform";
+import { TF_COVER_MS } from "@/components/portfolio/mode-transform-overlay";
 
 export function CommandPalette() {
   const open = useUIStore((s) => s.paletteOpen);
@@ -44,7 +46,8 @@ export function CommandPalette() {
   const openModal = useUIStore((s) => s.openModal);
   const openShortcuts = useUIStore((s) => s.openShortcuts);
   const openAdmin = useUIStore((s) => s.openAdmin);
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { pages, navigate } = usePageRouter();
+  const router = useRouter();
 
   // Global ⌘K / Ctrl+K shortcut
   useEffect(() => {
@@ -59,13 +62,10 @@ export function CommandPalette() {
     return () => window.removeEventListener("keydown", handler);
   }, [setOpen]);
 
-  const scrollTo = (href: string) => {
+  const goToPage = (id: string) => {
     close();
     // wait a tick for the dialog close animation
-    setTimeout(() => {
-      const el = document.querySelector(href);
-      if (el) (el as HTMLElement).scrollIntoView({ behavior: "smooth" });
-    }, 80);
+    setTimeout(() => navigate(id), 80);
   };
 
   const openProject = (slug: string) => {
@@ -76,12 +76,16 @@ export function CommandPalette() {
     }, 80);
   };
 
-  const toggleTheme = () => {
-    const isDark = (resolvedTheme ?? theme) === "dark";
-    const next = isDark ? "light" : "dark";
-    setTheme(next);
-    trackEvent("theme_toggle", { label: next });
+  /* Skins are fixed per view (Business = light, Developer = dark), so
+     the palette's theme entry became a mode shift instead — launching
+     the same Transformers sequence as the navbar toggle. */
+  const switchMode = () => {
     close();
+    useModeTransform.getState().begin("client");
+    trackEvent("mode_switch", { label: "client" });
+    window.setTimeout(() => {
+      if (setModeCookie("client")) router.refresh();
+    }, Math.max(200, TF_COVER_MS - 140));
   };
 
   return (
@@ -94,31 +98,32 @@ export function CommandPalette() {
       <CommandList className="scroll-area-thin">
         <CommandEmpty>No matches found.</CommandEmpty>
 
-        <CommandGroup heading="Navigate">
+        <CommandGroup heading="Pages">
           <CommandItem
-            onSelect={() => scrollTo("#top")}
+            onSelect={() => goToPage("home")}
             className="cursor-pointer"
           >
             <ArrowUp className="mr-2 h-4 w-4 text-brand" />
-            Back to top
+            Back to home
           </CommandItem>
-          {navLinks.map((l) => (
-            <CommandItem
-              key={l.href}
-              onSelect={() => scrollTo(l.href)}
-              className="cursor-pointer"
-            >
-              <Layout className="mr-2 h-4 w-4 text-brand" />
-              Go to {l.label}
-            </CommandItem>
+          {pages.map((p) => (
+            p.id === "home" ? null : (
+              <CommandItem
+                key={p.id}
+                onSelect={() => goToPage(p.id)}
+                className="cursor-pointer"
+              >
+                <Layout className="mr-2 h-4 w-4 text-brand" />
+                Go to {p.label}
+              </CommandItem>
+            )
           ))}
-          <CommandItem onSelect={toggleTheme} className="cursor-pointer">
-            {(resolvedTheme ?? theme) === "dark" ? (
-              <Sun className="mr-2 h-4 w-4 text-brand" />
-            ) : (
-              <Moon className="mr-2 h-4 w-4 text-brand" />
-            )}
-            Toggle theme
+          <CommandItem onSelect={switchMode} className="cursor-pointer">
+            <Briefcase className="mr-2 h-4 w-4 text-brand" />
+            Switch to Business view
+            <span className="ml-auto font-mono text-[10px] text-muted-foreground">
+              light skin
+            </span>
           </CommandItem>
           <CommandItem
             onSelect={() => {
@@ -173,13 +178,7 @@ export function CommandPalette() {
           {projectFilters.map((f) => (
             <CommandItem
               key={f}
-              onSelect={() => {
-                close();
-                setTimeout(() => {
-                  const el = document.getElementById("work");
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
-                }, 80);
-              }}
+              onSelect={() => goToPage("work")}
               className="cursor-pointer"
             >
               <Layers className="mr-2 h-4 w-4 text-brand" />

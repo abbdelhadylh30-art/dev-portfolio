@@ -1769,3 +1769,67 @@
     display: none !important;
   }
 }
+
+/* ===================================================================
+   Page-turn plate shutter (pt-*) — powers the paged router's quick
+   Transformers-flavoured transition between section pages. Six skewed
+   plates sweep the viewport; these utilities skin them.
+   =================================================================== */
+
+/* Plate surface — deep gunmetal with a brand-tinted diagonal texture */
+.pt-plate {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      color-mix(in oklch, var(--brand) 7%, transparent) 0 2px,
+      transparent 2px 26px
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--foreground) 10%, transparent),
+      color-mix(in oklch, var(--foreground) 4%, transparent)
+    ),
+    oklch(0.22 0.02 260);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--foreground) 12%, transparent);
+}
+
+/* Bright leading/trailing edges on each plate */
+.pt-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in oklch, var(--brand) 85%, transparent),
+    transparent
+  );
+  filter: drop-shadow(0 0 6px color-mix(in oklch, var(--brand) 45%, transparent));
+}
+
+/* Scanline texture laid over the whole shutter */
+.pt-scan {
+  background: repeating-linear-gradient(
+    0deg,
+    color-mix(in oklch, var(--foreground) 5%, transparent) 0 1px,
+    transparent 1px 4px
+  );
+  mix-blend-mode: overlay;
+}
+
+/* HUD ticker — destination label flashed while sealed */
+.pt-ticker {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: color-mix(in oklch, var(--foreground) 88%, transparent);
+  background: color-mix(in oklch, var(--background) 55%, transparent);
+  border: 1px solid color-mix(in oklch, var(--brand) 35%, transparent);
+  border-radius: 9999px;
+  padding: 0.45rem 1.1rem;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 24px -6px color-mix(in oklch, var(--brand) 55%, transparent);
+}

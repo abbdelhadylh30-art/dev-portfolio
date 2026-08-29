@@ -24,16 +24,21 @@ export function ModeToggle({ mode, compact = false }: { mode: PortfolioMode; com
     if (next === mode || pending) return;
     setPending(true);
 
-    // 1) Kick off the Transformers sequence (plates slam shut).
+    // 1) Kick off the Transformers sequence (plates slam shut). The tree
+    //    swap happens client-side the moment the screen seals — the flip
+    //    never depends on the cookie or the refresh below.
     useModeTransform.getState().begin(next);
     trackEvent("mode_switch", { label: next });
 
-    // 2) Once the plates are sealing (just before full cover), swap the
-    //    server tree underneath — the refresh is invisible to the visitor.
+    // 2) Just before full cover: persist the choice in the cookie and —
+    //    ONLY when the write verifiably took — refresh the server tree
+    //    so metadata (OG tags, titles) follows. If the cookie was
+    //    blocked (sandboxed iframe), skip the refresh entirely: it would
+    //    re-render the OLD mode server-side and fight the live client
+    //    tree. The visitor still gets the full flip either way.
     window.setTimeout(
       () => {
-        setModeCookie(next);
-        router.refresh();
+        if (setModeCookie(next)) router.refresh();
       },
       Math.max(200, TF_COVER_MS - 140)
     );

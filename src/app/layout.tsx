@@ -136,11 +136,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // The Business view is ALWAYS the friendly warm-light skin (coral →
-  // amber → rose on cream), so its theme is forced to "light" while the
-  // Developer view keeps the visitor's own (dark by default) theme.
-  // `data-view` on <body> scopes the warm palette from globals.css —
-  // and also flows into portal content (toasts, dialogs).
+  // Fixed skins: the Business view is ALWAYS the friendly warm-light
+  // skin (coral → amber → rose on cream), and the Developer view is
+  // ALWAYS the original dark. No visitor-selectable theme — the mode
+  // owns it. `data-view` on <body> scopes the warm palette from
+  // globals.css and also flows into portal content (toasts, dialogs).
   const mode = await getMode();
 
   return (
@@ -152,7 +152,7 @@ export default async function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          forcedTheme={mode === "client" ? "light" : undefined}
+          forcedTheme={mode === "client" ? "light" : "dark"}
           enableSystem={false}
           disableTransitionOnChange
         >

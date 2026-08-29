@@ -4,16 +4,21 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { Github, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { navLinks, clientNavLinks, profile } from "@/lib/portfolio-data";
+import { profile } from "@/lib/portfolio-data";
 import { ModeToggle } from "@/components/portfolio/mode-toggle";
+import { usePageRouter } from "@/components/portfolio/page-router";
 import type { PortfolioMode } from "@/lib/mode";
 
+/**
+ * Navbar — now page-based: links route through the micro-router
+ * (`#/services`, `#/work`, …) instead of scrolling one long page.
+ * The active pill follows the current page; the logo returns home.
+ */
 export function Navbar({ mode }: { mode: PortfolioMode }) {
-  const links = mode === "client" ? clientNavLinks : navLinks;
+  const { pages, page, navigate, pageIndex } = usePageRouter();
+  const links = pages.filter((p) => p.id !== "home");
   const [scrolled, setScrolled] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [active, setActive] = React.useState<string>("");
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -21,23 +26,6 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  React.useEffect(() => {
-    const sectionIds = links.map((l) => l.href.replace("#", ""));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(`#${entry.target.id}`);
-        });
-      },
-      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
-    );
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, [links]);
 
   return (
     <header
@@ -53,9 +41,11 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
         }`}
       />
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <a
-          href="#top"
-          className="group flex items-center gap-2 font-mono text-sm font-semibold tracking-tight"
+        <button
+          type="button"
+          onClick={() => navigate("home")}
+          className="group flex items-center gap-2 font-mono text-sm font-semibold tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60 rounded-md"
+          aria-label="Back to home page"
         >
           <span className="grad-badge icon-bob grid h-8 w-8 place-items-center rounded-lg font-bold">
             AG
@@ -63,17 +53,26 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
           <span className="hidden sm:inline text-foreground/90 group-hover:text-brand transition-colors">
             abdelhady<span className="text-brand">.dev</span>
           </span>
-        </a>
+          {/* Page counter chip — reinforces the paged feel */}
+          <span
+            className="ml-1 hidden rounded-full border border-border/70 bg-card/60 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-muted-foreground md:inline-block"
+            aria-hidden
+          >
+            {String(pageIndex + 1).padStart(2, "0")}/{String(pages.length).padStart(2, "0")}
+          </span>
+        </button>
 
         {/* Desktop links */}
         <div className="hidden items-center gap-1 md:flex">
           {links.map((link) => {
-            const isActive = active === link.href;
+            const isActive = page.id === link.id;
             return (
-              <a
-                key={link.href}
-                href={link.href}
+              <button
+                key={link.id}
+                type="button"
+                onClick={() => navigate(link.id)}
                 data-active={isActive ? "true" : "false"}
+                aria-current={isActive ? "page" : undefined}
                 className={`link-underline focus-ring relative rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                   isActive
                     ? "text-brand"
@@ -88,7 +87,7 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
-              </a>
+              </button>
             );
           })}
         </div>
@@ -111,9 +110,8 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
               GitHub
             </a>
           </Button>
-          {/* Light/dark toggle only in the Developer view — the Business
-              view is deliberately locked to its friendly warm-light skin. */}
-          {mode === "dev" && <ThemeToggle />}
+          {/* No theme toggle — skins are fixed per view: Business is
+              always warm light, Developer is always the original dark. */}
           <Button
             variant="ghost"
             size="icon"
@@ -137,15 +135,36 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
           className="md:hidden border-t border-border/60 bg-background/95 backdrop-blur-xl overflow-hidden"
         >
           <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6 flex flex-col gap-1">
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                navigate("home");
+              }}
+              className={`rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                page.id === "home"
+                  ? "bg-accent text-foreground"
+                  : "text-muted-foreground hover:bg-accent hover:text-foreground"
+              }`}
+            >
+              Home
+            </button>
             {links.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+              <button
+                key={link.id}
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  navigate(link.id);
+                }}
+                className={`rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                  page.id === link.id
+                    ? "bg-accent text-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                }`}
               >
                 {link.label}
-              </a>
+              </button>
             ))}
             <a
               href={profile.githubUrl}

@@ -3,7 +3,6 @@
 import * as React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Briefcase, Code2 } from "lucide-react";
-import type { PortfolioMode } from "@/lib/mode";
 import { useModeTransform } from "@/lib/mode-transform";
 
 /**
@@ -52,17 +51,11 @@ const HUD_CORNERS = [
 const EASE_SLAM = [0.22, 1.1, 0.36, 1] as [number, number, number, number];
 const EASE_OPEN = [0.7, 0, 0.84, 0] as [number, number, number, number];
 
-export function ModeTransformOverlay({ mode }: { mode: PortfolioMode }) {
+export function ModeTransformOverlay() {
   const phase = useModeTransform((s) => s.phase);
   const target = useModeTransform((s) => s.target);
   const reduced = !!useReducedMotion();
   const active = phase !== "idle" && target !== null;
-
-  /* Latest server-rendered mode (flips once router.refresh() lands). */
-  const modeRef = React.useRef(mode);
-  React.useEffect(() => {
-    modeRef.current = mode;
-  }, [mode]);
 
   /* cover → hold, reveal → idle. */
   React.useEffect(() => {
@@ -82,14 +75,28 @@ export function ModeTransformOverlay({ mode }: { mode: PortfolioMode }) {
     }
   }, [phase, reduced]);
 
-  /* hold → reveal: once the refreshed tree has arrived (mode === target)
-     and the emblem has had its moment on stage — hard cap as a fallback. */
+  /* hold — the screen is sealed: swap the LIVE tree to the target mode
+     right now. Pure client-side and deterministic — the old flow waited
+     for a `router.refresh()` to land with the new cookie mode, which can
+     silently fail (blocked cookies in sandboxed iframes) and left the
+     page stuck on the previous view after the plates retracted. Also
+     reset scroll so the incoming page starts at the top. */
+  React.useEffect(() => {
+    if (phase !== "hold" || !target) return;
+    const s = useModeTransform.getState();
+    if (s.liveMode !== target) s.setLiveMode(target);
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  }, [phase, target]);
+
+  /* hold → reveal: the live tree has already swapped (guaranteed above),
+     so this fires once the emblem has had its moment on stage. The hard
+     cap stays as a pure safety net. */
   React.useEffect(() => {
     if (phase !== "hold" || !target) return;
     const iv = window.setInterval(() => {
       const s = useModeTransform.getState();
       const elapsed = Date.now() - s.startedAt;
-      const arrived = modeRef.current === s.target;
+      const arrived = s.liveMode === s.target;
       if ((arrived && elapsed >= TF_HOLD_MIN_MS) || elapsed >= TF_HOLD_MAX_MS) {
         s.setPhase("reveal");
       }

@@ -16,8 +16,14 @@ export type PortfolioMode = "client" | "dev";
 
 export const MODE_COOKIE = "ag-mode";
 
-/** Client-side cookie writer shared by the toggle and the deep-link sync. */
-export function setModeCookie(mode: PortfolioMode) {
-  if (typeof document === "undefined") return;
+/** Client-side cookie writer shared by the toggle and the deep-link sync.
+ *  Returns whether the write verifiably took — sandboxed iframes (preview
+ *  panels) can silently block cookie writes, and callers should only
+ *  `router.refresh()` when the server will actually see the new mode. */
+export function setModeCookie(mode: PortfolioMode): boolean {
+  if (typeof document === "undefined") return false;
   document.cookie = `${MODE_COOKIE}=${mode}; path=/; max-age=31536000; samesite=lax`;
+  return document.cookie
+    .split(";")
+    .some((c) => c.trim().startsWith(`${MODE_COOKIE}=${mode}`));
 }

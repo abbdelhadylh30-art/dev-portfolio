@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/portfolio/navbar";
+/* Page content elements (keyed by the page ids in src/lib/site-pages.ts) */
 import { Hero } from "@/components/portfolio/hero";
 import { HighlightsStrip } from "@/components/portfolio/highlights-strip";
 import { ProcessStrip } from "@/components/portfolio/process-strip";
@@ -10,16 +10,7 @@ import { Skills } from "@/components/portfolio/skills";
 import { JourneyTimeline } from "@/components/portfolio/journey-timeline";
 import { ShippedStrip } from "@/components/portfolio/shipped-strip";
 import { NowSection } from "@/components/portfolio/now-section";
-import { Contact, Footer } from "@/components/portfolio/contact";
-import { ScrollProgress } from "@/components/portfolio/scroll-progress";
-import { SectionRail } from "@/components/portfolio/section-rail";
-import { CommandPalette } from "@/components/portfolio/command-palette";
-import { ProjectModal } from "@/components/portfolio/project-modal";
-import { KeyboardShortcutsOverlay } from "@/components/portfolio/keyboard-shortcuts-overlay";
-import { DeepLinkHandler } from "@/components/portfolio/deep-link-handler";
-import { AdminDashboard } from "@/components/portfolio/admin-dashboard";
-import { AdminLinkHandler } from "@/components/portfolio/admin-link-handler";
-import { WhatsAppFab } from "@/components/portfolio/whatsapp-fab";
+import { Contact } from "@/components/portfolio/contact";
 import { projects } from "@/lib/portfolio-data";
 import { getMode } from "@/lib/mode-server";
 
@@ -31,9 +22,8 @@ import { ClientProcess } from "@/components/portfolio/client-mode/client-process
 import { AboutLite } from "@/components/portfolio/client-mode/about-lite";
 import { TrustFaq } from "@/components/portfolio/client-mode/trust-faq";
 import { ClientContact } from "@/components/portfolio/client-mode/client-contact";
-import { ClientFooter } from "@/components/portfolio/client-mode/client-footer";
-import { ModeSync } from "@/components/portfolio/mode-sync";
 import { ModeTransformOverlay } from "@/components/portfolio/mode-transform-overlay";
+import { PortfolioShell } from "@/components/portfolio/portfolio-shell";
 
 /**
  * Per-project social previews: a shared `?p=<slug>` deep link (copied from
@@ -108,15 +98,50 @@ export async function generateMetadata({
 export default async function Home() {
   const mode = await getMode();
 
-  const chrome = (
-    <>
-      <ScrollProgress />
-      <SectionRail mode={mode} />
-      <Navbar mode={mode} />
-      <ModeSync mode={mode} />
-      <WhatsAppFab />
-    </>
-  );
+  /* One page per section — the paged portfolio. Both element sets are
+     shipped to the client; PortfolioShell decides which tree is live
+     (first paint follows this server mode so SSR + hydration match,
+     then the client store owns the Business ⇄ Developer flip). */
+  const clientElements: Record<string, React.ReactNode> = {
+    home: <ClientHero />,
+    services: <Services />,
+    results: <Results />,
+    process: <ClientProcess />,
+    about: <AboutLite />,
+    faq: <TrustFaq />,
+    contact: <ClientContact />,
+  };
+
+  const devElements: Record<string, React.ReactNode> = {
+    home: (
+      <>
+        <Hero />
+        <HighlightsStrip />
+      </>
+    ),
+    about: (
+      <>
+        <About />
+        <ProcessStrip />
+      </>
+    ),
+    work: <Projects />,
+    clients: (
+      <>
+        <ClientWork />
+        <TestimonialsStrip />
+      </>
+    ),
+    skills: (
+      <>
+        <Skills />
+        <ShippedStrip />
+      </>
+    ),
+    journey: <JourneyTimeline />,
+    now: <NowSection />,
+    contact: <Contact />,
+  };
 
   return (
     <div className="relative flex min-h-screen flex-col bg-background">
@@ -126,51 +151,19 @@ export default async function Home() {
         className="bg-grain pointer-events-none fixed inset-0 -z-50 opacity-30 dark:opacity-40"
       />
 
-      {mode === "client" ? (
-        <>
-          {chrome}
-          <main className="flex-1">
-            <ClientHero />
-            <Services />
-            <Results />
-            <ClientProcess />
-            <AboutLite />
-            <TrustFaq />
-            <ClientContact />
-          </main>
-          <ClientFooter />
-        </>
-      ) : (
-        <>
-          {chrome}
-          <main className="flex-1">
-            <Hero />
-            <HighlightsStrip />
-            <ProcessStrip />
-            <TestimonialsStrip />
-            <About />
-            <Projects />
-            <ClientWork />
-            <Skills />
-            <JourneyTimeline />
-            <ShippedStrip />
-            <NowSection />
-            <Contact />
-          </main>
-          <Footer />
-          <CommandPalette />
-          <DeepLinkHandler />
-          <ProjectModal />
-          <KeyboardShortcutsOverlay />
-          <AdminLinkHandler />
-          <AdminDashboard />
-        </>
-      )}
+      {/* Client cockpit: owns the live mode, the skin (body[data-view] +
+          theme class), the paged router and all shared chrome. */}
+      <PortfolioShell
+        serverMode={mode}
+        clientElements={clientElements}
+        devElements={devElements}
+      />
 
       {/* Transformers-style Business ⇄ Developer mode-shift overlay.
-          Rendered OUTSIDE the mode branches so it stays mounted (and its
-          phase machine keeps running) across the router.refresh() swap. */}
-      <ModeTransformOverlay mode={mode} />
+          Rendered OUTSIDE the shell so it stays mounted — and its phase
+          machine keeps running — no matter which tree is live. It swaps
+          the live mode itself the instant the plates seal the screen. */}
+      <ModeTransformOverlay />
     </div>
   );
 }
