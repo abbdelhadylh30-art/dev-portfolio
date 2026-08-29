@@ -144,7 +144,7 @@ export default async function RootLayout({
   const mode = await getMode();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
         data-view={mode}
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}

@@ -17,7 +17,7 @@ export function SectionRail({ mode: _mode }: { mode: PortfolioMode }) {
   return (
     <nav
       aria-label="Page quick navigation"
-      className="pointer-events-none fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 lg:block"
+      className="pointer-events-none fixed right-7 top-1/2 z-40 hidden -translate-y-1/2 lg:block"
     >
       <ul className="pointer-events-auto flex flex-col items-end gap-3 rounded-full border border-border/50 bg-background/60 py-3 pl-2 pr-2.5 backdrop-blur-md shadow-[0_8px_32px_-16px_rgba(0,0,0,0.55)]">
         {pages.map((p, i) => {
