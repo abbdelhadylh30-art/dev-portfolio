@@ -65,7 +65,7 @@ export const profile = {
   githubUrl: "https://github.com/abbdelhadylh30-art",
   avatarUrl: "https://avatars.githubusercontent.com/u/275516572?v=4",
   /** Real channels — synced from the production deployment. */
-  email: "abbelhadylh31@gmail.com",
+  email: "abbdelhadylh31@gmail.com",
   phoneDisplay: "0103 224 6016",
   phoneIntl: "+201032246016",
   whatsappUrl:
