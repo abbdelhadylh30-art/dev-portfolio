@@ -55,6 +55,78 @@ const DEFAULTS: ContactValues = {
   website: "",
 };
 
+/**
+ * Client-side email delivery via FormSubmit's AJAX endpoint.
+ *
+ * WHY CLIENT-SIDE: FormSubmit sits behind Cloudflare bot detection that
+ * challenges server-to-server Node fetches (the API route's best-effort
+ * server attempt fails fast with a 403). A real browser is FormSubmit's
+ * intended client, so when the server couldn't email the owner (no
+ * RESEND_API_KEY + server FormSubmit blocked), the visitor's own browser
+ * fires this call with its genuine origin and fingerprint.
+ *
+ * The notification target is the site's public contact address — it is
+ * already rendered on the contact pages, so nothing private is exposed.
+ * The server route has ALREADY validated + rate-limited + persisted by
+ * the time this runs; it only runs for well-formed submissions.
+ *
+ * Returns true when the message was accepted (delivered, or accepted
+ * pending the owner's one-time "Activate Form" click).
+ */
+async function deliverViaFormSubmit(
+  values: ContactValues
+): Promise<boolean> {
+  try {
+    const res = await fetch(
+      `https://formsubmit.co/ajax/${encodeURIComponent(profile.email.trim())}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          _subject: `🌐 ${
+            values.projectType !== "Other" ? values.projectType : "Inquiry"
+          } from ${values.name}${values.subject ? ` — ${values.subject}` : ""}`,
+          _template: "table",
+          _captcha: "false", // server already honeypot + rate-limited
+          _replyto: values.email, // owner's "Reply" answers the visitor
+          _autoresponse: [
+            `Hi ${values.name},`,
+            "",
+            "Thanks for reaching out through my website — your message just landed in my inbox.",
+            "I read every inquiry personally and usually reply within 24 hours.",
+            "",
+            "— Abdelhady Gabriel",
+            "Full-Stack Developer & Product Engineer · Cairo",
+            "abdelhady-gabriel.vercel.app",
+          ].join("\n"),
+          Name: values.name,
+          Email: values.email,
+          "Project type": values.projectType,
+          Subject: values.subject || "—",
+          Message: values.body,
+          Source: "abdelhady-gabriel.vercel.app",
+        }),
+        signal: AbortSignal.timeout(8000),
+      }
+    );
+    const data = (await res.json().catch(() => ({}))) as {
+      success?: string;
+      message?: string;
+    };
+    // success, or the first-ever "Activate Form" acceptance — both count
+    // as delivered/accepted from the visitor's perspective.
+    return (
+      data.success === "true" ||
+      (data.message ?? "").includes("Activation")
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function ContactForm() {
   const { toast } = useToast();
   const [submitted, setSubmitted] = React.useState(false);
@@ -79,6 +151,7 @@ export function ContactForm() {
       const data = (await res.json()) as {
         ok: boolean;
         persisted?: boolean;
+        emailed?: boolean;
         error?: string;
         issues?: Record<string, string[]>;
       };
@@ -97,6 +170,15 @@ export function ContactForm() {
       }
 
       const persisted = data.persisted !== false;
+      let emailed = data.emailed === true;
+      // Server couldn't email (no Resend key + server FormSubmit blocked by
+      // Cloudflare bot checks) — deliver via the visitor's own browser,
+      // which is FormSubmit's intended client. Runs after the server has
+      // already validated + rate-limited the submission.
+      if (data.ok && !emailed) {
+        emailed = await deliverViaFormSubmit(values);
+      }
+      const delivered = persisted || emailed;
       // Compose a WhatsApp deep-link carrying the same message — used both
       // as the degraded-mode delivery channel and as an optional "fastest
       // reply" accelerator when the DB did persist.
@@ -117,12 +199,16 @@ export function ContactForm() {
 
       toast({
         title: "Message sent",
-        description: persisted
-          ? "Thanks — I'll reply to your email shortly."
+        description: delivered
+          ? "Thanks — it just landed in my inbox. I'll reply to your email shortly."
           : "Thanks! For the fastest reply, also tap \"Send via WhatsApp\" below.",
       });
       trackEvent("contact_submit", {
-        label: persisted ? "success" : "success_whatsapp_fallback",
+        label: emailed
+          ? "success_email"
+          : persisted
+            ? "success_db"
+            : "success_whatsapp_fallback",
       });
       setSubmitted(true);
       form.reset(DEFAULTS);
@@ -317,7 +403,7 @@ export function ContactForm() {
 
         <div className="flex items-center justify-between gap-3 pt-1">
           <p className="font-mono text-[11px] text-muted-foreground/70">
-            Saved to my inbox — no third-party mailing.
+            Straight to my inbox — usually replied to within 24h.
           </p>
           <Button
             type="submit"

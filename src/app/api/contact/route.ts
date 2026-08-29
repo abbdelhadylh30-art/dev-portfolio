@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { notifyContactEmail } from "@/lib/notify-email";
 
 export const dynamic = "force-dynamic";
 
@@ -80,31 +81,58 @@ export async function POST(request: Request) {
 
   const { name, email, subject, projectType, body } = parsed.data;
 
+  // Email notification FIRST — server-side transport is Resend (used only
+  // when RESEND_API_KEY is configured). When it isn't, the CLIENT delivers
+  // via FormSubmit from the visitor's browser (see contact-form.tsx) after
+  // this route has validated + rate-limited the submission.
+  const notify = await notifyContactEmail({
+    name,
+    email,
+    subject,
+    projectType,
+    body,
+  });
+  if (notify.provider !== "none" && !notify.ok) {
+    console.warn(
+      "[api/contact] email notification failed:",
+      notify.provider,
+      notify.detail
+    );
+  }
+
+  // Then best-effort persistence for the local admin inbox (sandbox/dev).
+  let persisted = false;
+  let id: string | undefined;
+  let createdAt: string | undefined;
   try {
     const message = await db.message.create({
       data: { name, email, subject: subject ?? "", projectType, body },
       select: { id: true, createdAt: true },
     });
-
-    return NextResponse.json(
-      { ok: true, persisted: true, id: message.id, createdAt: message.createdAt },
-      { status: 201 }
-    );
+    persisted = true;
+    id = message.id;
+    createdAt = message.createdAt.toISOString();
   } catch (err) {
-    // Serverless deployments (e.g. Vercel) have no writable SQLite volume:
-    // the message can't be persisted. Degrade gracefully — tell the client
-    // it was received but unpersisted so the UI can steer the visitor to
-    // WhatsApp (the primary "fastest reply" channel) instead of failing.
-    console.error("[api/contact] failed to persist message", err);
-    return NextResponse.json(
-      {
-        ok: true,
-        persisted: false,
-        fallback: "whatsapp",
-      },
-      { status: 201 }
-    );
+    // Serverless deployments (e.g. Vercel) have no writable SQLite volume.
+    // Fine — the email notification above is the production channel.
+    console.warn("[api/contact] message not persisted (no writable db)", err);
   }
+
+  // The message reached the owner if it was emailed OR persisted. Only
+  // steer the visitor to WhatsApp when BOTH channels failed.
+  const delivered = notify.ok || persisted;
+
+  return NextResponse.json(
+    {
+      ok: true,
+      persisted,
+      emailed: notify.ok,
+      ...(delivered ? {} : { fallback: "whatsapp" }),
+      ...(id ? { id } : {}),
+      ...(createdAt ? { createdAt } : {}),
+    },
+    { status: 201 }
+  );
 }
 
 export async function GET() {
