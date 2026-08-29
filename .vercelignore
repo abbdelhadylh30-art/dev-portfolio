@@ -1,0 +1,35 @@
+# Secrets — never upload
+.env
+.env.*
+
+# VCS / caches / build output (auto-ignored by the CLI, listed for safety)
+.git
+.node_modules
+node_modules
+.next
+.cache
+*.tsbuildinfo
+
+# Sandbox-only folders not needed by the web app
+skills
+tool-results
+examples
+mini-services
+download
+tests
+.zscripts
+.claude
+.z-ai-config
+upload
+db
+
+# Local logs / scratch files
+dev.log
+server.log
+dev.out.log
+*.log
+--full-page
+preview-*.png
+prompt
+local-*
+test

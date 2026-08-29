@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// A message submitted through the portfolio contact form.
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String   @default("")
+  /// What the visitor wants — one of the pill options in the contact form
+  /// ("New site", "Redesign", "Web app", "Free audit", "Other"). Empty for
+  /// messages submitted before the field existed.
+  projectType String @default("")
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([email])
+  @@index([projectType])
+}
+
+/// An analytics event emitted by the portfolio UI (clicks, opens, theme
+/// toggles, palette usage, etc.). Aggregated server-side and exposed via
+/// the admin dashboard "Stats" tab.
+model Event {
+  id        String   @id @default(cuid())
+  /// Event type — e.g. `project_card_click`, `palette_open`, `theme_toggle`.
+  type      String
+  /// Optional slug context — typically a project slug for project-related events.
+  slug      String   @default("")
+  /// Optional human-readable label (e.g. the project name or section name).
+  label     String   @default("")
+  /// Best-effort IP for spam/abuse triage (hashed in practice for privacy).
+  ip       String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([type, createdAt])
+  @@index([slug, createdAt])
+  @@index([createdAt])
+}
+
+/// Markdown content for the public "Now" section. Only the most recent
+/// row (where `active = true`) is rendered; older rows are kept as
+/// history. The admin dashboard writes a new row on every save and
+/// flips the previous active row to `active = false` in the same
+/// transaction.
+model NowContent {
+  id        String   @id @default(cuid())
+  /// Markdown body — rendered to HTML on the client with a tiny inline parser.
+  body      String
+  /// One-line blurb shown above the groups (kept short for layout).
+  blurb     String   @default("")
+  /// ISO timestamp shown as "Last updated ..." under the section.
+  updatedAt DateTime @default(now())
+  /// Only the most recent `active = true` row is rendered publicly.
+  active    Boolean  @default(true)
+
+  @@index([active, updatedAt])
+}
