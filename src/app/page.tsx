@@ -48,7 +48,13 @@ export async function generateMetadata({
   if (!project) {
     const mode = await getMode();
     if (mode === "client") {
-      const title = "Websites that work as hard as you do — Abdelhady Gabriel";
+      // Two deliberate titles: the SERP <title> is keyword-led (what
+      // owners actually search: web developer + Cairo + Egypt), while
+      // the social/OG title stays emotional (what makes people click
+      // a WhatsApp link preview).
+      const title =
+        "Web Developer in Cairo, Egypt | Websites for Businesses — Abdelhady Gabriel";
+      const socialTitle = "Websites that work as hard as you do — Abdelhady Gabriel";
       const description =
         "Fixed-price websites and booking systems for businesses in Egypt and the Gulf. Fast, bilingual (Arabic + English), built to rank on Google — with support after launch. Starts with a free 15-minute chat.";
       const image = "/api/og?mode=client";
@@ -56,15 +62,17 @@ export async function generateMetadata({
         title,
         description,
         openGraph: {
-          title,
+          title: socialTitle,
           description,
           type: "website",
           siteName: "Abdelhady Gabriel",
-          images: [{ url: image, width: 1200, height: 630, alt: title }],
+          locale: "en_US",
+          url: "/",
+          images: [{ url: image, width: 1200, height: 630, alt: socialTitle }],
         },
         twitter: {
           card: "summary_large_image",
-          title,
+          title: socialTitle,
           description,
           images: [image],
         },

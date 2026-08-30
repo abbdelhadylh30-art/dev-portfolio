@@ -1,24 +1,29 @@
 import type { MetadataRoute } from "next";
-import { profile } from "@/lib/portfolio-data";
 
 /**
- * Generates /sitemap.xml. The portfolio is a single-page site, so we list
- * the canonical root URL plus the in-page anchor sections as separate
- * entries — search engines can index each section by its hash fragment
- * and Google's "jump to" links will surface them.
+ * Generates /sitemap.xml.
+ *
+ * The portfolio is a single canonical URL — the paged experience
+ * (`#/services`, `#/work`, …) is a client-side hash micro-router, and
+ * search engines ignore hash fragments, so listing them as separate
+ * entries is noise (the previous sitemap also listed legacy anchors
+ * that no longer exist). One clean, honest entry: the root document.
+ *
+ * `?p=<slug>` deep links exist for social previews only (unique
+ * title/OG image, same body content) — deliberately not listed, as
+ * they are near-duplicates of the root.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL ??
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
-  const lastModified = new Date();
-  const sections = ["", "#about", "#work", "#skills", "#now", "#contact"];
-
-  return sections.map((hash) => ({
-    url: `${baseUrl}/${hash}`,
-    lastModified,
-    changeFrequency: "weekly" as const,
-    priority: hash === "" ? 1 : 0.7,
-  }));
+  return [
+    {
+      url: `${baseUrl}/`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 1,
+    },
+  ];
 }

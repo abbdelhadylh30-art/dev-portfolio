@@ -3,8 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
-import { profile, projects, skillGroups } from "@/lib/portfolio-data";
+import { profile } from "@/lib/portfolio-data";
 import { getMode } from "@/lib/mode-server";
+import { buildJsonLdGraph } from "@/lib/schema";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,18 +32,51 @@ export const metadata: Metadata = {
     "Bilingual SaaS",
     "RTL",
     "Web developer Egypt",
+    "Web developer Cairo",
     "Clinic websites Egypt",
     "Restaurant websites Egypt",
     "Real estate websites Egypt",
+    "Booking system Egypt",
+    "Arabic English website",
     "SEO fast websites",
   ],
-  authors: [{ name: "Abdelhady Gabriel" }],
+  authors: [{ name: "Abdelhady Gabriel", url: profile.githubUrl }],
+  creator: "Abdelhady Gabriel",
+  publisher: "Abdelhady Gabriel",
+  applicationName: "Abdelhady Gabriel",
+  category: "technology",
+  /** Index everything; let Google use large image previews (Discover,
+   *  rich results) and full snippet lengths. */
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  /** Search-engine verification codes — set via env vars when the
+   *  owner registers the site with Google Search Console / Bing
+   *  Webmaster Tools. Absent env → tags are simply omitted. */
+  verification: {
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+      : {}),
+    ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+      ? { other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } }
+      : {}),
+  },
   openGraph: {
     title: "Abdelhady Gabriel — Full-Stack Developer & Product Engineer",
     description:
       "Fast, bilingual websites and web apps for businesses in Egypt and the Gulf — built with Next.js 16, TypeScript and Prisma.",
     type: "website",
     siteName: "Abdelhady Gabriel",
+    locale: "en_US",
+    url: "/",
     /** Generated on the fly by /api/og — branded card with avatar, name,
      *  role, tagline + repo stats. Rendered with next/og (Satori). */
     images: [
@@ -77,59 +111,16 @@ export const metadata: Metadata = {
 };
 
 /**
- * JSON-LD Person structured data — gives search engines an explicit,
- * schema.org-typed understanding of who this page is about. Renders
- * as a server-side `<script type="application/ld+json">` so it's
- * available immediately to crawlers.
+ * JSON-LD structured data — a schema.org @graph (WebSite + ProfilePage
+ * + Person, plus ProfessionalService & FAQPage for the Business view)
+ * built in src/lib/schema.ts. Renders as a server-side
+ * `<script type="application/ld+json">` so it is available immediately
+ * to crawlers. Mode-aware: the default (cookie-less) Business view
+ * ships the full business graph.
  */
-const personJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: profile.name,
-  givenName: profile.firstName,
-  familyName: profile.lastName,
-  jobTitle: profile.role,
-  description:
-    "Abdelhady Gabriel is a full-stack developer & product engineer based in Egypt. Builder of Forge Studio, PixelForge, LandingForge, Lead Profiler, and client portfolios. Available for freelance and full-time roles.",
-  url:
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"),
-  image: profile.avatarUrl,
-  email: `mailto:${profile.email}`,
-  telephone: profile.phoneIntl,
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Cairo",
-    addressCountry: "EG",
-  },
-  nationality: {
-    "@type": "Country",
-    name: "Egypt",
-  },
-  knowsLanguage: ["en", "ar"],
-  sameAs: [profile.githubUrl],
-  knowsAbout: Array.from(
-    new Set(
-      [
-        ...skillGroups.flatMap((g) => g.skills.map((s) => s.name)),
-        ...projects.flatMap((p) => p.primaryTech),
-        "Next.js 16",
-        "TypeScript",
-        "Prisma",
-        "Tailwind CSS 4",
-        "shadcn/ui",
-        "Framer Motion",
-        "Bilingual AR/EN",
-        "RTL",
-        "Multi-tenant SaaS",
-      ]
-    )
-  ).slice(0, 30),
-  worksFor: {
-    "@type": "Organization",
-    name: "Independent",
-  },
-};
+async function jsonLdFor(mode: Awaited<ReturnType<typeof getMode>>) {
+  return buildJsonLdGraph(mode);
+}
 
 export default async function RootLayout({
   children,
@@ -142,6 +133,7 @@ export default async function RootLayout({
   // owns it. `data-view` on <body> scopes the warm palette from
   // globals.css and also flows into portal content (toasts, dialogs).
   const mode = await getMode();
+  const jsonLd = await jsonLdFor(mode);
 
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
@@ -161,7 +153,7 @@ export default async function RootLayout({
         </ThemeProvider>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </body>
     </html>
