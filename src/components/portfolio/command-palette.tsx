@@ -37,7 +37,6 @@ import { usePageRouter } from "@/components/portfolio/page-router";
 import { trackEvent } from "@/lib/analytics";
 import { setModeCookie } from "@/lib/mode";
 import { useModeTransform } from "@/lib/mode-transform";
-import { TF_COVER_MS } from "@/components/portfolio/mode-transform-overlay";
 
 export function CommandPalette() {
   const open = useUIStore((s) => s.paletteOpen);
@@ -77,15 +76,13 @@ export function CommandPalette() {
   };
 
   /* Skins are fixed per view (Business = light, Developer = dark), so
-     the palette's theme entry became a mode shift instead — launching
-     the same Transformers sequence as the navbar toggle. */
+     the palette's theme entry became a mode shift instead — the same
+     instant swap the navbar toggle performs. */
   const switchMode = () => {
     close();
-    useModeTransform.getState().begin("client");
+    useModeTransform.getState().setLiveMode("client");
     trackEvent("mode_switch", { label: "client" });
-    window.setTimeout(() => {
-      if (setModeCookie("client")) router.refresh();
-    }, Math.max(200, TF_COVER_MS - 140));
+    if (setModeCookie("client")) router.refresh();
   };
 
   return (

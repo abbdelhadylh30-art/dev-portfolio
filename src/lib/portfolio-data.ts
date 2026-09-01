@@ -318,25 +318,25 @@ export const projects: Project[] = [
     ],
   },
   {
-    name: "Pixelforge",
-    slug: "pixelforge",
+    name: "ProfileForge",
+    slug: "profileforge",
     description:
-      "A creative HTML-first build deployed on Vercel. Lean markup with a TypeScript tooling layer.",
+      "Forge a stunning GitHub profile README in minutes — live preview, 50+ tech badges, stats embeds, an AI bio writer and ready-made templates.",
     highlights: [
-      "HTML-first creative build",
-      "Lean markup (~490k LOC)",
-      "Live on Vercel",
+      "Live-preview README builder",
+      "50+ tech badges + stats embeds",
+      "AI bio writer + ready-made templates",
     ],
-    repoUrl: "https://github.com/abbdelhadylh30-art/Pixelforge",
-    homepage: "https://pixelforge-sigma.vercel.app",
-    category: "Web",
-    featured: false,
-    updatedAt: "2026-05-04T10:24:08Z",
-    createdAt: "2026-05-04T09:07:14Z",
-    primaryTech: ["HTML", "TypeScript", "Vercel"],
+    repoUrl: "https://github.com/abbdelhadylh30-art/profileforge",
+    category: "Tools",
+    featured: true,
+    updatedAt: "2026-08-29T20:55:08Z",
+    createdAt: "2026-08-29T20:54:37Z",
+    primaryTech: ["Next.js", "TypeScript", "Live Preview", "AI"],
     languages: [
-      { name: "HTML", percent: 99.0, bytes: 489753 },
-      { name: "TypeScript", percent: 1.0, bytes: 4731 },
+      { name: "TypeScript", percent: 96.9, bytes: 258009 },
+      { name: "CSS", percent: 2.5, bytes: 6680 },
+      { name: "JavaScript", percent: 0.6, bytes: 1713 },
     ],
   },
 ];
@@ -390,10 +390,10 @@ export const projectDetails: Record<string, string[]> = {
     "Three-stage design: a lenient JSON pre-processor that tolerates messy input, strict ADT schemas that fail loudly, and a defaults layer that fills gaps safely.",
     "Includes a code generator that emits TypeScript types from the Haskell ADTs so the two stacks can't drift.",
   ],
-  "pixelforge": [
-    "A creative, HTML-first build deployed on Vercel.",
-    "~490k LOC of lean markup with a thin TypeScript tooling layer on top.",
-    "An earlier experiment in hand-rolled, framework-light web craft.",
+  "profileforge": [
+    "A GitHub profile README studio: compose your profile from 50+ tech badges, stats embeds and ready-made templates while a live preview shows the exact README you'll get.",
+    "An AI bio writer drafts the about section from a few prompts, and everything compiles to clean Markdown you can paste straight into your GitHub profile.",
+    "The newest build in the portfolio — TypeScript end-to-end (~258k LOC), shipped the same day the idea landed.",
   ],
 };
 

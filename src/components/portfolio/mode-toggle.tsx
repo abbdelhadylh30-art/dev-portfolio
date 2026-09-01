@@ -7,14 +7,14 @@ import { Briefcase, Code2 } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import { setModeCookie, type PortfolioMode } from "@/lib/mode";
 import { useModeTransform } from "@/lib/mode-transform";
-import { TF_COVER_MS } from "@/components/portfolio/mode-transform-overlay";
 
 /**
  * Business ⇄ Developer view toggle (segmented pill, lives in the navbar).
- * Flipping it launches the Transformers mode-shift sequence: armor plates
- * slam shut, and only once the screen is sealed do we write the mode
- * cookie + router.refresh() — the server tree re-composes behind the
- * cover and the plates retract onto the fully re-skinned view.
+ * Flipping it swaps the live tree instantly via the live-mode store, then
+ * persists the choice in the cookie and refreshes the server tree so
+ * metadata (OG tags, titles) follows — skipped when the cookie write was
+ * blocked (sandboxed iframe) so a stale server render can never fight the
+ * live client tree.
  */
 export function ModeToggle({ mode, compact = false }: { mode: PortfolioMode; compact?: boolean }) {
   const router = useRouter();
@@ -24,27 +24,16 @@ export function ModeToggle({ mode, compact = false }: { mode: PortfolioMode; com
     if (next === mode || pending) return;
     setPending(true);
 
-    // 1) Kick off the Transformers sequence (plates slam shut). The tree
-    //    swap happens client-side the moment the screen seals — the flip
-    //    never depends on the cookie or the refresh below.
-    useModeTransform.getState().begin(next);
+    // 1) Instant, deterministic client-side swap.
+    useModeTransform.getState().setLiveMode(next);
     trackEvent("mode_switch", { label: next });
 
-    // 2) Just before full cover: persist the choice in the cookie and —
-    //    ONLY when the write verifiably took — refresh the server tree
-    //    so metadata (OG tags, titles) follows. If the cookie was
-    //    blocked (sandboxed iframe), skip the refresh entirely: it would
-    //    re-render the OLD mode server-side and fight the live client
-    //    tree. The visitor still gets the full flip either way.
-    window.setTimeout(
-      () => {
-        if (setModeCookie(next)) router.refresh();
-      },
-      Math.max(200, TF_COVER_MS - 140)
-    );
+    // 2) Persist + refresh server metadata when the cookie verifiably
+    //    took; skip the refresh if cookies are blocked.
+    if (setModeCookie(next)) router.refresh();
 
-    // 3) Re-enable after the whole sequence has had time to play out.
-    window.setTimeout(() => setPending(false), 2300);
+    // 3) Brief guard against double-flips while the trees swap.
+    window.setTimeout(() => setPending(false), 650);
   };
 
   const options: { value: PortfolioMode; label: string; icon: typeof Briefcase }[] = [

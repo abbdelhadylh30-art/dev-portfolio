@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Abdelhady Gabriel — Full-Stack Developer & Product Engineer",
   description:
-    "Abdelhady Gabriel is a full-stack developer & product engineer based in Egypt. Builder of Forge Studio, PixelForge, LandingForge, Lead Profiler, and client portfolios. Available for freelance and full-time roles.",
+    "Abdelhady Gabriel is a full-stack developer & product engineer based in Egypt. Builder of Forge Studio, ProfileForge, GlamChain, Lead Profiler, and client portfolios. Available for freelance and full-time roles.",
   keywords: [
     "Abdelhady Gabriel",
     "Full-Stack Developer",

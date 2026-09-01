@@ -22,7 +22,6 @@ import { ClientProcess } from "@/components/portfolio/client-mode/client-process
 import { AboutLite } from "@/components/portfolio/client-mode/about-lite";
 import { TrustFaq } from "@/components/portfolio/client-mode/trust-faq";
 import { ClientContact } from "@/components/portfolio/client-mode/client-contact";
-import { ModeTransformOverlay } from "@/components/portfolio/mode-transform-overlay";
 import { PortfolioShell } from "@/components/portfolio/portfolio-shell";
 
 /**
@@ -160,18 +159,14 @@ export default async function Home() {
       />
 
       {/* Client cockpit: owns the live mode, the skin (body[data-view] +
-          theme class), the paged router and all shared chrome. */}
+          theme class), the paged router and all shared chrome. Mode
+          switches are instant — the store flips and the other tree
+          renders immediately. */}
       <PortfolioShell
         serverMode={mode}
         clientElements={clientElements}
         devElements={devElements}
       />
-
-      {/* Transformers-style Business ⇄ Developer mode-shift overlay.
-          Rendered OUTSIDE the shell so it stays mounted — and its phase
-          machine keeps running — no matter which tree is live. It swaps
-          the live mode itself the instant the plates seal the screen. */}
-      <ModeTransformOverlay />
     </div>
   );
 }

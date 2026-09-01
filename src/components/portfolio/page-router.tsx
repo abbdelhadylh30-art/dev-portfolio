@@ -4,7 +4,6 @@ import * as React from "react";
 import {
   AnimatePresence,
   motion,
-  useReducedMotion,
 } from "framer-motion";
 import {
   Home,
@@ -35,12 +34,8 @@ import { trackEvent } from "@/lib/analytics";
  * micro-route (`#/services`, `#/work`, `#/` for home) inside the single
  * `/` Next.js route.
  *
- * Navigating between pages plays a Transformers-flavoured "page turn":
- * six skewed armour plates sweep across the viewport (park → hold →
- * launch, staggered), the content swaps underneath while sealed, and the
- * incoming page assembles with a mechanical clip-and-rise. The Business
- * ⇄ Developer mode-shift keeps its own bigger ceremony
- * (ModeTransformOverlay); this one is the quick sibling.
+ * Page swaps are instant: the content crossfades quickly (~300ms) and the
+ * viewport hops to the top, so navigation feels immediate — no theatrics.
  *
  * Legacy in-page anchors (`#services`) are redirected to their page so
  * old links keep working.
@@ -56,9 +51,6 @@ type PageRouterValue = {
   page: SitePage;
   pageIndex: number;
   direction: 1 | -1;
-  /** Increments on every navigation — keys the plate shutter. */
-  navToken: number;
-  transitioning: boolean;
   elements: Record<string, React.ReactNode>;
   navigate: (id: string) => void;
   goRelative: (delta: number) => void;
@@ -76,8 +68,6 @@ export function usePageRouter(): PageRouterValue {
 /* Provider                                                            */
 /* ------------------------------------------------------------------ */
 
-const PLATE_TOTAL_MS = 1000;
-
 export function PageRouterProvider({
   mode,
   elements,
@@ -92,9 +82,7 @@ export function PageRouterProvider({
   const [state, setState] = React.useState<{
     id: string;
     direction: 1 | -1;
-    token: number;
-    skip: boolean;
-  }>({ id: "home", direction: 1, token: 0, skip: true });
+  }>({ id: "home", direction: 1 });
 
   const stateRef = React.useRef(state);
   React.useEffect(() => {
@@ -121,7 +109,7 @@ export function PageRouterProvider({
   }, [pages]);
 
   const applyNavigation = React.useCallback(
-    (id: string, opts?: { skipPlates?: boolean; updateHash?: boolean }) => {
+    (id: string, opts?: { updateHash?: boolean }) => {
       const current = stateRef.current;
       const target = pages.find((p) => p.id === id);
       if (!target) return;
@@ -135,8 +123,6 @@ export function PageRouterProvider({
       setState({
         id: target.id,
         direction: to > from ? 1 : -1,
-        token: current.token + 1,
-        skip: !!opts?.skipPlates,
       });
       if (opts?.updateHash !== false) {
         const h = target.id === "home" ? "#/" : `#/${target.id}`;
@@ -147,13 +133,10 @@ export function PageRouterProvider({
       }
       trackEvent("page_nav", { slug: target.id, label: target.id });
 
-      // Let the exiting page animate out, then hop to the top while the
-      // plates have the stage covered.
-      window.setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
-        const stage = document.getElementById("page-stage");
-        stage?.focus({ preventScroll: true });
-      }, 220);
+      // Hop straight to the top of the incoming page and hand it focus.
+      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+      const stage = document.getElementById("page-stage");
+      stage?.focus({ preventScroll: true });
     },
     [pages]
   );
@@ -167,7 +150,7 @@ export function PageRouterProvider({
         return;
       }
       const id = idFromHash();
-      if (id && id !== stateRef.current.id) applyNavigation(id, { skipPlates: true });
+      if (id && id !== stateRef.current.id) applyNavigation(id);
     };
     sync();
     window.addEventListener("hashchange", sync);
@@ -178,18 +161,9 @@ export function PageRouterProvider({
      sure the current page exists in the new page set. */
   React.useEffect(() => {
     if (!pages.some((p) => p.id === stateRef.current.id)) {
-      applyNavigation("home", { skipPlates: true });
+      applyNavigation("home");
     }
   }, [pages, applyNavigation]);
-
-  /* transitioning flag: true while the plate shutter is on screen. */
-  const [transitioning, setTransitioning] = React.useState(false);
-  React.useEffect(() => {
-    if (state.token === 0 || state.skip) return;
-    setTransitioning(true);
-    const t = window.setTimeout(() => setTransitioning(false), PLATE_TOTAL_MS);
-    return () => window.clearTimeout(t);
-  }, [state.token, state.skip]);
 
   const navigate = React.useCallback((id: string) => applyNavigation(id), [applyNavigation]);
 
@@ -230,8 +204,6 @@ export function PageRouterProvider({
     page,
     pageIndex: pages.indexOf(page),
     direction: state.direction,
-    navToken: state.token,
-    transitioning,
     elements,
     navigate,
     goRelative,
@@ -269,113 +241,16 @@ export function PageLink({
 }
 
 /* ------------------------------------------------------------------ */
-/* Plate shutter — the Transformers page-turn                          */
+/* PageStage — mounts the active page with a quick crossfade           */
 /* ------------------------------------------------------------------ */
 
-const PLATES = 6;
-
-function PlateShutter({ dir, label }: { dir: 1 | -1; label: string }) {
-  const from = dir === 1 ? "112%" : "-112%";
-  const to = dir === 1 ? "-112%" : "112%";
-  return (
-    <div
-      aria-hidden
-      className="pointer-events-none fixed inset-0 z-[90] overflow-hidden"
-    >
-      {/* Skewed plate rack — slightly oversized so the skew never gaps */}
-      <div
-        className="absolute inset-y-0 -left-[8%] flex w-[116%]"
-        style={{ transform: "skewX(-9deg)" }}
-      >
-        {Array.from({ length: PLATES }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="pt-plate relative h-full flex-1"
-            style={{ filter: `brightness(${1 - i * 0.028})` }}
-            initial={{ x: from, opacity: 0 }}
-            animate={{
-              x: [from, "0%", "0%", to],
-              opacity: [0, 1, 1, 1],
-            }}
-            transition={{
-              duration: 0.95,
-              times: [0, 0.42, 0.55, 1],
-              delay: i * 0.045,
-              ease: ["easeOut", "linear", "easeIn"],
-            }}
-          >
-            {/* Leading + trailing bright edges */}
-            <span className="pt-edge left-0" />
-            <span className="pt-edge right-0" />
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Scanline texture over the whole shutter */}
-      <div className="pt-scan absolute inset-0" />
-
-      {/* HUD ticker — flashes the destination page while sealed */}
-      <div className="absolute inset-x-0 bottom-7 flex justify-center">
-        <motion.span
-          className="pt-ticker"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: [0, 1, 1, 0], y: [10, 0, 0, -8] }}
-          transition={{ duration: 0.95, times: [0, 0.3, 0.75, 1], ease: "easeOut" }}
-        >
-          » {label}
-        </motion.span>
-      </div>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* PageStage — mounts the active page + plays the transitions          */
-/* ------------------------------------------------------------------ */
-
-const EASE_MECH = [0.22, 1, 0.36, 1] as const;
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
 export function PageStage() {
-  const { page, elements, direction, navToken, transitioning, pages, navigate, mode } =
-    usePageRouter();
-  const reduced = !!useReducedMotion();
-  /* Keyed by mode AND page: a Business ⇄ Developer flip remounts the
-     stage so the incoming tree plays its mechanical clip-and-rise
-     entrance while the transform plates are still covering the swap. */
+  const { page, elements, mode } = usePageRouter();
+  /* Keyed by mode AND page so a Business ⇄ Developer flip or a page
+     navigation remounts the stage and the incoming tree fades in. */
   const stageKey = `${mode}:${page.id}`;
-
-  const content = (
-    <motion.div
-      key={stageKey}
-      initial="enter"
-      animate="center"
-      exit="exit"
-      custom={direction}
-      variants={{
-        enter: (d: number) => ({
-          opacity: 0,
-          y: d === 1 ? 28 : -28,
-          scale: 0.992,
-        }),
-        center: {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          transition: { duration: 0.5, delay: 0.16, ease: EASE_MECH },
-        },
-        exit: (d: number) => ({
-          opacity: 0,
-          y: d === 1 ? -20 : 20,
-          scale: 0.995,
-          transition: { duration: 0.2, ease: "easeIn" },
-        }),
-      }}
-    >
-      {elements[page.id] ?? null}
-      {page.id === "home" && <PageIndexGrid />}
-      <PageFooterNav />
-    </motion.div>
-  );
 
   return (
     <div
@@ -384,27 +259,17 @@ export function PageStage() {
       className="relative focus:outline-none"
       aria-live="polite"
     >
-      <AnimatePresence>
-        {transitioning && !reduced && (
-          <PlateShutter key={navToken} dir={direction} label={page.label} />
-        )}
-      </AnimatePresence>
       <AnimatePresence mode="wait" initial={false}>
-        {reduced ? (
-          <motion.div
-            key={stageKey}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-          >
-            {elements[page.id] ?? null}
-            {page.id === "home" && <PageIndexGrid />}
-            <PageFooterNav />
-          </motion.div>
-        ) : (
-          content
-        )}
+        <motion.div
+          key={stageKey}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0, transition: { duration: 0.28, ease: EASE_OUT } }}
+          exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeIn" } }}
+        >
+          {elements[page.id] ?? null}
+          {page.id === "home" && <PageIndexGrid />}
+          <PageFooterNav />
+        </motion.div>
       </AnimatePresence>
     </div>
   );

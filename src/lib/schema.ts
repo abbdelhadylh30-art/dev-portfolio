@@ -22,7 +22,7 @@ function siteUrl(): string {
 }
 
 const DEV_DESCRIPTION =
-  "Abdelhady Gabriel is a full-stack developer & product engineer based in Egypt. Builder of Forge Studio, PixelForge, LandingForge, Lead Profiler, and client portfolios. Available for freelance and full-time roles.";
+  "Abdelhady Gabriel is a full-stack developer & product engineer based in Egypt. Builder of Forge Studio, ProfileForge, GlamChain, Lead Profiler, and client portfolios. Available for freelance and full-time roles.";
 
 const CLIENT_DESCRIPTION =
   "Fixed-price websites and booking systems for businesses in Egypt and the Gulf. Fast, bilingual (Arabic + English), built to rank on Google — with support after launch.";
