@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site-url";
 
 /**
  * Generates /sitemap.xml.
@@ -14,9 +15,8 @@ import type { MetadataRoute } from "next";
  * they are near-duplicates of the root.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+  // Canonical production URL — see src/lib/site-url.ts.
+  const baseUrl = SITE_URL;
 
   return [
     {

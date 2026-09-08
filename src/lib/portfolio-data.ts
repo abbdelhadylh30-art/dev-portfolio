@@ -605,7 +605,7 @@ export const journey: JourneyEntry[] = [...projects]
 
 /**
  * Real client case studies — synced from the production deployment
- * (abdelhady-gabriel.vercel.app). These are delivered client projects
+ * (www.abdelhadygabriel.me). These are delivered client projects
  * with measured business outcomes, distinct from the open-source repos
  * in `projects`. Rendered by the ClientWork section (#clients).
  */

@@ -91,7 +91,7 @@ export async function notifyContactEmail(
           `Message:`,
           p.body,
           ``,
-          `— Sent from abdelhady-gabriel.vercel.app`,
+          `— Sent from www.abdelhadygabriel.me`,
         ].join("\n"),
       }),
       signal: AbortSignal.timeout(TIMEOUT_MS),

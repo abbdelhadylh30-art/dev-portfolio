@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { profile } from "@/lib/portfolio-data";
 import { getMode } from "@/lib/mode-server";
 import { buildJsonLdGraph } from "@/lib/schema";
+import { SITE_URL } from "@/lib/site-url";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -95,10 +96,10 @@ export const metadata: Metadata = {
       "Fast, bilingual websites and web apps for businesses in Egypt and the Gulf — built with Next.js 16, TypeScript and Prisma.",
     images: ["/api/og"],
   },
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ??
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
-  ),
+  /** Canonical host: www.abdelhadygabriel.me — see src/lib/site-url.ts.
+   *  metadataBase resolves every relative URL in metadata (canonical,
+   *  og:url, og:image, feed link) against the indexed domain. */
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: "/",
     /** Atom feed of the live "Recently shipped" commits — served by

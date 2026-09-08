@@ -1,5 +1,6 @@
 import { getRecentCommits } from "@/lib/github-stats";
 import { profile } from "@/lib/portfolio-data";
+import { SITE_URL } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 600;
@@ -21,11 +22,8 @@ function escapeXml(s: string) {
  * repo; each entry links straight to the commit on GitHub.
  */
 export async function GET() {
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000");
+  // Canonical production URL — see src/lib/site-url.ts.
+  const siteUrl = SITE_URL;
 
   const { commits, fetchedAt } = await getRecentCommits(9);
 

@@ -1,13 +1,13 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site-url";
 
 /**
  * Generates /robots.txt. Allows the public portfolio root, but keeps the
  * admin API endpoints (messages inbox + analytics) out of search engines.
  */
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+  // Canonical production URL — see src/lib/site-url.ts.
+  const baseUrl = SITE_URL;
 
   return {
     rules: [

@@ -1,4 +1,5 @@
 import { profile, projects, skillGroups, services, faqs } from "@/lib/portfolio-data";
+import { SITE_URL } from "@/lib/site-url";
 import type { PortfolioMode } from "@/lib/mode";
 
 /**
@@ -14,11 +15,9 @@ import type { PortfolioMode } from "@/lib/mode";
  * ProfilePage (the résumé face).
  */
 
+/** Canonical site URL — see src/lib/site-url.ts. */
 function siteUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
-  );
+  return SITE_URL;
 }
 
 const DEV_DESCRIPTION =
