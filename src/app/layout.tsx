@@ -59,13 +59,15 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  /** Search-engine verification codes — set via env vars when the
-   *  owner registers the site with Google Search Console / Bing
-   *  Webmaster Tools. Absent env → tags are simply omitted. */
+  /** Search-engine verification codes. Google's code is set as a Vercel
+   *  env var (production + preview); the hardcoded fallback keeps the
+   *  meta tag present even if the env var is ever lost — the value is
+   *  public-by-design (it renders in the HTML head). Bing stays env-only
+   *  (simply omitted when unset). */
   verification: {
-    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
-      ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
-      : {}),
+    google:
+      process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ??
+      "stB6Mz35LFd0Bc0XR16zSz57eJG2JrBtd1DU5aSztz4",
     ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
       ? { other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } }
       : {}),
