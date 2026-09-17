@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  ...(process.env.VERCEL ? {} : { output: "standalone" as const }),
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
    * falling back to the (slow) Google Fonts CDN.
    */
   outputFileTracingIncludes: {
+    "/api/**": ["./db/**/*"],
+    "/": ["./db/**/*"],
+    "/opengraph-image": ["./db/**/*"],
     "/api/og": ["./public/fonts/**/*"],
   },
 };
