@@ -52,10 +52,10 @@ export async function generateMetadata({
       // the social/OG title stays emotional (what makes people click
       // a WhatsApp link preview).
       const title =
-        "Web Developer in Cairo, Egypt | Websites for Businesses — Abdelhady Gabriel";
+        "Web Developer in Cairo, Egypt — Abdelhady Gabriel";
       const socialTitle = "Websites that work as hard as you do — Abdelhady Gabriel";
       const description =
-        "Fixed-price websites and booking systems for businesses in Egypt and the Gulf. Fast, bilingual (Arabic + English), built to rank on Google — with support after launch. Starts with a free 15-minute chat.";
+        "Fixed-price websites and booking systems for businesses in Egypt and the Gulf. Bilingual (Arabic + English), built to rank on Google. Free 15-min intro chat.";
       const image = "/api/og?mode=client";
       return {
         title,
