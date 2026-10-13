@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
@@ -17,6 +18,12 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+/** Google Tag Manager container for www.abdelhadygabriel.me. Public by
+ *  design — the ID ships in every page's source anyway. Override with
+ *  NEXT_PUBLIC_GTM_ID to point at a different container (e.g. a scratch
+ *  one for experiments) without a code change. */
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID ?? "GTM-M5TFLR86";
 
 export const metadata: Metadata = {
   title: "Abdelhady Gabriel — Full-Stack Developer & Product Engineer",
@@ -144,6 +151,25 @@ export default async function RootLayout({
         data-view={mode}
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
+        {/* Google Tag Manager — loads on production and local dev, but is
+            skipped on Vercel PREVIEW deployments so test/QA traffic never
+            reaches GA4. VERCEL_ENV is set automatically by Vercel. Events
+            reach GTM via the dataLayer mirror in src/lib/analytics.ts. */}
+        {process.env.VERCEL_ENV !== "preview" && (
+          <>
+            <noscript>
+              <iframe
+                src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+                height="0"
+                width="0"
+                style={{ display: "none", visibility: "hidden" }}
+              />
+            </noscript>
+            <Script id="gtm-loader" strategy="afterInteractive">
+              {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM_ID}');`}
+            </Script>
+          </>
+        )}
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
