@@ -131,7 +131,7 @@ export function PageRouterProvider({
           window.location.hash = h;
         }
       }
-      trackEvent("page_nav", { slug: target.id, label: target.id });
+      trackEvent("page_nav", { slug: target.id, label: target.label });
 
       // Hop straight to the top of the incoming page and hand it focus.
       window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });

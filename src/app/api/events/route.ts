@@ -12,6 +12,7 @@ export const dynamic = "force-dynamic";
  * and prevents abuse from arbitrary string submissions.
  */
 const ALLOWED_TYPES = [
+  "page_nav",
   "project_card_click",
   "project_modal_open",
   "modal_nav",
