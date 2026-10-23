@@ -803,7 +803,7 @@ export const clientResults: ClientResult[] = [
     client: "Knead Bakery",
     headline: "A slow website was losing them orders",
     story:
-      "A bakery in Abu Dhabi was running on a Wix site so slow that customers gave up before the menu loaded. We rebuilt it around how customers actually order — food grouped by time of day, pickup times shown up front.",
+      "“Customers give up before the menu even loads.” That's what the owner of a bakery in Abu Dhabi told me about their old Wix site — and every abandoned load was an order that walked out the door. We rebuilt it around how customers actually order: food grouped by time of day, pickup times shown up front.",
     metrics: [
       { value: "45×", label: "faster than the old site" },
       { value: "15→4", label: "clearer menu categories" },
@@ -827,7 +827,7 @@ export const clientResults: ClientResult[] = [
     client: "A salon chain, Qatar",
     headline: "Bookings that run themselves",
     story:
-      "A luxury salon was managing appointments by phone and losing customers to missed calls. We built them online booking with automatic WhatsApp reminders — in Arabic and English.",
+      "A luxury salon was running appointments over the phone — and losing bookings every time a call rang out during rush hour. We built them online booking with automatic WhatsApp reminders, in Arabic and English, so the chair fills itself even when the front desk is busy.",
     metrics: [
       { value: "24/7", label: "online booking" },
       { value: "Auto", label: "WhatsApp reminders" },
@@ -913,7 +913,11 @@ export type Faq = { q: string; a: string };
 export const faqs: Faq[] = [
   {
     q: "How much does a website cost?",
-    a: "It depends on what you need — but you'll get one fixed number before any work begins, and that number won't change. A simple business website costs far less than most owners expect; booking systems and larger tools cost more. The free chat exists precisely so we can pin this down in 15 minutes.",
+    a: "It depends on what you need — but you'll get one fixed number before any work begins, and that number won't change. For most small businesses, a simple business website costs less than the money already spent on boosted posts that vanished in a week — and the site works for years. Booking systems and larger tools cost more. The free chat exists precisely so we can pin your exact number down in 15 minutes.",
+  },
+  {
+    q: "I already have a website — do I need a rebuild?",
+    a: "Not necessarily. Half the time the right move is a few targeted fixes — speed, mobile layout, a clearer call-to-action — not a full rebuild. That's exactly what the free 15-minute audit is for: I'll look at what you have and tell you honestly which one you need, even if the answer means you don't hire me.",
   },
   {
     q: "How long until my site is live?",

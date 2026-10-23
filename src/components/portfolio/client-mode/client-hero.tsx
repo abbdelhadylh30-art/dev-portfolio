@@ -99,7 +99,7 @@ export function ClientHero() {
           animate="show"
           className="mx-auto mt-6 max-w-2xl text-center text-base text-muted-foreground sm:text-lg"
         >
-          I build fast, beautiful websites for businesses — sites that load instantly,
+          I build fast, beautiful websites for businesses — clinics, restaurants, real estate, salons — sites that load instantly,
           show up on Google, and turn visitors into customers.{" "}
           <span className="text-foreground">In Arabic and English.</span>
         </motion.p>
@@ -149,7 +149,7 @@ export function ClientHero() {
           animate="show"
           className="mt-4 text-center text-xs text-muted-foreground"
         >
-          Free 15-minute chat · I&apos;ll tell you honestly what&apos;s worth fixing — whether you hire me or not.
+          Free 15-minute audit · You&apos;ll see exactly what&apos;s costing you customers and what it takes to fix it — whether you hire me or not.
         </motion.p>
 
         {/* Trust chips */}

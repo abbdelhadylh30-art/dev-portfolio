@@ -94,9 +94,9 @@ export function Services() {
               onClick={() => trackEvent("service_click", { label: "not_sure_cta" })}
               className="font-semibold text-brand hover:underline"
             >
-              Tell me what&apos;s bothering you about your current website
+              Tell me what&apos;s bothering you about your business right now
             </a>{" "}
-            — I&apos;ll map it to the right fix for free.
+            — I&apos;ll map it to the right fix in the free 15-minute chat.
           </p>
         </motion.div>
       </div>

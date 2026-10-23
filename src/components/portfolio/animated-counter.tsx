@@ -18,12 +18,19 @@ export function AnimatedCounter({ value }: { value: string }) {
     : "";
 
   const isNumeric = target !== null;
-  const [display, setDisplay] = useState<string>(isNumeric ? "0" : value);
+  // SSR / no-JS / crawlers must see the real value — the count-up is a
+  // progressive enhancement that only runs once the element scrolls into
+  // view. (Starting at "0" used to leak "<0s / #0 / 0×" into the server
+  // HTML, which looked broken in search results and link previews.)
+  const [display, setDisplay] = useState<string>(value);
 
   useEffect(() => {
     if (!isNumeric || target === null) return;
     const el = ref.current;
     if (!el) return;
+
+    // Respect users who prefer reduced motion — show the final value.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let started = false;
     const duration = 1100;
