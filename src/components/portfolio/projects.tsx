@@ -167,6 +167,24 @@ function ProjectCard({
         </div>
       </button>
 
+      {project.image && (
+        <button
+          type="button"
+          onClick={handleOpen}
+          aria-label={`Open screenshot of ${project.name}`}
+          className="relative mt-4 block w-full overflow-hidden rounded-xl border border-border/60"
+        >
+          <img
+            src={project.image}
+            alt={`${project.name} — live screenshot`}
+            width={1280}
+            height={800}
+            loading="lazy"
+            className="aspect-[16/10] w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+          />
+        </button>
+      )}
+
       <p className="mt-4 text-sm leading-relaxed text-muted-foreground line-clamp-3">
         {project.description}
       </p>
@@ -325,8 +343,8 @@ export function Projects() {
           counter={{ current: "02", total: "08" }}
           title={
             <>
-              9 repositories, <span className="text-brand">synced</span> from
-              GitHub.
+              {projects.length} repositories,{" "}
+              <span className="text-brand">synced</span> from GitHub.
             </>
           }
           description="Every project below is pulled from my live GitHub profile. Filter by category or sort to taste, then jump to the live demo or the source."
@@ -421,7 +439,7 @@ export function Projects() {
               Want the raw source?
             </h3>
             <p className="text-sm text-muted-foreground">
-              Browse all 9 repositories, commits and issues on GitHub.
+              Browse all {projects.length} repositories, commits and issues on GitHub.
             </p>
           </div>
           <Button

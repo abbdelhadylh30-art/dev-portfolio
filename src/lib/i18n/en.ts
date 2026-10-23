@@ -211,6 +211,44 @@ const en = {
         icon: "cta",
       },
     ] as ClientResult[],
+
+    /**
+     * Live concept builds — clickable proof. These are spec sites on the
+     * demos subdomain (fictional brands, real booking flows) matching the
+     * exact niches the business view sells to. Honest by design: the copy
+     * says "concept", never "client".
+     */
+    demoStrip: {
+      kicker: "Live concept builds",
+      title: { pre: "Don't take my word — ", grad: "click a working site", post: "." },
+      sub: "Three spec builds for the exact niches I serve: real booking flows, real bilingual layouts, zero filler copy. The brands are fictional — the engineering isn't. Try one.",
+      items: [
+        {
+          name: "CoolFix",
+          niche: "Home services · Cairo & Riyadh",
+          blurb: "24/7 dispatch booking with 2-hour arrival windows and a live jobs board.",
+          url: "https://demos.abdelhadygabriel.me/coolfix",
+          image: "/screenshots/coolfix.webp",
+        },
+        {
+          name: "Layan Interiors",
+          niche: "Interior studio · Cairo & Dubai",
+          blurb: "Crawlable case-study portfolio plus consultation booking.",
+          url: "https://demos.abdelhadygabriel.me/layan",
+          image: "/screenshots/layan.webp",
+        },
+        {
+          name: "Lumière Clinic",
+          niche: "Aesthetic clinic · Dubai",
+          blurb: "Treatment booking wizard with live time slots.",
+          url: "https://demos.abdelhadygabriel.me/lumiere",
+          image: "/screenshots/lumiere.webp",
+        },
+      ],
+      cta: "Open the live demo",
+      hubLabel: "All three demos + the bookings dashboard",
+      hubUrl: "https://demos.abdelhadygabriel.me",
+    },
   },
 
   process: {

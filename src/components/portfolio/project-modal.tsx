@@ -195,6 +195,32 @@ function ProjectDetail({ project }: { project: Project }) {
         </span>
       </div>
 
+      {/* Live-build screenshot (if the project has one) */}
+      {project.image && (
+        <a
+          href={project.homepage ?? project.repoUrl}
+          target="_blank"
+          rel="noreferrer noopener"
+          onClick={() =>
+            trackEvent("project_screenshot_click", { slug: project.slug })
+          }
+          className="group/img relative block overflow-hidden rounded-xl border border-border/60"
+          aria-label={`Open the live build of ${project.name}`}
+        >
+          <img
+            src={project.image}
+            alt={`${project.name} — live screenshot`}
+            width={1280}
+            height={800}
+            loading="lazy"
+            className="aspect-[16/10] w-full object-cover object-top transition-transform duration-500 group-hover/img:scale-[1.02]"
+          />
+          <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-end gap-1 bg-gradient-to-t from-background/80 to-transparent px-3 pb-2 pt-8 text-[11px] font-medium text-foreground/90 opacity-0 transition-opacity duration-300 group-hover/img:opacity-100">
+            Open live build <ExternalLink className="h-3 w-3" />
+          </span>
+        </a>
+      )}
+
       {/* Long description */}
       <p className="text-sm leading-relaxed text-foreground/85">
         {project.description}

@@ -102,7 +102,7 @@ export const DEV_PAGES: SitePage[] = [
     id: "work",
     label: "Work",
     kicker: "Repositories",
-    blurb: "9 public repos — SaaS, chat, tooling, automation.",
+    blurb: "17 repos — bilingual concept demos, SaaS, tooling.",
     icon: "folder",
   },
   {

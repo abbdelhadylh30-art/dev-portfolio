@@ -116,6 +116,78 @@ export function Results() {
             );
           })}
         </div>
+
+        {/* Live concept builds — clickable proof for the exact niches we
+            serve. Fictional brands, real booking flows; the copy says
+            "concept", never "client". */}
+        <div className="mt-16">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand">
+                {t.results.demoStrip.kicker}
+              </p>
+              <h3 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+                <GradTitle parts={t.results.demoStrip.title} />
+              </h3>
+            </div>
+            <a
+              href={t.results.demoStrip.hubUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => trackEvent("demo_hub_open", { label: "results_strip" })}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-brand"
+            >
+              {t.results.demoStrip.hubLabel}
+              <ArrowUpRight className="h-4 w-4 rtl:-scale-x-100" />
+            </a>
+          </div>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            {t.results.demoStrip.sub}
+          </p>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            {t.results.demoStrip.items.map((d, idx) => (
+              <motion.a
+                key={d.name}
+                href={d.url}
+                target="_blank"
+                rel="noreferrer noopener"
+                onClick={() => trackEvent("demo_open", { label: d.name })}
+                initial={{ opacity: 0, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.55, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="client-card group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/50"
+              >
+                <div className="relative overflow-hidden">
+                  <img
+                    src={d.image}
+                    alt={`${d.name} — live concept demo`}
+                    width={1280}
+                    height={800}
+                    loading="lazy"
+                    className="aspect-[16/10] w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                </div>
+                <div className="flex flex-1 flex-col p-5">
+                  <h4 className="text-sm font-semibold text-foreground transition-colors group-hover:text-brand">
+                    {d.name}
+                  </h4>
+                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wide text-muted-foreground/70">
+                    {d.niche}
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {d.blurb}
+                  </p>
+                  <span className="mt-auto inline-flex items-center gap-1.5 pt-4 text-sm font-medium text-brand">
+                    {t.results.demoStrip.cta}
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 rtl:-scale-x-100" />
+                  </span>
+                </div>
+              </motion.a>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

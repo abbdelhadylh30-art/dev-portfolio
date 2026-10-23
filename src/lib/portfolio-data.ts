@@ -3,7 +3,7 @@
  * Every visible string on the site is sourced from here.
  *
  * Repository data was synced from github.com/abbdelhadylh30-art
- * (9 public repositories, fetched via the GitHub REST API).
+ * (17 public repositories, synced from the GitHub REST API).
  */
 
 export type LanguageBreakdown = { name: string; percent: number; bytes: number };
@@ -15,6 +15,8 @@ export type Project = {
   highlights: string[];
   repoUrl: string;
   homepage?: string;
+  /** Live-build screenshot, served from /public/screenshots (1280px WebP). */
+  image?: string;
   category: "SaaS" | "Web" | "Portfolio" | "Tools";
   featured: boolean;
   updatedAt: string; // ISO date
@@ -141,6 +143,7 @@ export const projects: Project[] = [
     ],
     repoUrl: "https://github.com/abbdelhadylh30-art/forge-studio",
     homepage: "https://forge-studio-green.vercel.app",
+    image: "/screenshots/forge-studio.webp",
     category: "SaaS",
     featured: true,
     updatedAt: "2026-08-23T22:00:22Z",
@@ -150,6 +153,78 @@ export const projects: Project[] = [
       { name: "TypeScript", percent: 97.9, bytes: 865038 },
       { name: "CSS", percent: 1.7, bytes: 14608 },
       { name: "JavaScript", percent: 0.5, bytes: 4144 },
+    ],
+  },
+  {
+    name: "CoolFix — Concept Demo",
+    slug: "coolfix",
+    description:
+      "Concept build: 24/7 home-services dispatch (AC, plumbing, electrical) for Cairo & Riyadh — 5-step booking with 2-hour arrival windows, an emergency fast-path and a live jobs board. Fully bilingual AR/EN.",
+    highlights: [
+      "5-step dispatch booking, 2-hour arrival windows",
+      "Emergency fast-path + live jobs board",
+      "Bilingual AR/EN, WhatsApp confirmation flow",
+    ],
+    repoUrl: "https://github.com/abbdelhadylh30-art/portfolio-demos",
+    homepage: "https://demos.abdelhadygabriel.me/coolfix",
+    image: "/screenshots/coolfix.webp",
+    category: "Web",
+    featured: true,
+    updatedAt: "2026-10-16T15:47:33Z",
+    createdAt: "2026-10-16T00:00:00Z",
+    primaryTech: ["Next.js 16", "Tailwind 4", "zustand", "RTL"],
+    languages: [
+      { name: "TypeScript", percent: 97.4, bytes: 386032 },
+      { name: "CSS", percent: 2.2, bytes: 8733 },
+      { name: "JavaScript", percent: 0.4, bytes: 1713 },
+    ],
+  },
+  {
+    name: "Layan Interiors — Concept Demo",
+    slug: "layan",
+    description:
+      "Concept build: interior-architecture studio site with crawlable case-study URLs (/work/[slug]) and consultation booking that pre-qualifies budget. Bilingual AR/EN with native RTL.",
+    highlights: [
+      "Multi-page case-study portfolio (/work/[slug])",
+      "Consultation booking with budget pre-qualification",
+      "Bilingual AR/EN, Arabic-first typography",
+    ],
+    repoUrl: "https://github.com/abbdelhadylh30-art/portfolio-demos",
+    homepage: "https://demos.abdelhadygabriel.me/layan",
+    image: "/screenshots/layan.webp",
+    category: "Web",
+    featured: true,
+    updatedAt: "2026-10-16T15:47:33Z",
+    createdAt: "2026-10-16T00:00:00Z",
+    primaryTech: ["Next.js 16", "Framer Motion", "i18n", "SEO"],
+    languages: [
+      { name: "TypeScript", percent: 97.4, bytes: 386032 },
+      { name: "CSS", percent: 2.2, bytes: 8733 },
+      { name: "JavaScript", percent: 0.4, bytes: 1713 },
+    ],
+  },
+  {
+    name: "Lumière Clinic — Concept Demo",
+    slug: "lumiere",
+    description:
+      "Concept build: one-page scrollytelling site for an aesthetic clinic — 4-step treatment-booking wizard with live time slots and a shared owner dashboard. Bilingual AR/EN.",
+    highlights: [
+      "One-page scrollytelling experience",
+      "4-step treatment booking wizard with slots",
+      "Shared bookings dashboard across all demos",
+    ],
+    repoUrl: "https://github.com/abbdelhadylh30-art/portfolio-demos",
+    homepage: "https://demos.abdelhadygabriel.me/lumiere",
+    image: "/screenshots/lumiere.webp",
+    category: "Web",
+    featured: true,
+    updatedAt: "2026-10-16T15:47:33Z",
+    createdAt: "2026-10-16T00:00:00Z",
+    primaryTech: ["Next.js 16", "shadcn/ui", "zustand", "JSON-LD"],
+    languages: [
+      { name: "TypeScript", percent: 97.4, bytes: 386032 },
+      { name: "CSS", percent: 2.2, bytes: 8733 },
+      { name: "JavaScript", percent: 0.4, bytes: 1713 },
     ],
   },
   {
@@ -164,6 +239,7 @@ export const projects: Project[] = [
     ],
     repoUrl: "https://github.com/abbdelhadylh30-art/glamchain",
     homepage: "https://glamchain.vercel.app",
+    image: "/screenshots/glamchain.webp",
     category: "SaaS",
     featured: true,
     updatedAt: "2026-08-23T06:21:06Z",
@@ -188,6 +264,7 @@ export const projects: Project[] = [
       "Framer Motion throughout",
     ],
     repoUrl: "https://github.com/abbdelhadylh30-art/dev-portfolio",
+    image: "/screenshots/dev-portfolio.webp",
     category: "Portfolio",
     featured: true,
     updatedAt: "2026-07-03T00:04:12Z",
@@ -213,6 +290,7 @@ export const projects: Project[] = [
     ],
     repoUrl: "https://github.com/abbdelhadylh30-art/lead-profiler",
     homepage: "https://lead-profiler-deploy.vercel.app",
+    image: "/screenshots/lead-profiler.webp",
     category: "SaaS",
     featured: true,
     updatedAt: "2026-07-27T01:57:25Z",
@@ -236,6 +314,7 @@ export const projects: Project[] = [
     ],
     repoUrl: "https://github.com/abbdelhadylh30-art/fitness-house",
     homepage: "https://fitness-house-phi.vercel.app",
+    image: "/screenshots/fitness-house.webp",
     category: "Web",
     featured: false,
     updatedAt: "2026-08-08T22:42:18Z",
@@ -320,6 +399,173 @@ export const projects: Project[] = [
     ],
   },
   {
+    name: "Qaimati",
+    slug: "qaimati",
+    description:
+      "Qaimati — QR digital-menu platform: guests scan and browse a live menu, merchants manage it from a dashboard, analytics close the loop. Bilingual AR/EN end to end.",
+    highlights: [
+      "QR menus — customer → merchant → analytics",
+      "Merchant dashboard with live menu management",
+      "Bilingual AR/EN platform",
+    ],
+    repoUrl: "https://github.com/abbdelhadylh30-art/qaimati",
+    homepage: "https://qaimati-eight.vercel.app",
+    image: "/screenshots/qaimati.webp",
+    category: "SaaS",
+    featured: false,
+    updatedAt: "2026-09-19T22:57:00Z",
+    createdAt: "2026-09-17T00:00:00Z",
+    primaryTech: ["Next.js", "TypeScript", "QR", "Dashboard"],
+    languages: [
+      { name: "TypeScript", percent: 87.9, bytes: 587928 },
+      { name: "CSS", percent: 6.9, bytes: 45913 },
+      { name: "Shell", percent: 5.0, bytes: 33449 },
+      { name: "JavaScript", percent: 0.3, bytes: 1713 },
+    ],
+  },
+  {
+    name: "Deutsch A1",
+    slug: "deutsch-a1-app",
+    description:
+      "CEFR A1 German learning app for Arabic speakers — 12-chapter curriculum, spaced-repetition review and exam practice, with an Arabic-first UI.",
+    highlights: [
+      "12-chapter CEFR A1 curriculum",
+      "Spaced-repetition (SRS) review engine",
+      "Arabic-first UI, RTL layouts",
+    ],
+    repoUrl: "https://github.com/abbdelhadylh30-art/deutsch-a1-app",
+    homepage: "https://deutsch-a1-app.vercel.app",
+    image: "/screenshots/deutsch-a1-app.webp",
+    category: "Web",
+    featured: false,
+    updatedAt: "2026-10-06T04:10:38Z",
+    createdAt: "2026-09-30T00:00:00Z",
+    primaryTech: ["Next.js", "TypeScript", "SRS", "i18n"],
+    languages: [
+      { name: "TypeScript", percent: 96.0, bytes: 1306816 },
+      { name: "Shell", percent: 2.5, bytes: 33449 },
+      { name: "CSS", percent: 0.9, bytes: 11614 },
+      { name: "JavaScript", percent: 0.6, bytes: 8178 },
+    ],
+  },
+  {
+    name: "Athar",
+    slug: "athar",
+    description:
+      "Athar — a journaling app that remembers who you're becoming: three sentences a day, kept private, reflected back over time.",
+    highlights: [
+      "Three-sentences-a-day journaling",
+      "Long-term self-reflection view",
+      "Live on Vercel",
+    ],
+    repoUrl: "https://github.com/abbdelhadylh30-art/Athar",
+    homepage: "https://athar-navy.vercel.app",
+    image: "/screenshots/athar.webp",
+    category: "Web",
+    featured: false,
+    updatedAt: "2026-09-19T22:57:39Z",
+    createdAt: "2026-06-07T00:00:00Z",
+    primaryTech: ["Next.js", "TypeScript", "Tailwind 4"],
+    languages: [
+      { name: "TypeScript", percent: 76.2, bytes: 83006 },
+      { name: "Shell", percent: 17.7, bytes: 19291 },
+      { name: "CSS", percent: 4.5, bytes: 4914 },
+      { name: "JavaScript", percent: 1.6, bytes: 1713 },
+    ],
+  },
+  {
+    name: "PixelForge",
+    slug: "pixelforge",
+    description:
+      "PixelForge — landing-page audit & optimization tool: scores a page across performance, SEO and content, then walks you to the fixes.",
+    highlights: [
+      "Landing-page audit scoring engine",
+      "Actionable per-finding fixes",
+      "Fully client-side, no backend",
+    ],
+    repoUrl: "https://github.com/abbdelhadylh30-art/Pixelforge",
+    homepage: "https://pixelforge-sigma.vercel.app",
+    image: "/screenshots/pixelforge.webp",
+    category: "Tools",
+    featured: false,
+    updatedAt: "2026-09-19T22:57:43Z",
+    createdAt: "2026-05-04T00:00:00Z",
+    primaryTech: ["HTML", "CSS", "JavaScript", "Audit"],
+    languages: [
+      { name: "HTML", percent: 99.0, bytes: 490497 },
+      { name: "TypeScript", percent: 1.0, bytes: 5148 },
+    ],
+  },
+  {
+    name: "Landing Forge",
+    slug: "landing-forge",
+    description:
+      "landing-forge studio — the open-source visual builder Forge Studio grew from: drag & drop sections, AI prompts and section-level control.",
+    highlights: [
+      "Drag-&-drop landing page builder",
+      "AI-assisted section prompts",
+      "Serialisable section tree — pages are data",
+    ],
+    repoUrl: "https://github.com/abbdelhadylh30-art/landing-forge",
+    category: "Tools",
+    featured: false,
+    updatedAt: "2026-09-19T23:09:41Z",
+    createdAt: "2026-09-03T00:00:00Z",
+    primaryTech: ["TypeScript", "Drag-Drop", "AI"],
+    languages: [
+      { name: "TypeScript", percent: 94.9, bytes: 841551 },
+      { name: "Shell", percent: 4.1, bytes: 36354 },
+      { name: "CSS", percent: 0.8, bytes: 7318 },
+      { name: "JavaScript", percent: 0.2, bytes: 1713 },
+    ],
+  },
+  {
+    name: "Mobile Accessories Store",
+    slug: "mobile-accessories-store",
+    description:
+      "Full accessories e-commerce storefront — product catalog, cart and checkout flow on Next.js with a clean TypeScript data layer.",
+    highlights: [
+      "E-commerce catalog, cart & checkout",
+      "API-route backed order flow",
+      "Production-shaped TypeScript models",
+    ],
+    repoUrl: "https://github.com/abbdelhadylh30-art/mobile-accessories-store",
+    category: "Web",
+    featured: false,
+    updatedAt: "2026-10-07T13:56:41Z",
+    createdAt: "2026-10-07T00:00:00Z",
+    primaryTech: ["Next.js", "TypeScript", "E-commerce"],
+    languages: [
+      { name: "TypeScript", percent: 94.0, bytes: 731879 },
+      { name: "Shell", percent: 4.3, bytes: 33449 },
+      { name: "CSS", percent: 1.4, bytes: 11169 },
+      { name: "JavaScript", percent: 0.2, bytes: 1713 },
+    ],
+  },
+  {
+    name: "Fleet Control",
+    slug: "fleet-control",
+    description:
+      "Fleet Control — the ops control plane for abdelhadygabriel.me: live status, SEO readiness checks, an IndexNow pipeline and agent access.",
+    highlights: [
+      "Live status + SEO readiness checks",
+      "IndexNow pipeline for instant indexing",
+      "Agent-accessible ops endpoints",
+    ],
+    repoUrl: "https://github.com/abbdelhadylh30-art/fleet-control",
+    category: "Tools",
+    featured: false,
+    updatedAt: "2026-09-24T03:35:47Z",
+    createdAt: "2026-09-20T00:00:00Z",
+    primaryTech: ["TypeScript", "SEO", "IndexNow", "Ops"],
+    languages: [
+      { name: "TypeScript", percent: 97.9, bytes: 779301 },
+      { name: "Python", percent: 1.2, bytes: 9415 },
+      { name: "CSS", percent: 0.7, bytes: 5920 },
+      { name: "JavaScript", percent: 0.2, bytes: 1713 },
+    ],
+  },
+  {
     name: "ProfileForge",
     slug: "profileforge",
     description:
@@ -396,6 +642,56 @@ export const projectDetails: Record<string, string[]> = {
     "A GitHub profile README studio: compose your profile from 50+ tech badges, stats embeds and ready-made templates while a live preview shows the exact README you'll get.",
     "An AI bio writer drafts the about section from a few prompts, and everything compiles to clean Markdown you can paste straight into your GitHub profile.",
     "The newest build in the portfolio — TypeScript end-to-end (~258k LOC), shipped the same day the idea landed.",
+  ],
+  "coolfix": [
+    "Spec build for the niche most agencies skip: 24/7 AC, plumbing and electrical dispatch across Cairo & Riyadh.",
+    "5-step booking flow with 2-hour arrival windows, an emergency fast-path and a live jobs board fed by a shared API.",
+    "Bilingual AR/EN with native RTL, WhatsApp deep-link confirmation and HomeAndConstructionBusiness JSON-LD.",
+  ],
+  "layan": [
+    "Interior-architecture concept where the portfolio is crawlable — every case study owns a real URL (/work/[slug]).",
+    "Consultation booking pre-qualifies budget before the call, so studio time goes to serious enquiries.",
+    "Per-brand i18n with zero route duplication: instant AR/EN flip, proper RTL, Arabic-first fonts.",
+  ],
+  "lumiere": [
+    "Aesthetic-clinic concept: one-page scrollytelling that sells trust before treatments.",
+    "4-step booking wizard with live time slots; every request lands in a shared dashboard with a readable reference code.",
+    "MedicalClinic + FAQPage JSON-LD and a strict performance budget — self-hosted fonts, static-first pages.",
+  ],
+  "qaimati": [
+    "QR digital-menu platform: guests scan, browse and order from a live menu; merchants manage it all from a dashboard.",
+    "Analytics close the loop — views and orders per item, per day.",
+    "Bilingual AR/EN end to end; the Arabic UI is designed first-class, not translated afterwards.",
+  ],
+  "deutsch-a1-app": [
+    "A full CEFR A1 German curriculum for Arabic speakers — 12 chapters from zero to exam-ready.",
+    "A spaced-repetition engine schedules vocabulary so it sticks.",
+    "Arabic-first interface with RTL layouts and phonetic aids for German sounds.",
+  ],
+  "athar": [
+    "A minimal journaling practice: three sentences a day, timestamped and private.",
+    "Athar surfaces past entries back to you — a long-memory view of who you're becoming.",
+    "Deployed on Vercel with a lean TypeScript core.",
+  ],
+  "pixelforge": [
+    "Landing-page audit tool: scores performance, SEO and content, then converts each finding into a concrete fix.",
+    "Its audit heuristics later became the 5-category auditor inside Forge Studio.",
+    "Single-page tool — no backend required, fully client-side scoring.",
+  ],
+  "landing-forge": [
+    "The original visual builder: drag & drop sections onto a canvas, tune each one, let AI prompts draft the copy.",
+    "Serialisable section tree — pages are data, so they save, reload and export cleanly.",
+    "The codebase that grew into Forge Studio's builder.",
+  ],
+  "mobile-accessories-store": [
+    "Full accessories storefront: product catalog, cart and checkout flow backed by Next.js API routes.",
+    "TypeScript data layer with clean product and order models.",
+    "Built as a production-shaped e-commerce reference.",
+  ],
+  "fleet-control": [
+    "The ops control plane for abdelhadygabriel.me: live status, SEO readiness and uptime checks from one place.",
+    "IndexNow pipeline pings search engines the moment content changes.",
+    "Agent-accessible endpoints let automation inspect and operate the site safely.",
   ],
 };
 
@@ -479,7 +775,7 @@ export type Highlight = {
 
 export const highlights: Highlight[] = [
   {
-    text: "9 public repos shipped",
+    text: "17 repos shipped",
     context: "github.com/abbdelhadylh30-art",
     icon: "git",
   },
