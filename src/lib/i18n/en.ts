@@ -34,7 +34,7 @@ const en = {
   /** Localised page labels (ids/icons stay language-neutral in site-pages.ts). */
   pages: {
     home: { label: "Home", kicker: "Start here", blurb: "Websites that work as hard as you do." },
-    services: { label: "What I do", kicker: "Services", blurb: "Fixed-price websites, booking systems and Google visibility." },
+    services: { label: "What I do", kicker: "Services", blurb: "Fixed prices from day one, booking systems, and Google visibility." },
     results: { label: "Results", kicker: "Proof", blurb: "Real businesses, real numbers — loads, ranks, bookings." },
     process: { label: "How it works", kicker: "Process", blurb: "From free 15-minute chat to launch in 2–4 weeks." },
     pricing: { label: "Pricing", kicker: "Packages", blurb: "Real prices, task by task — from $149 one-pagers to full builds." },
@@ -64,7 +64,7 @@ const en = {
     badge: "Now booking new projects",
     nameRole: "Web developer for businesses · Cairo — working across Egypt & the Gulf",
     title: { pre: "A website that ", grad: "works as hard", post: " as you do." },
-    sub: "I build fast, beautiful websites for clinics, restaurants, salons and real-estate teams — sites that load instantly, show up on Google, and quietly turn visitors into paying customers.",
+    sub: "Clinic, restaurant, salon, real-estate office? My job is simple: a fast website that opens in seconds on a phone, shows up on Google, and brings you customers while you're busy running the business.",
     subEm: "In Arabic and English.",
     ctaPrimary: "Get your free website audit",
     ctaSecondary: "See real client results",
@@ -156,9 +156,9 @@ const en = {
   results: {
     head: {
       eyebrow: "Results",
-      title: { pre: "What businesses ", grad: "actually got", post: "." },
+      title: { pre: "What ", grad: "actually changed", post: " for real businesses." },
       description:
-        "No client cares about the tech behind it. Here's what changed for real businesses — in numbers they care about.",
+        "None of my clients care about the tech under the hood — they care that the phone rings. Here's what changed, in the numbers they actually care about.",
     },
     startChat: "Start your free chat",
     items: [
@@ -199,7 +199,7 @@ const en = {
         icon: "scissors",
       },
       {
-        client: "Your business",
+        client: "You?",
         headline: "The next story could be yours",
         story:
           "Every project above started the same way: a free 15-minute chat. No pressure, no jargon — I'll look at what you have now and tell you honestly what's worth fixing.",
@@ -253,7 +253,7 @@ const en = {
   pricing: {
     head: {
       eyebrow: "Pricing",
-      title: { pre: "Real prices. ", grad: "Real timelines", post: ". No mystery quotes." },
+      title: { pre: "Real numbers, ", grad: "in writing", post: ", before we start." },
       description:
         "Every package, every task, every dollar — out in the open. Pick what fits today, start small, and upgrade later: you only ever pay the difference.",
     },
@@ -376,7 +376,7 @@ const en = {
       {
         id: "business",
         name: "Business",
-        tagline: "The site plus the machinery that books and sells.",
+        tagline: "The website plus the system that books and sells for you.",
         price: 649,
         deposit: 325,
         duration: "10–14 days",
@@ -414,7 +414,7 @@ const en = {
     },
     {
       title: "You own everything",
-      body: "Your domain, your hosting, your content, your code. If we ever part ways, it's all yours — no hostage-taking.",
+      body: "Your domain, your hosting, your content, your code — accounts in your name. If we ever part ways, it's all yours and nothing is held back.",
       icon: "own",
     },
     {
@@ -424,7 +424,7 @@ const en = {
     },
     {
       title: "Support after launch",
-      body: "Free tweaks in the first month, same-day WhatsApp replies after that. A website is a living thing — it needs a caretaker.",
+      body: "Free tweaks in the first month, same-day WhatsApp replies after that. Websites need looking after — like anything else that brings you business.",
       icon: "support",
     },
   ] as Guarantee[],
@@ -535,7 +535,7 @@ const en = {
     whatNeed: "What do you need?",
     projectTypes: ["New site", "Redesign", "Web app", "Free audit", "Other"],
     message: "Message",
-    messagePh: "Tell me about your project, role or idea…",
+    messagePh: "Tell me about your business and what you need…",
     note: "Straight to my inbox — usually replied to within 24h.",
     send: "Send message",
     sending: "Sending…",

@@ -1040,7 +1040,7 @@ export const pricingTiers: PricingTier[] = [
   {
     id: "business",
     name: "Business",
-    tagline: "The site plus the machinery that books and sells.",
+    tagline: "The website plus the system that books and sells for you.",
     price: 649,
     deposit: 325,
     duration: "10–14 days",
@@ -1115,7 +1115,7 @@ export const faqs: Faq[] = [
   },
   {
     q: "Can my site be in Arabic?",
-    a: "نعم بالتأكيد. Your site can be Arabic, English, or both — with proper right-to-left layout designed in from the start, not a machine-flipped afterthought. This matters for how professional your business looks to Arabic-first customers.",
+    a: "Yes, absolutely. Your site can be Arabic, English, or both — with proper right-to-left layout designed in from the start, not a machine-flipped afterthought. It changes how professional your business reads to Arabic-first customers.",
   },
   {
     q: "What if I need changes later?",
