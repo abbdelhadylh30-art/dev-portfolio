@@ -26,7 +26,7 @@ export function SectionHeading({
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className={`flex flex-col gap-3 ${
-        isCenter ? "items-center text-center" : "items-start text-left"
+        isCenter ? "items-center text-center" : "items-start text-start"
       }`}
     >
       <div
@@ -40,8 +40,8 @@ export function SectionHeading({
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            style={{ transformOrigin: "left" }}
-            className="h-px w-6 bg-gradient-to-r from-brand to-brand-2"
+            /* Draws from the reading side in both directions. */
+            className="h-px w-6 bg-gradient-to-r from-brand to-brand-2 origin-left rtl:origin-right"
           />
           <span className="brand-gradient-text font-semibold">{eyebrow}</span>
         </span>

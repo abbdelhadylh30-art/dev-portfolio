@@ -5,6 +5,7 @@ import { MessageCircle, Phone, Mail, BadgeCheck, ArrowUpRight } from "lucide-rea
 import { Button } from "@/components/ui/button";
 import { profile } from "@/lib/portfolio-data";
 import { ContactForm } from "@/components/portfolio/contact-form";
+import { usePrefs, GradTitle } from "@/lib/i18n/language";
 import { SectionHeading } from "@/components/portfolio/section-heading";
 import { trackEvent } from "@/lib/analytics";
 
@@ -13,20 +14,17 @@ import { trackEvent } from "@/lib/analytics";
  * reach a developer in Egypt/Gulf), then phone, then email, then the form.
  */
 export function ClientContact() {
+  const { t } = usePrefs();
   return (
     <section id="contact" className="relative overflow-hidden border-t border-border/40 py-20 sm:py-28">
       <div className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-brand/12 blur-[110px] pulse-slow float-a" />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
-          eyebrow="Contact"
+          eyebrow={t.contact.head.eyebrow}
           counter={{ current: "06", total: "06" }}
-          title={
-            <>
-              Let&apos;s talk about <span className="brand-gradient-text">your website</span>.
-            </>
-          }
-          description="WhatsApp is fastest — I usually reply within a few hours, same day at the latest."
+          title={<GradTitle parts={t.contact.head.title} />}
+          description={t.contact.head.description}
         />
 
         <div className="mt-12 grid gap-6 lg:grid-cols-2 lg:gap-8">
@@ -50,11 +48,13 @@ export function ClientContact() {
               </span>
               <div className="min-w-0">
                 <div className="flex items-center gap-2 text-base font-semibold text-foreground transition-colors group-hover:text-brand">
-                  WhatsApp — fastest
+                  {t.contact.whatsappTitle}
                   <ArrowUpRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
-                <p className="mt-0.5 text-sm text-muted-foreground">{profile.phoneDisplay}</p>
-                <p className="mt-1 text-xs text-muted-foreground/70">Usually replies within a few hours</p>
+                <p className="mt-0.5 text-sm text-muted-foreground">
+                  <span dir="ltr">{profile.phoneDisplay}</span>
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground/70">{t.contact.repliesNote}</p>
               </div>
             </a>
 
@@ -68,8 +68,10 @@ export function ClientContact() {
                   <Phone className="h-5 w-5" />
                 </span>
                 <div className="min-w-0">
-                  <div className="text-sm font-semibold text-foreground transition-colors group-hover:text-brand">Call me</div>
-                  <p className="text-xs text-muted-foreground">{profile.phoneDisplay}</p>
+                  <div className="text-sm font-semibold text-foreground transition-colors group-hover:text-brand">{t.contact.callMe}</div>
+                  <p className="text-xs text-muted-foreground">
+                    <span dir="ltr">{profile.phoneDisplay}</span>
+                  </p>
                 </div>
               </a>
 
@@ -82,8 +84,8 @@ export function ClientContact() {
                   <Mail className="h-5 w-5" />
                 </span>
                 <div className="min-w-0">
-                  <div className="text-sm font-semibold text-foreground transition-colors group-hover:text-brand">Email</div>
-                  <p className="truncate text-xs text-muted-foreground">{profile.email}</p>
+                  <div className="text-sm font-semibold text-foreground transition-colors group-hover:text-brand">{t.contact.email}</div>
+                  <p className="truncate text-xs text-muted-foreground" dir="ltr">{profile.email}</p>
                 </div>
               </a>
             </div>
@@ -93,22 +95,16 @@ export function ClientContact() {
               <div className="flex items-center gap-2.5">
                 <BadgeCheck className="icon-bob h-5 w-5 text-brand" />
                 <h3 className="text-sm font-semibold text-foreground">
-                  What happens in the free 15-minute chat
+                  {t.contact.audit.title}
                 </h3>
               </div>
               <ul className="mt-3.5 space-y-2 text-sm text-muted-foreground">
-                <li className="flex gap-2.5">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand/60" />
-                  I look at your current website (or your competitor&apos;s) with you
-                </li>
-                <li className="flex gap-2.5">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand/60" />
-                  I tell you what&apos;s worth fixing and what isn&apos;t
-                </li>
-                <li className="flex gap-2.5">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand/60" />
-                  You get a fixed-price quote — with zero obligation
-                </li>
+                {t.contact.audit.bullets.map((b) => (
+                  <li key={b} className="flex gap-2.5">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand/60" />
+                    {b}
+                  </li>
+                ))}
               </ul>
             </div>
           </motion.div>
@@ -122,15 +118,15 @@ export function ClientContact() {
             className="contact-form-shell grad-border relative rounded-2xl border border-border/60 bg-card/40 p-6 sm:p-7"
           >
             <div aria-hidden className="grad-divider absolute inset-x-6 top-0 opacity-60" />
-            <div className="mb-5 flex items-center justify-between">
+            <div className="mb-5 flex items-center justify-between gap-3">
               <h3 className="text-base font-semibold text-foreground">
-                Or send a message — I&apos;ll reply on WhatsApp
+                {t.contact.formTitle}
               </h3>
               <span className="hidden font-mono text-[10px] uppercase tracking-wider text-muted-foreground/70 sm:inline">
-                Same-day reply
+                {t.contact.sameDay}
               </span>
             </div>
-            <ContactForm />
+            <ContactForm labels={t.form} />
           </motion.div>
         </div>
       </div>

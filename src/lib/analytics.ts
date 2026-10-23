@@ -46,7 +46,9 @@ export type AnalyticsEventType =
   | "service_click"
   | "result_card_click"
   | "pricing_cta_click"
-  | "pricing_variant_switch";
+  | "pricing_variant_switch"
+  | "language_switch"
+  | "palette_switch";
 
 const THROTTLE_MS = 1000;
 const lastSent = new Map<string, number>();

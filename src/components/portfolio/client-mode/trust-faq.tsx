@@ -9,7 +9,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { guarantees, faqs, type Guarantee } from "@/lib/portfolio-data";
+import type { Guarantee } from "@/lib/portfolio-data";
+import { usePrefs, GradTitle } from "@/lib/i18n/language";
 import { SectionHeading } from "@/components/portfolio/section-heading";
 import { trackEvent } from "@/lib/analytics";
 
@@ -26,6 +27,7 @@ const GUARANTEE_ICONS: Record<Guarantee["icon"], typeof Wallet> = {
  * language questions every owner actually asks.
  */
 export function TrustFaq() {
+  const { t } = usePrefs();
   const [opened, setOpened] = React.useState<string[]>([]);
 
   return (
@@ -34,18 +36,14 @@ export function TrustFaq() {
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
-          eyebrow="Straight answers"
-          title={
-            <>
-              The things you&apos;d <span className="brand-gradient-text">ask anyway</span>.
-            </>
-          }
-          description="Money, timing, Arabic, and what happens after launch — answered plainly."
+          eyebrow={t.faq.head.eyebrow}
+          title={<GradTitle parts={t.faq.head.title} />}
+          description={t.faq.head.description}
         />
 
         {/* Guarantees strip */}
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {guarantees.map((g, idx) => {
+          {t.guarantees.map((g, idx) => {
             const Icon = GUARANTEE_ICONS[g.icon];
             return (
               <motion.div
@@ -86,9 +84,9 @@ export function TrustFaq() {
             }}
             className="divide-y divide-border/50 rounded-2xl border border-border/60 bg-card/50 px-2"
           >
-            {faqs.map((f, i) => (
+            {t.faq.items.map((f, i) => (
               <AccordionItem key={f.q} value={`faq-${i}`} className="border-0">
-                <AccordionTrigger className="px-4 py-4 text-left text-sm font-semibold text-foreground hover:text-brand hover:no-underline sm:text-[15px]">
+                <AccordionTrigger className="px-4 py-4 text-start text-sm font-semibold text-foreground hover:text-brand hover:no-underline sm:text-[15px]">
                   {f.q}
                 </AccordionTrigger>
                 <AccordionContent className="px-4 pb-4 text-sm leading-relaxed text-muted-foreground">

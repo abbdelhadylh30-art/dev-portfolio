@@ -4,14 +4,11 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Check, Sparkles, Timer, Wallet } from "lucide-react";
 import {
-  pricingTiers,
-  paymentFlow,
-  pricingExtras,
-  upgradeCreditNote,
   type PricingTask,
   type PricingTier,
   type PricingVariant,
 } from "@/lib/portfolio-data";
+import { usePrefs, GradTitle } from "@/lib/i18n/language";
 import { SectionHeading } from "@/components/portfolio/section-heading";
 import { trackEvent } from "@/lib/analytics";
 
@@ -43,12 +40,14 @@ function TaskList({ tasks }: { tasks: PricingTask[] }) {
    The one-pager carries two flavours (portfolio / landing) toggled in-card. */
 function TierCard({ tier }: { tier: PricingTier }) {
   const [variantIdx, setVariantIdx] = useState(0);
+  const { t } = usePrefs();
   const active: PricingVariant | null = tier.variants ? tier.variants[variantIdx] : null;
 
   const price = active ? active.price : tier.price;
   const deposit = active ? active.deposit : tier.deposit;
   const duration = active ? active.duration : tier.duration;
   const tasks = active ? active.tasks : tier.tasks;
+  const depositCopy = t.pricing.deposit(deposit, price - deposit);
 
   return (
     <motion.div
@@ -64,7 +63,7 @@ function TierCard({ tier }: { tier: PricingTier }) {
     >
       {tier.popular && (
         <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-brand to-brand-2 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow">
-          Most chosen
+          {t.pricing.mostChosen}
         </span>
       )}
 
@@ -106,7 +105,7 @@ function TierCard({ tier }: { tier: PricingTier }) {
           <span className="font-mono text-4xl font-black tracking-tight text-foreground">
             {usd(price)}
           </span>
-          <span className="ml-1.5 text-xs text-muted-foreground">one-time</span>
+          <span className="ms-1.5 text-xs text-muted-foreground">{t.pricing.oneTime}</span>
         </div>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-muted/40 px-2.5 py-1 text-xs font-medium text-muted-foreground">
           <Timer className="h-3.5 w-3.5 text-brand" />
@@ -118,7 +117,8 @@ function TierCard({ tier }: { tier: PricingTier }) {
       <p className="mt-4 flex items-center gap-2 rounded-lg border border-brand/15 bg-brand/10 px-3 py-2 text-xs font-medium text-foreground">
         <Wallet className="h-3.5 w-3.5 shrink-0 text-brand" />
         <span>
-          <strong>{usd(deposit)} deposit</strong> to start · {usd(price - deposit)} on launch day
+          <strong>{depositCopy.strong}</strong>
+          {depositCopy.rest}
         </span>
       </p>
 
@@ -147,8 +147,8 @@ function TierCard({ tier }: { tier: PricingTier }) {
             : "border border-border/60 bg-muted/40 text-foreground hover:border-brand/40 hover:text-brand"
         }`}
       >
-        Book the free 15-minute chat
-        <ArrowRight className="h-4 w-4" />
+        {t.pricing.bookChat}
+        <ArrowRight className="h-4 w-4 rtl:rotate-180" />
       </a>
     </motion.div>
   );
@@ -161,25 +161,22 @@ function TierCard({ tier }: { tier: PricingTier }) {
  * hidden behind "contact us for a quote" except genuinely custom work.
  */
 export function ClientPricing() {
+  const { t } = usePrefs();
   return (
     <section id="pricing" className="relative overflow-hidden border-t border-border/40 py-20 sm:py-28">
       <div className="pointer-events-none absolute -right-32 top-24 -z-10 h-56 w-56 rounded-full bg-brand/8 blur-[100px] pulse-slow float-b" />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
-          eyebrow="Pricing"
+          eyebrow={t.pricing.head.eyebrow}
           counter={{ current: "04", total: "06" }}
-          title={
-            <>
-              Real prices. <span className="brand-gradient-text">Real timelines</span>. No mystery quotes.
-            </>
-          }
-          description="Every package, every task, every dollar — out in the open. Pick what fits today, start small, and upgrade later: you only ever pay the difference."
+          title={<GradTitle parts={t.pricing.head.title} />}
+          description={t.pricing.head.description}
         />
 
         {/* the four packages */}
         <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {pricingTiers.map((tier) => (
+          {t.pricing.tiers.map((tier) => (
             <TierCard key={tier.id} tier={tier} />
           ))}
         </div>
@@ -193,16 +190,18 @@ export function ClientPricing() {
           className="mt-8 flex items-start gap-3 rounded-2xl border border-brand/25 bg-brand/10 p-5"
         >
           <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
-          <p className="text-sm leading-relaxed text-foreground">{upgradeCreditNote}</p>
+          <p className="text-sm leading-relaxed text-foreground">{t.pricing.upgradeNote}</p>
         </motion.div>
 
         {/* what happens after the deposit — the 5-step payment flow */}
         <div className="mt-14">
           <h3 className="text-center text-xl font-bold text-foreground">
-            What happens after <span className="brand-gradient-text">the deposit</span>
+            {t.pricing.afterDeposit.pre}
+            <span className="brand-gradient-text">{t.pricing.afterDeposit.grad}</span>
+            {t.pricing.afterDeposit.post}
           </h3>
           <ol className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {paymentFlow.map((step, idx) => (
+            {t.pricing.paymentFlow.map((step, idx) => (
               <motion.li
                 key={step.num}
                 initial={{ opacity: 0, y: 18 }}
@@ -228,10 +227,10 @@ export function ClientPricing() {
             transition={{ duration: 0.5 }}
             className="client-card rounded-2xl border border-border/60 bg-card/50 p-6"
           >
-            <h3 className="text-lg font-bold text-foreground">{pricingExtras.title}</h3>
-            <p className="mt-1.5 text-sm text-muted-foreground">{pricingExtras.lead}</p>
+            <h3 className="text-lg font-bold text-foreground">{t.pricing.extras.title}</h3>
+            <p className="mt-1.5 text-sm text-muted-foreground">{t.pricing.extras.lead}</p>
             <ul className="mt-4 space-y-3">
-              {pricingExtras.items.map((item) => (
+              {t.pricing.extras.items.map((item) => (
                 <li key={item.label} className="flex items-start gap-2.5">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
                   <p className="text-sm leading-relaxed text-muted-foreground">
@@ -249,17 +248,17 @@ export function ClientPricing() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="client-card glow-card relative flex flex-col rounded-2xl border border-border/60 bg-gradient-to-br from-card/60 to-brand/8 p-6"
           >
-            <h3 className="text-lg font-bold text-foreground">{pricingExtras.custom.title}</h3>
+            <h3 className="text-lg font-bold text-foreground">{t.pricing.extras.custom.title}</h3>
             <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-              {pricingExtras.custom.body}
+              {t.pricing.extras.custom.body}
             </p>
             <a
               href="#contact"
               onClick={() => trackEvent("pricing_cta_click", { label: "custom" })}
               className="mt-5 inline-flex w-fit items-center gap-2 rounded-xl border border-border/60 bg-muted/40 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-brand/40 hover:text-brand"
             >
-              {pricingExtras.custom.cta}
-              <ArrowRight className="h-4 w-4" />
+              {t.pricing.extras.custom.cta}
+              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
             </a>
           </motion.div>
         </div>
@@ -271,9 +270,9 @@ export function ClientPricing() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-10 text-center text-sm text-muted-foreground"
         >
-          Not sure which package fits? That&apos;s exactly what the free chat is for.{" "}
+          {t.pricing.notSurePre}{" "}
           <a href="#contact" className="font-semibold text-brand hover:underline">
-            Pin your number in 15 minutes →
+            {t.pricing.notSureLink} <span aria-hidden className="inline-block rtl:rotate-180">→</span>
           </a>
         </motion.p>
       </div>

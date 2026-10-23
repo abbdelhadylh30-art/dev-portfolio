@@ -19,6 +19,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { trackEvent } from "@/lib/analytics";
 import { profile } from "@/lib/portfolio-data";
+import type { ClientContent } from "@/lib/i18n/en";
 
 /** The "what do you need?" pill options — first is the default. */
 const PROJECT_TYPES = [
@@ -28,6 +29,8 @@ const PROJECT_TYPES = [
   "Free audit",
   "Other",
 ] as const;
+
+type FormLabels = ClientContent["form"];
 
 const ContactSchema = z.object({
   name: z
@@ -45,6 +48,42 @@ const ContactSchema = z.object({
 });
 
 type ContactValues = z.infer<typeof ContactSchema>;
+
+/** English defaults — used when the form renders without labels
+ *  (Developer view). The Business view passes the active language. */
+const DEFAULT_LABELS: FormLabels = {
+  name: "Name",
+  namePh: "Your name",
+  email: "Email",
+  emailPh: "you@example.com",
+  subject: "Subject",
+  subjectOptional: "(optional)",
+  subjectPh: "What's this about?",
+  whatNeed: "What do you need?",
+  projectTypes: ["New site", "Redesign", "Web app", "Free audit", "Other"],
+  message: "Message",
+  messagePh: "Tell me about your project, role or idea…",
+  note: "Straight to my inbox — usually replied to within 24h.",
+  send: "Send message",
+  sending: "Sending…",
+  sentTitle: "Message sent",
+  sentBody: "Thanks for reaching out. I'll get back to you at the email you provided.",
+  sendAnother: "Send another message",
+  waToo: "Send via WhatsApp too — fastest reply",
+  errorTitle: "Could not send",
+  genericError: "Something went wrong.",
+  networkTitle: "Network error",
+  networkBody: "Please check your connection and try again.",
+  successToast: {
+    emailed: "Thanks — it just landed in my inbox. I'll reply to your email shortly.",
+    fallback: "Thanks! For the fastest reply, also tap \u201cSend via WhatsApp\u201d below.",
+  },
+  validations: {
+    nameMin: "Name must be at least 2 characters",
+    email: "Enter a valid email",
+    messageMin: "Message must be at least 10 characters",
+  },
+};
 
 const DEFAULTS: ContactValues = {
   name: "",
@@ -127,7 +166,8 @@ async function deliverViaFormSubmit(
   }
 }
 
-export function ContactForm() {
+export function ContactForm({ labels }: { labels?: FormLabels }) {
+  const L = labels ?? DEFAULT_LABELS;
   const { toast } = useToast();
   const [submitted, setSubmitted] = React.useState(false);
   // When the deployment has no writable database (serverless), the API
@@ -160,9 +200,9 @@ export function ContactForm() {
         const msg =
           data.issues && Object.keys(data.issues).length > 0
             ? Object.values(data.issues)[0]?.[0]
-            : data.error ?? "Something went wrong.";
+            : data.error ?? L.genericError;
         toast({
-          title: "Could not send",
+          title: L.errorTitle,
           description: msg,
           variant: "destructive",
         });
@@ -198,10 +238,10 @@ export function ContactForm() {
       setWhatsappHref(wa);
 
       toast({
-        title: "Message sent",
+        title: L.sentTitle,
         description: delivered
-          ? "Thanks — it just landed in my inbox. I'll reply to your email shortly."
-          : "Thanks! For the fastest reply, also tap \"Send via WhatsApp\" below.",
+          ? L.successToast.emailed
+          : L.successToast.fallback,
       });
       trackEvent("contact_submit", {
         label: emailed
@@ -214,8 +254,8 @@ export function ContactForm() {
       form.reset(DEFAULTS);
     } catch {
       toast({
-        title: "Network error",
-        description: "Please check your connection and try again.",
+        title: L.networkTitle,
+        description: L.networkBody,
         variant: "destructive",
       });
     }
@@ -227,10 +267,9 @@ export function ContactForm() {
         <span className="grid h-12 w-12 place-items-center rounded-full bg-brand text-brand-foreground">
           <CheckCircle2 className="h-6 w-6" />
         </span>
-        <h3 className="text-lg font-semibold text-foreground">Message sent</h3>
+        <h3 className="text-lg font-semibold text-foreground">{L.sentTitle}</h3>
         <p className="max-w-sm text-sm text-muted-foreground">
-          Thanks for reaching out. I&apos;ll get back to you at the email you
-          provided.
+          {L.sentBody}
         </p>
         {whatsappHref && (
           <a href={whatsappHref} target="_blank" rel="noreferrer noopener"
@@ -240,7 +279,7 @@ export function ContactForm() {
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
               <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.47-.01" />
             </svg>
-            Send via WhatsApp too — fastest reply
+            {L.waToo}
           </a>
         )}
         <Button
@@ -248,7 +287,7 @@ export function ContactForm() {
           className="mt-1 h-10 rounded-full border-border/70"
           onClick={() => setSubmitted(false)}
         >
-          Send another message
+          {L.sendAnother}
         </Button>
       </div>
     );
@@ -270,11 +309,11 @@ export function ContactForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Name
+                  {L.name}
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Your name"
+                    placeholder={L.namePh}
                     autoComplete="name"
                     className="h-11 rounded-xl bg-background/60"
                     {...field}
@@ -290,12 +329,12 @@ export function ContactForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Email
+                  {L.email}
                 </FormLabel>
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="you@example.com"
+                    placeholder={L.emailPh}
                     autoComplete="email"
                     className="h-11 rounded-xl bg-background/60"
                     {...field}
@@ -313,11 +352,11 @@ export function ContactForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Subject <span className="text-muted-foreground/50">(optional)</span>
+                {L.subject} <span className="text-muted-foreground/50">{L.subjectOptional}</span>
               </FormLabel>
               <FormControl>
                 <Input
-                  placeholder="What's this about?"
+                  placeholder={L.subjectPh}
                   className="h-11 rounded-xl bg-background/60"
                   {...field}
                 />
@@ -333,23 +372,24 @@ export function ContactForm() {
           render={({ field }) => (
             <FormItem className="space-y-0">
               <FormLabel className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                What do you need?
+                {L.whatNeed}
               </FormLabel>
               <FormControl>
                 <div
                   role="radiogroup"
-                  aria-label="Project type"
+                  aria-label={L.whatNeed}
                   className="flex flex-wrap gap-2 pt-1"
                 >
-                  {PROJECT_TYPES.map((t) => {
-                    const active = field.value === t;
+                  {L.projectTypes.map((label, i) => {
+                    const value = PROJECT_TYPES[i];
+                    const active = field.value === value;
                     return (
                       <button
-                        key={t}
+                        key={value}
                         type="button"
                         role="radio"
                         aria-checked={active}
-                        onClick={() => field.onChange(t)}
+                        onClick={() => field.onChange(value)}
                         className={`type-pill ${active ? "type-pill-active" : ""}`}
                       >
                         <span
@@ -358,7 +398,7 @@ export function ContactForm() {
                             active ? "bg-brand" : "bg-muted-foreground/40"
                           }`}
                         />
-                        {t}
+                        {label}
                       </button>
                     );
                   })}
@@ -375,11 +415,11 @@ export function ContactForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Message
+                {L.message}
               </FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Tell me about your project, role or idea…"
+                  placeholder={L.messagePh}
                   rows={5}
                   className="min-h-28 resize-y rounded-xl bg-background/60"
                   {...field}
@@ -403,7 +443,7 @@ export function ContactForm() {
 
         <div className="flex items-center justify-between gap-3 pt-1">
           <p className="font-mono text-[11px] text-muted-foreground/70">
-            Straight to my inbox — usually replied to within 24h.
+            {L.note}
           </p>
           <Button
             type="submit"
@@ -412,13 +452,13 @@ export function ContactForm() {
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Sending…
+                <Loader2 className="me-2 h-4 w-4 animate-spin" />
+                {L.sending}
               </>
             ) : (
               <>
-                <Send className="mr-2 h-4 w-4" />
-                Send message
+                <Send className="me-2 h-4 w-4" />
+                {L.send}
               </>
             )}
           </Button>

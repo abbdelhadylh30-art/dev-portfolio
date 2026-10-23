@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Globe, CalendarCheck, TrendingUp, ShieldCheck, Check, ArrowRight } from "lucide-react";
-import { services, type Service } from "@/lib/portfolio-data";
+import { Globe, CalendarCheck, TrendingUp, ShieldCheck, Check } from "lucide-react";
+import { type Service } from "@/lib/portfolio-data";
+import { usePrefs, GradTitle } from "@/lib/i18n/language";
 import { SectionHeading } from "@/components/portfolio/section-heading";
 import { trackEvent } from "@/lib/analytics";
 
@@ -18,24 +19,21 @@ const ICONS: Record<Service["icon"], typeof Globe> = {
  * each ending on the outcome the business owner actually buys.
  */
 export function Services() {
+  const { t } = usePrefs();
   return (
     <section id="services" className="relative overflow-hidden py-20 sm:py-28">
       <div className="pointer-events-none absolute -left-32 top-40 -z-10 h-56 w-56 rounded-full bg-brand-2/8 blur-[100px] pulse-slow float-b" />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
-          eyebrow="What I do"
+          eyebrow={t.services.head.eyebrow}
           counter={{ current: "01", total: "06" }}
-          title={
-            <>
-              Websites that <span className="brand-gradient-text">pay for themselves</span>.
-            </>
-          }
-          description="Four things I do for businesses like yours — described the way I'd describe them over coffee, not in tech-speak."
+          title={<GradTitle parts={t.services.head.title} />}
+          description={t.services.head.description}
         />
 
         <div className="mt-12 grid gap-5 sm:gap-6 md:grid-cols-2">
-          {services.map((svc, idx) => {
+          {t.services.items.map((svc, idx) => {
             const Icon = ICONS[svc.icon];
             return (
               <motion.article
@@ -70,7 +68,7 @@ export function Services() {
 
                 <div className="mt-auto pt-5">
                   <div className="grad-border flex items-center gap-2 rounded-lg border border-brand/25 bg-brand/6 px-3.5 py-2.5 transition-colors group-hover:border-brand/40">
-                    <ArrowRight className="h-3.5 w-3.5 shrink-0 text-brand transition-transform duration-300 group-hover:translate-x-1" />
+                    <Check className="h-4 w-4 shrink-0 text-brand transition-transform duration-300 group-hover:scale-110" />
                     <span className="text-sm font-semibold text-foreground">{svc.outcome}</span>
                   </div>
                 </div>
@@ -88,15 +86,15 @@ export function Services() {
           className="mt-10 text-center"
         >
           <p className="text-sm text-muted-foreground">
-            Not sure which one you need?{" "}
+            {t.services.notSurePre}{" "}
             <a
               href="#contact"
               onClick={() => trackEvent("service_click", { label: "not_sure_cta" })}
               className="font-semibold text-brand hover:underline"
             >
-              Tell me what&apos;s bothering you about your business right now
+              {t.services.notSureLink}
             </a>{" "}
-            — I&apos;ll map it to the right fix in the free 15-minute chat.
+            {t.services.notSurePost}
           </p>
         </motion.div>
       </div>

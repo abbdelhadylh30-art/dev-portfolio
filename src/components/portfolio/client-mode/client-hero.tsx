@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, BadgeCheck, MessageCircle, ShieldCheck, Timer, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { profile, clientStats } from "@/lib/portfolio-data";
+import { profile } from "@/lib/portfolio-data";
+import { usePrefs } from "@/lib/i18n/language";
 import { AnimatedCounter } from "@/components/portfolio/animated-counter";
 import { trackEvent } from "@/lib/analytics";
 
@@ -17,17 +18,15 @@ const fadeUp = {
   }),
 };
 
-const trustChips = [
-  { icon: Wallet, label: "Fixed-price quotes" },
-  { icon: ShieldCheck, label: "You own everything" },
-  { icon: Timer, label: "Launch in 2–4 weeks" },
-];
+const TRUST_ICONS = [Wallet, ShieldCheck, Timer] as const;
 
 /**
  * Business-view hero — benefit-led copy for owners and clients.
  * No role rotator, no live GitHub strip, no tech stack mention.
+ * Copy comes from the active language (EN/AR) via usePrefs.
  */
 export function ClientHero() {
+  const { t } = usePrefs();
   return (
     <section
       id="top"
@@ -52,7 +51,7 @@ export function ClientHero() {
               <span className="status-pulse absolute inline-flex h-2 w-2 rounded-full bg-brand opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-brand" />
             </span>
-            Taking on new businesses for this quarter
+            {t.hero.badge}
           </span>
         </motion.div>
 
@@ -71,13 +70,13 @@ export function ClientHero() {
               }}
             />
             <Avatar className="relative h-16 w-16 border-2 border-brand/40 shadow-md">
-              <AvatarImage src={profile.avatarUrl} alt={profile.name} />
+              <AvatarImage src={profile.avatarUrl} alt={t.ownerName} />
               <AvatarFallback className="bg-brand text-brand-foreground font-bold">AG</AvatarFallback>
             </Avatar>
           </div>
-          <div className="text-center sm:text-left">
-            <p className="text-sm font-semibold text-foreground">{profile.name}</p>
-            <p className="text-xs text-muted-foreground">Web developer for businesses · Cairo, working with Egypt &amp; the Gulf</p>
+          <div className="text-center sm:text-start">
+            <p className="text-sm font-semibold text-foreground">{t.ownerName}</p>
+            <p className="text-xs text-muted-foreground">{t.hero.nameRole}</p>
           </div>
         </motion.div>
 
@@ -89,7 +88,9 @@ export function ClientHero() {
           animate="show"
           className="mx-auto mt-8 max-w-3xl text-center text-4xl font-bold leading-[1.12] tracking-tight sm:text-6xl"
         >
-          A website that <span className="brand-gradient-text">works as hard</span> as you do.
+          {t.hero.title.pre}
+          <span className="brand-gradient-text">{t.hero.title.grad}</span>
+          {t.hero.title.post}
         </motion.h1>
 
         <motion.p
@@ -99,9 +100,8 @@ export function ClientHero() {
           animate="show"
           className="mx-auto mt-6 max-w-2xl text-center text-base text-muted-foreground sm:text-lg"
         >
-          I build fast, beautiful websites for businesses — clinics, restaurants, real estate, salons — sites that load instantly,
-          show up on Google, and turn visitors into paying customers.{" "}
-          <span className="text-foreground">In Arabic and English.</span>
+          {t.hero.sub}{" "}
+          <span className="text-foreground">{t.hero.subEm}</span>
         </motion.p>
 
         {/* CTAs */}
@@ -123,9 +123,9 @@ export function ClientHero() {
               rel="noreferrer noopener"
               onClick={() => trackEvent("whatsapp_click", { label: "client_hero" })}
             >
-              <MessageCircle className="mr-2 h-5 w-5" />
-              Get your free website audit
-              <ArrowUpRight className="ml-2 h-4 w-4" />
+              <MessageCircle className="me-2 h-5 w-5" />
+              {t.hero.ctaPrimary}
+              <ArrowUpRight className="ms-2 h-4 w-4" />
             </a>
           </Button>
           <Button
@@ -135,8 +135,8 @@ export function ClientHero() {
             className="chip-pop h-12 rounded-full border-border/70 bg-background/40 px-6 text-base backdrop-blur"
           >
             <a href="#results">
-              <BadgeCheck className="mr-2 h-4 w-4 text-brand" />
-              See real client results
+              <BadgeCheck className="me-2 h-4 w-4 text-brand" />
+              {t.hero.ctaSecondary}
             </a>
           </Button>
         </motion.div>
@@ -149,7 +149,7 @@ export function ClientHero() {
           animate="show"
           className="mt-4 text-center text-xs text-muted-foreground"
         >
-          Free 15-minute audit · You&apos;ll see exactly what&apos;s costing you customers and what it takes to fix it — whether you hire me or not.
+          {t.hero.auditNote}
         </motion.p>
 
         {/* Trust chips */}
@@ -160,15 +160,18 @@ export function ClientHero() {
           animate="show"
           className="mt-8 flex flex-wrap items-center justify-center gap-2.5"
         >
-          {trustChips.map((chip) => (
-            <span
-              key={chip.label}
-              className="chip-pop inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/60 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur"
-            >
-              <chip.icon className="h-3.5 w-3.5 text-brand" />
-              {chip.label}
-            </span>
-          ))}
+          {t.hero.trustChips.map((label, i) => {
+            const Icon = TRUST_ICONS[i % TRUST_ICONS.length];
+            return (
+              <span
+                key={label}
+                className="chip-pop inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/60 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur"
+              >
+                <Icon className="h-3.5 w-3.5 text-brand" />
+                {label}
+              </span>
+            );
+          })}
         </motion.div>
 
         {/* Outcome stats */}
@@ -179,13 +182,17 @@ export function ClientHero() {
           animate="show"
           className="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 sm:grid-cols-4"
         >
-          {clientStats.map((s) => (
+          {t.stats.map((s) => (
             <div
               key={s.label}
               className="stat-topline group relative flex flex-col items-center justify-center gap-0.5 bg-card px-3 py-5 text-center transition-colors hover:bg-card/60"
             >
               <div className="brand-gradient-text text-2xl font-bold tracking-tight sm:text-3xl">
-                <AnimatedCounter value={s.value} />
+                {/* dir=ltr keeps metric strings like "<2s" / "45×" in
+                    reading order inside RTL paragraphs */}
+                <span dir="ltr">
+                  <AnimatedCounter value={s.value} />
+                </span>
               </div>
               <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                 {s.label}

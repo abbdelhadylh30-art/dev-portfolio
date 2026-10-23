@@ -7,6 +7,7 @@ import { Briefcase, Code2 } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import { setModeCookie, type PortfolioMode } from "@/lib/mode";
 import { useModeTransform } from "@/lib/mode-transform";
+import { usePrefs } from "@/lib/i18n/language";
 
 /**
  * Business ⇄ Developer view toggle (segmented pill, lives in the navbar).
@@ -18,6 +19,7 @@ import { useModeTransform } from "@/lib/mode-transform";
  */
 export function ModeToggle({ mode, compact = false }: { mode: PortfolioMode; compact?: boolean }) {
   const router = useRouter();
+  const { t } = usePrefs();
   const [pending, setPending] = React.useState(false);
 
   const switchTo = (next: PortfolioMode) => {
@@ -37,15 +39,15 @@ export function ModeToggle({ mode, compact = false }: { mode: PortfolioMode; com
   };
 
   const options: { value: PortfolioMode; label: string; icon: typeof Briefcase }[] = [
-    { value: "client", label: "Business", icon: Briefcase },
-    { value: "dev", label: "Developer", icon: Code2 },
+    { value: "client", label: t.nav.viewClient, icon: Briefcase },
+    { value: "dev", label: t.nav.viewDev, icon: Code2 },
   ];
 
   return (
     <div
       role="group"
-      aria-label="Choose audience view"
-      title="Business view for clients · Developer view for the full technical portfolio"
+      aria-label={t.nav.viewGroup}
+      title={t.nav.viewTitle}
       className={`relative flex items-center rounded-full border border-border/70 bg-background/60 p-0.5 backdrop-blur ${
         pending ? "opacity-70" : ""
       }`}

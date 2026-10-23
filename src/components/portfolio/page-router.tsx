@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import type { PortfolioMode } from "@/lib/mode";
 import { pagesForMode, type SitePage } from "@/lib/site-pages";
+import { usePrefs } from "@/lib/i18n/language";
 import { trackEvent } from "@/lib/analytics";
 
 /**
@@ -177,7 +178,8 @@ export function PageRouterProvider({
     [pages, applyNavigation]
   );
 
-  /* ← / → page flipping (skipped while typing or inside dialogs). */
+  /* ← / → page flipping (skipped while typing or inside dialogs).
+     In RTL the arrow semantics flip with the reading direction. */
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -191,8 +193,9 @@ export function PageRouterProvider({
       )
         return;
       if (document.querySelector('[role="dialog"][data-state="open"]')) return;
-      if (e.key === "ArrowRight") goRelative(1);
-      else if (e.key === "ArrowLeft") goRelative(-1);
+      const rtl = document.documentElement.dir === "rtl";
+      if (e.key === (rtl ? "ArrowLeft" : "ArrowRight")) goRelative(1);
+      else if (e.key === (rtl ? "ArrowRight" : "ArrowLeft")) goRelative(-1);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -282,13 +285,14 @@ export function PageStage() {
 
 function PageFooterNav() {
   const { pages, pageIndex, navigate } = usePageRouter();
-  const prev = pageIndex > 0 ? pages[pageIndex - 1] : null;
+  const { t, localizedPages } = usePrefs();
+  const prev = pageIndex > 0 ? localizedPages[pageIndex - 1] : null;
   const next =
-    pageIndex < pages.length - 1 ? pages[pageIndex + 1] : pages[0]; /* wrap → home */
+    pageIndex < pages.length - 1 ? localizedPages[pageIndex + 1] : localizedPages[0]; /* wrap → home */
 
   return (
     <nav
-      aria-label="Pages"
+      aria-label={t.pager.pagesAria}
       className="mx-auto w-full max-w-6xl px-4 pb-14 pt-12 sm:px-6 sm:pb-16"
     >
       <div className="border-t border-border/70" />
@@ -300,9 +304,9 @@ function PageFooterNav() {
             onClick={() => navigate(prev.id)}
             className="group inline-flex min-h-11 items-center gap-2 rounded-lg border border-border/70 bg-card/60 px-3 py-2 text-sm font-medium text-muted-foreground transition-all hover:border-brand/50 hover:text-foreground hover:shadow-[0_8px_30px_-14px_color-mix(in_oklch,var(--brand)_55%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
           >
-            <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+            <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5 rtl:rotate-180 rtl:group-hover:translate-x-0.5" />
             <span className="hidden sm:inline">{prev.label}</span>
-            <span className="sr-only sm:hidden">Previous page: {prev.label}</span>
+            <span className="sr-only sm:hidden">{t.pager.prevSr(prev.label)}</span>
           </button>
         ) : (
           <span aria-hidden className="w-2" />
@@ -310,8 +314,8 @@ function PageFooterNav() {
 
         {/* Dots + counter */}
         <div className="flex flex-col items-center gap-1.5">
-          <div className="flex items-center gap-1.5" role="tablist" aria-label="All pages">
-            {pages.map((p, i) => (
+          <div className="flex items-center gap-1.5" role="tablist" aria-label={t.pager.allPages}>
+            {localizedPages.map((p, i) => (
               <button
                 key={p.id}
                 type="button"
@@ -337,7 +341,7 @@ function PageFooterNav() {
             <span className="mx-2 hidden sm:inline" aria-hidden>
               ·
             </span>
-            <span className="hidden sm:inline">← → to flip</span>
+            <span className="hidden sm:inline">{t.pager.flipHint}</span>
           </p>
         </div>
 
@@ -348,12 +352,12 @@ function PageFooterNav() {
           className="group inline-flex min-h-11 items-center gap-2 rounded-lg border border-brand/35 bg-brand/[0.07] px-3 py-2 text-sm font-semibold text-foreground transition-all hover:border-brand/60 hover:bg-brand/15 hover:shadow-[0_8px_30px_-14px_color-mix(in_oklch,var(--brand)_55%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
         >
           <span className="hidden sm:inline">
-            {pageIndex < pages.length - 1 ? next.label : "Back to start"}
+            {pageIndex < pages.length - 1 ? next.label : t.pager.backToStart}
           </span>
           <span className="sr-only sm:hidden">
-            {pageIndex < pages.length - 1 ? `Next page: ${next.label}` : "Back to start"}
+            {pageIndex < pages.length - 1 ? t.pager.nextSr(next.label) : t.pager.backToStart}
           </span>
-          <ChevronRight className="h-4 w-4 text-brand transition-transform group-hover:translate-x-0.5" />
+          <ChevronRight className="h-4 w-4 text-brand transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
         </button>
       </div>
     </nav>
@@ -383,24 +387,25 @@ const PAGE_ICONS: Record<SitePage["icon"], LucideIcon> = {
 
 function PageIndexGrid() {
   const { pages, navigate, mode } = usePageRouter();
-  const rest = pages.slice(1);
+  const { t, localizedPages } = usePrefs();
+  const rest = localizedPages.slice(1);
 
   return (
     <section
-      aria-label="Site index"
+      aria-label={t.pager.pagesAria}
       className="mx-auto w-full max-w-6xl px-4 pb-4 pt-6 sm:px-6"
     >
       <div className="mb-7 flex items-end justify-between gap-4">
         <div>
           <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.28em] text-brand">
-            {mode === "client" ? "Where to next?" : "Mission index"}
+            {mode === "client" ? t.index.kicker : "Mission index"}
           </p>
           <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
-            {mode === "client" ? "Take a look around" : "Pick a deck"}
+            {mode === "client" ? t.index.title : "Pick a deck"}
           </h2>
         </div>
-        <p className="hidden max-w-56 text-right text-xs leading-relaxed text-muted-foreground sm:block">
-          Every section is its own page — flip with the arrows below or the keys{" "}
+        <p className="hidden max-w-56 text-end text-xs leading-relaxed text-muted-foreground sm:block">
+          {t.index.hint}{" "}
           <kbd className="rounded border border-border/70 bg-muted px-1.5 py-0.5 font-mono text-[10px]">
             ←
           </kbd>{" "}
@@ -435,7 +440,7 @@ function PageIndexGrid() {
                     {p.blurb}
                   </span>
                 </span>
-                <ArrowRight className="absolute bottom-3 right-3 h-3.5 w-3.5 -translate-x-1 text-brand opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
+                <ArrowRight className="absolute bottom-3 right-3 h-3.5 w-3.5 -translate-x-1 text-brand opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 rtl:rotate-180" />
               </button>
             </li>
           );

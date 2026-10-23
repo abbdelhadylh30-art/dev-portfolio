@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Cairo } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -18,6 +18,26 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+/* Arabic family for the Business view's AR mode — geometric, highly
+ * legible at UI sizes, and pairs cleanly with Geist. next/font
+ * downloads + self-hosts the woff2 (arabic + latin subsets with
+ * unicode-range) at build time, so nothing is fetched from Google
+ * at runtime. */
+const cairo = Cairo({
+  variable: "--font-arabic",
+  subsets: ["arabic", "latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+/**
+ * Early-apply language/direction/palette preferences before hydration.
+ * The Business view defaults to EN/LTR on the server; a visitor who
+ * chose Arabic (or a palette) last time shouldn't watch an LTR flash
+ * first. Runs inline before paint; React state syncs post-hydration.
+ * Values are validated — unknown values fall back to defaults.
+ */
+const PREF_EARLY_SCRIPT = `(function(){try{var d=document.documentElement,l=localStorage.getItem("pref-lang"),p=localStorage.getItem("pref-palette");if(l==="ar"){d.lang="ar";d.dir="rtl"}if(p==="royal"||p==="midnight"){d.dataset.palette=p}}catch(e){}})();`;
 
 /** Google Tag Manager container for www.abdelhadygabriel.me. Public by
  *  design — the ID ships in every page's source anyway. Override with
@@ -149,8 +169,10 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
         data-view={mode}
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cairo.variable} antialiased bg-background text-foreground`}
       >
+        {/* Language/palette early-apply (see PREF_EARLY_SCRIPT above). */}
+        <script dangerouslySetInnerHTML={{ __html: PREF_EARLY_SCRIPT }} />
         {/* Google Tag Manager — loads on production and local dev, but is
             skipped on Vercel PREVIEW deployments so test/QA traffic never
             reaches GA4. VERCEL_ENV is set automatically by Vercel. Events

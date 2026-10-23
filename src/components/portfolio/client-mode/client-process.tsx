@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { MessagesSquare, FileText, Hammer, Rocket } from "lucide-react";
-import { clientProcess, type ClientProcessStep } from "@/lib/portfolio-data";
+import { type ClientProcessStep } from "@/lib/portfolio-data";
+import { usePrefs, GradTitle } from "@/lib/i18n/language";
 import { SectionHeading } from "@/components/portfolio/section-heading";
 
 const ICONS: Record<ClientProcessStep["icon"], typeof MessagesSquare> = {
@@ -17,24 +18,21 @@ const ICONS: Record<ClientProcessStep["icon"], typeof MessagesSquare> = {
  * a developer: free chat → fixed quote → visible progress → launch+support.
  */
 export function ClientProcess() {
+  const { t, isRtl } = usePrefs();
   return (
     <section id="process" className="relative overflow-hidden border-t border-border/40 py-20 sm:py-28">
       <div className="pointer-events-none absolute -left-32 bottom-32 -z-10 h-56 w-56 rounded-full bg-brand-2/8 blur-[100px] pulse-slow float-a" />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
-          eyebrow="How it works"
+          eyebrow={t.process.head.eyebrow}
           counter={{ current: "03", total: "06" }}
-          title={
-            <>
-              No mystery. <span className="brand-gradient-text">No jargon</span>. No surprises.
-            </>
-          }
-          description="Hiring a developer feels risky when you can't see the code. Here's exactly how working together goes — start to finish."
+          title={<GradTitle parts={t.process.head.title} />}
+          description={t.process.head.description}
         />
 
         <ol className="mt-12 grid gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {clientProcess.map((step, idx) => {
+          {t.process.items.map((step, idx) => {
             const Icon = ICONS[step.icon];
             return (
               <motion.li
@@ -45,13 +43,16 @@ export function ClientProcess() {
                 transition={{ duration: 0.55, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
                 className="client-card glow-card group relative flex flex-col rounded-2xl border border-border/60 bg-card/50 p-6"
               >
-                {/* connector arrow (desktop) — drifting pulse toward the next step */}
-                {idx < clientProcess.length - 1 && (
+                {/* connector arrow (desktop) — drifting pulse toward the
+                    next step; flips with the reading direction */}
+                {idx < t.process.items.length - 1 && (
                   <span
                     aria-hidden
-                    className="absolute -right-3.5 top-1/2 z-10 hidden -translate-y-1/2 text-brand/60 lg:block float-c"
+                    className={`absolute top-1/2 z-10 hidden -translate-y-1/2 text-brand/60 lg:block float-c ${
+                      isRtl ? "-left-3.5" : "-right-3.5"
+                    }`}
                   >
-                    →
+                    {isRtl ? "←" : "→"}
                   </span>
                 )}
 
@@ -78,9 +79,9 @@ export function ClientProcess() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-10 text-center text-sm text-muted-foreground"
         >
-          The whole first step costs you 15 minutes and nothing else.{" "}
+          {t.process.footerPre}
           <a href="#contact" className="font-semibold text-brand hover:underline">
-            Start with the free chat →
+            {t.process.footerLink} {isRtl ? "←" : "→"}
           </a>
         </motion.p>
       </div>

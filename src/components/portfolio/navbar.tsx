@@ -6,7 +6,10 @@ import { Github, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { profile } from "@/lib/portfolio-data";
 import { ModeToggle } from "@/components/portfolio/mode-toggle";
+import { LanguageToggle } from "@/components/portfolio/language-toggle";
+import { PaletteToggle } from "@/components/portfolio/palette-toggle";
 import { usePageRouter } from "@/components/portfolio/page-router";
+import { usePrefs } from "@/lib/i18n/language";
 import type { PortfolioMode } from "@/lib/mode";
 
 /**
@@ -15,8 +18,9 @@ import type { PortfolioMode } from "@/lib/mode";
  * The active pill follows the current page; the logo returns home.
  */
 export function Navbar({ mode }: { mode: PortfolioMode }) {
-  const { pages, page, navigate, pageIndex } = usePageRouter();
-  const links = pages.filter((p) => p.id !== "home");
+  const { page, navigate, pageIndex } = usePageRouter();
+  const { t, localizedPages } = usePrefs();
+  const links = localizedPages.filter((p) => p.id !== "home");
   const [scrolled, setScrolled] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
@@ -45,7 +49,7 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
           type="button"
           onClick={() => navigate("home")}
           className="group flex items-center gap-2 font-mono text-sm font-semibold tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60 rounded-md"
-          aria-label="Back to home page"
+          aria-label={t.nav.backHome}
         >
           <span className="grad-badge icon-bob grid h-8 w-8 place-items-center rounded-lg font-bold">
             AG
@@ -55,10 +59,10 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
           </span>
           {/* Page counter chip — reinforces the paged feel */}
           <span
-            className="ml-1 hidden rounded-full border border-border/70 bg-card/60 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-muted-foreground md:inline-block"
+            className="ms-1 hidden rounded-full border border-border/70 bg-card/60 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-muted-foreground md:inline-block"
             aria-hidden
           >
-            {String(pageIndex + 1).padStart(2, "0")}/{String(pages.length).padStart(2, "0")}
+            {String(pageIndex + 1).padStart(2, "0")}/{String(localizedPages.length).padStart(2, "0")}
           </span>
         </button>
 
@@ -73,7 +77,7 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
                 onClick={() => navigate(link.id)}
                 data-active={isActive ? "true" : "false"}
                 aria-current={isActive ? "page" : undefined}
-                className={`link-underline focus-ring relative rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                className={`link-underline focus-ring relative whitespace-nowrap rounded-md px-2.5 py-2 text-sm font-medium transition-colors ${
                   isActive
                     ? "text-brand"
                     : "text-muted-foreground hover:text-foreground"
@@ -93,21 +97,34 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
         </div>
 
         <div className="flex items-center gap-2">
-          <ModeToggle mode={mode} />
+          <div className="xl:hidden sm:inline-flex">
+            <ModeToggle mode={mode} compact />
+          </div>
+          <div className="hidden xl:inline-flex">
+            <ModeToggle mode={mode} />
+          </div>
+          {/* Language + palette live in the Business view only — the
+              Developer view keeps its fixed English/dark identity. */}
+          {mode === "client" && <LanguageToggle />}
+          {mode === "client" && (
+            <div className="hidden lg:inline-flex">
+              <PaletteToggle />
+            </div>
+          )}
           <Button
             variant="ghost"
             size="sm"
             asChild
-            className="hidden h-9 px-3 text-muted-foreground hover:text-foreground lg:inline-flex"
+            className="hidden h-9 px-3 text-muted-foreground hover:text-foreground xl:inline-flex"
           >
             <a
               href={profile.githubUrl}
               target="_blank"
               rel="noreferrer noopener"
-              aria-label="GitHub profile"
+              aria-label={t.nav.githubAria}
             >
-              <Github className="h-4 w-4 mr-2" />
-              GitHub
+              <Github className="h-4 w-4 me-2" />
+              {t.nav.github}
             </a>
           </Button>
           {/* No theme toggle — skins are fixed per view: Business is
@@ -116,7 +133,7 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
             variant="ghost"
             size="icon"
             className="md:hidden h-9 w-9"
-            aria-label="Toggle navigation menu"
+            aria-label={t.nav.menu}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
@@ -141,13 +158,13 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
                 setOpen(false);
                 navigate("home");
               }}
-              className={`rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+              className={`rounded-md px-3 py-2.5 text-start text-sm font-medium transition-colors ${
                 page.id === "home"
                   ? "bg-accent text-foreground"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground"
               }`}
             >
-              Home
+              {t.nav.home}
             </button>
             {links.map((link) => (
               <button
@@ -157,7 +174,7 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
                   setOpen(false);
                   navigate(link.id);
                 }}
-                className={`rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                className={`rounded-md px-3 py-2.5 text-start text-sm font-medium transition-colors ${
                   page.id === link.id
                     ? "bg-accent text-foreground"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -173,7 +190,7 @@ export function Navbar({ mode }: { mode: PortfolioMode }) {
               onClick={() => setOpen(false)}
               className="rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors inline-flex items-center gap-2"
             >
-              <Github className="h-4 w-4" /> GitHub
+              <Github className="h-4 w-4" /> {t.nav.github}
             </a>
           </div>
         </motion.div>

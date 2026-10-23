@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import { Store, Search, Scissors, Sparkles, ArrowUpRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { clientResults, profile, type ClientResult } from "@/lib/portfolio-data";
+import { profile, type ClientResult } from "@/lib/portfolio-data";
+import { usePrefs, GradTitle } from "@/lib/i18n/language";
 import { SectionHeading } from "@/components/portfolio/section-heading";
 import { trackEvent } from "@/lib/analytics";
 
@@ -19,24 +20,21 @@ const ICONS: Record<ClientResult["icon"], typeof Store> = {
  * The final card is a CTA: "The next story could be yours."
  */
 export function Results() {
+  const { t } = usePrefs();
   return (
     <section id="results" className="relative overflow-hidden border-t border-border/40 py-20 sm:py-28">
       <div className="pointer-events-none absolute -right-32 top-32 -z-10 h-56 w-56 rounded-full bg-brand-3/8 blur-[100px] pulse-slow float-c" />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
-          eyebrow="Results"
+          eyebrow={t.results.head.eyebrow}
           counter={{ current: "02", total: "06" }}
-          title={
-            <>
-              What businesses <span className="brand-gradient-text">actually got</span>.
-            </>
-          }
-          description="No client cares about the tech behind it. Here's what changed for real businesses — in numbers they care about."
+          title={<GradTitle parts={t.results.head.title} />}
+          description={t.results.head.description}
         />
 
         <div className="mt-12 grid gap-5 sm:gap-6 lg:grid-cols-2">
-          {clientResults.map((r, idx) => {
+          {t.results.items.map((r, idx) => {
             const Icon = ICONS[r.icon];
             const isCta = r.icon === "cta";
             return (
@@ -104,9 +102,9 @@ export function Results() {
                         rel="noreferrer noopener"
                         onClick={() => trackEvent("whatsapp_click", { label: "results_cta_card" })}
                       >
-                        <MessageCircle className="mr-2 h-4 w-4" />
-                        Start your free chat
-                        <ArrowUpRight className="ml-2 h-4 w-4" />
+                        <MessageCircle className="me-2 h-4 w-4" />
+                        {t.results.startChat}
+                        <ArrowUpRight className="ms-2 h-4 w-4" />
                       </a>
                     </Button>
                   )}

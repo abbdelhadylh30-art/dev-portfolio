@@ -17,6 +17,7 @@ import { KeyboardShortcutsOverlay } from "@/components/portfolio/keyboard-shortc
 import { AdminLinkHandler } from "@/components/portfolio/admin-link-handler";
 import { AdminDashboard } from "@/components/portfolio/admin-dashboard";
 import { ClientFooter } from "@/components/portfolio/client-mode/client-footer";
+import { PrefsProvider } from "@/lib/i18n/language";
 
 /**
  * PortfolioShell — the client-side cockpit of the site.
@@ -91,31 +92,33 @@ export function PortfolioShell({
       mode={mode}
       elements={mode === "client" ? clientElements : devElements}
     >
-      {/* Shared chrome (inside the provider so navbar + rail read the
-          active page from the router context) */}
-      <ScrollProgress />
-      <SectionRail mode={mode} />
-      <Navbar mode={mode} />
-      <ModeSync />
-      <WhatsAppFab />
+      <PrefsProvider>
+        {/* Shared chrome (inside the provider so navbar + rail read the
+            active page from the router context) */}
+        <ScrollProgress />
+        <SectionRail mode={mode} />
+        <Navbar mode={mode} />
+        <ModeSync />
+        <WhatsAppFab />
 
-      <main className="flex-1">
-        <PageStage />
-      </main>
+        <main className="flex-1">
+          <PageStage />
+        </main>
 
-      {mode === "client" ? (
-        <ClientFooter />
-      ) : (
-        <>
-          <Footer />
-          <CommandPalette />
-          <DeepLinkHandler />
-          <ProjectModal />
-          <KeyboardShortcutsOverlay />
-          <AdminLinkHandler />
-          <AdminDashboard />
-        </>
-      )}
+        {mode === "client" ? (
+          <ClientFooter />
+        ) : (
+          <>
+            <Footer />
+            <CommandPalette />
+            <DeepLinkHandler />
+            <ProjectModal />
+            <KeyboardShortcutsOverlay />
+            <AdminLinkHandler />
+            <AdminDashboard />
+          </>
+        )}
+      </PrefsProvider>
     </PageRouterProvider>
   );
 }

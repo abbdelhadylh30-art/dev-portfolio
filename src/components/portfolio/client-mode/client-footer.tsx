@@ -2,6 +2,7 @@
 
 import { Phone, Mail, ArrowUp, MessageCircle } from "lucide-react";
 import { profile } from "@/lib/portfolio-data";
+import { usePrefs } from "@/lib/i18n/language";
 import { trackEvent } from "@/lib/analytics";
 
 /**
@@ -9,6 +10,7 @@ import { trackEvent } from "@/lib/analytics";
  * No RSS/GitHub-source/repo-synced chrome; that lives in the dev footer.
  */
 export function ClientFooter() {
+  const { t } = usePrefs();
   return (
     <footer className="mt-auto border-t border-border/60 bg-card/30">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
@@ -18,10 +20,8 @@ export function ClientFooter() {
               AG
             </span>
             <div>
-              <div className="text-sm font-semibold text-foreground">{profile.name}</div>
-              <div className="text-[11px] text-muted-foreground">
-                Websites for businesses · Egypt &amp; the Gulf
-              </div>
+              <div className="text-sm font-semibold text-foreground">{t.ownerName}</div>
+              <div className="text-[11px] text-muted-foreground">{t.footer.nameRole}</div>
             </div>
           </div>
 
@@ -34,7 +34,7 @@ export function ClientFooter() {
               className="inline-flex items-center gap-1.5 transition-colors hover:text-brand"
             >
               <MessageCircle className="h-3.5 w-3.5" />
-              WhatsApp
+              {t.footer.whatsapp}
             </a>
             <a
               href={`tel:${profile.phoneIntl}`}
@@ -48,28 +48,28 @@ export function ClientFooter() {
               className="inline-flex items-center gap-1.5 transition-colors hover:text-brand"
             >
               <Mail className="h-3.5 w-3.5" />
-              Email
+              {t.footer.email}
             </a>
             <a
               href="#top"
               className="inline-flex items-center gap-1.5 transition-colors hover:text-brand"
             >
               <ArrowUp className="h-3.5 w-3.5" />
-              Back to top
+              {t.footer.backToTop}
             </a>
           </div>
         </div>
 
-        <div className="mt-6 flex flex-col items-center justify-between gap-2 border-t border-border/40 pt-6 text-center sm:flex-row sm:text-left">
+        <div className="mt-6 flex flex-col items-center justify-between gap-2 border-t border-border/40 pt-6 text-center sm:flex-row sm:text-start">
           <p className="text-[11px] text-muted-foreground/70">
-            © {new Date().getFullYear()} {profile.name} · <span className="brand-gradient-text font-semibold">Websites that work as hard as you do.</span>
+            © {new Date().getFullYear()} {t.ownerName} · <span className="brand-gradient-text font-semibold">{t.footer.tagline}</span>
           </p>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/30 bg-brand/5 px-2.5 py-0.5 text-[11px] text-brand">
             <span className="relative flex h-1.5 w-1.5">
               <span className="status-pulse absolute h-1.5 w-1.5 rounded-full bg-brand opacity-75" />
               <span className="relative h-1.5 w-1.5 rounded-full bg-brand" />
             </span>
-            Taking on new projects
+            {t.footer.takingNew}
           </span>
         </div>
       </div>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { profile } from "@/lib/portfolio-data";
+import { usePrefs } from "@/lib/i18n/language";
 import { trackEvent } from "@/lib/analytics";
 
 /**
@@ -13,6 +14,7 @@ import { trackEvent } from "@/lib/analytics";
  * WhatsApp card) is in view.
  */
 export function WhatsAppFab() {
+  const { t } = usePrefs();
   const [visible, setVisible] = useState(false);
   const [inContact, setInContact] = useState(false);
   const reduced = useReducedMotion();
@@ -52,7 +54,7 @@ export function WhatsAppFab() {
           href={profile.whatsappUrl}
           target="_blank"
           rel="noreferrer noopener"
-          aria-label="Chat on WhatsApp — fastest reply"
+          aria-label={t.contact.whatsappTitle}
           onClick={() => trackEvent("whatsapp_click", { label: "fab" })}
           className="whatsapp-fab group fixed bottom-5 right-5 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full shadow-xl sm:bottom-6 sm:right-6"
         >
