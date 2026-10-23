@@ -63,7 +63,9 @@ export const profile = {
   ],
   githubUsername: "abbdelhadylh30-art",
   githubUrl: "https://github.com/abbdelhadylh30-art",
-  avatarUrl: "https://avatars.githubusercontent.com/u/275516572?v=4",
+  avatarUrl: "/abdelhady-avatar.webp",
+  /** Full studio portrait (About section card) — the face behind the business. */
+  portraitUrl: "/abdelhady-portrait.webp",
   /** Real channels — synced from the production deployment. */
   email: "abbdelhadylh31@gmail.com",
   phoneDisplay: "0103 224 6016",
@@ -1127,8 +1129,8 @@ export const faqs: Faq[] = [
 
 export const aboutLite = {
   paragraphs: [
-    "I'm Abdelhady Gabriel, a web developer based in Cairo. For the last three years I've built websites and web tools for businesses across Egypt and the Gulf — a bakery in Abu Dhabi, a salon chain in Qatar, a marketing consultant in Cairo. What they all had in common: they needed to look credible online and get more customers. That's the job.",
-    "I work in Arabic and English, I answer my own WhatsApp, and I treat your budget like it's my own. No jargon in our conversations, no endless meetings — just a clear plan, one fixed price, and a website that does its job.",
+    "Yes, that's a real photo — Abdelhady Gabriel, web developer in Cairo, and the only person you'll deal with on your project. For the last three years I've built websites for businesses across Egypt and the Gulf: a bakery in Abu Dhabi, a salon chain in Qatar, a marketing consultant in Cairo. Different industries, same job every time: look credible online, get found on Google, and turn visitors into paying customers.",
+    "I work in Arabic and English, I answer my own WhatsApp, and I treat your budget like it's my own. No account managers, no “let me check with the team” — when you ask who is actually building your site, the answer is the person in this photo. A clear plan, one fixed price, and a website that does its job. That's the whole pitch.",
   ],
   quickFacts: [
     { label: "Based in", value: "Cairo, Egypt" },

@@ -70,7 +70,7 @@ export function ClientHero() {
                 WebkitMaskImage: "radial-gradient(circle, transparent 62%, black 63%, black 100%)",
               }}
             />
-            <Avatar className="relative h-14 w-14 border-2 border-brand/40 shadow-md">
+            <Avatar className="relative h-16 w-16 border-2 border-brand/40 shadow-md">
               <AvatarImage src={profile.avatarUrl} alt={profile.name} />
               <AvatarFallback className="bg-brand text-brand-foreground font-bold">AG</AvatarFallback>
             </Avatar>
@@ -100,7 +100,7 @@ export function ClientHero() {
           className="mx-auto mt-6 max-w-2xl text-center text-base text-muted-foreground sm:text-lg"
         >
           I build fast, beautiful websites for businesses — clinics, restaurants, real estate, salons — sites that load instantly,
-          show up on Google, and turn visitors into customers.{" "}
+          show up on Google, and turn visitors into paying customers.{" "}
           <span className="text-foreground">In Arabic and English.</span>
         </motion.p>
 
@@ -136,7 +136,7 @@ export function ClientHero() {
           >
             <a href="#results">
               <BadgeCheck className="mr-2 h-4 w-4 text-brand" />
-              See what clients got
+              See real client results
             </a>
           </Button>
         </motion.div>

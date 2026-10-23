@@ -20,6 +20,11 @@ function siteUrl(): string {
   return SITE_URL;
 }
 
+/** JSON-LD image fields must be absolute — profile images are local paths. */
+function absoluteUrl(url: string): string {
+  return url.startsWith("http") ? url : `${siteUrl()}${url}`;
+}
+
 const DEV_DESCRIPTION =
   "Abdelhady Gabriel is a full-stack developer & product engineer based in Egypt. Builder of Forge Studio, ProfileForge, GlamChain, Lead Profiler, and client portfolios. Available for freelance and full-time roles.";
 
@@ -72,7 +77,7 @@ export function buildJsonLdGraph(mode: PortfolioMode): Record<string, unknown> {
       jobTitle: isClient ? "Web Developer" : profile.role,
       description: isClient ? CLIENT_DESCRIPTION : DEV_DESCRIPTION,
       url: base,
-      image: profile.avatarUrl,
+      image: absoluteUrl(profile.avatarUrl),
       email: `mailto:${profile.email}`,
       telephone: profile.phoneIntl,
       address: {
@@ -116,7 +121,7 @@ export function buildJsonLdGraph(mode: PortfolioMode): Record<string, unknown> {
         name: "Abdelhady Gabriel — Web Development",
         description: CLIENT_DESCRIPTION,
         url: base,
-        image: profile.avatarUrl,
+        image: absoluteUrl(profile.portraitUrl),
         telephone: profile.phoneIntl,
         email: `mailto:${profile.email}`,
         priceRange: "$$",

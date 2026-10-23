@@ -3,14 +3,15 @@
 import { motion } from "framer-motion";
 import { MapPin, Languages, MessageCircle, Briefcase } from "lucide-react";
 import { aboutLite, profile } from "@/lib/portfolio-data";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { SectionHeading } from "@/components/portfolio/section-heading";
 
 const FACT_ICONS = [MapPin, Briefcase, Languages, MessageCircle];
 
 /**
- * Business-view "About" — a short human story. No philosophy cards,
- * no tech marquee: who I am, where I work, and how I treat clients.
+ * Business-view "About" — a short human story anchored by the real studio
+ * portrait. No philosophy cards, no tech marquee: who I am, where I work,
+ * and how I treat clients. The photo does the trust-building; the copy
+ * points at it ("the person in this photo") instead of stock-model vibes.
  */
 export function AboutLite() {
   return (
@@ -30,7 +31,7 @@ export function AboutLite() {
         />
 
         <div className="mt-12 grid gap-8 lg:grid-cols-5 lg:gap-12">
-          {/* Left: avatar + quick facts */}
+          {/* Left: studio portrait + quick facts */}
           <motion.div
             initial={{ opacity: 0, y: 22 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -38,39 +39,49 @@ export function AboutLite() {
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="lg:col-span-2"
           >
-            <div className="client-card rounded-2xl border border-border/60 bg-card/50 p-6 sm:p-7">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <div
-                    aria-hidden
-                    className="absolute -inset-1 rounded-full opacity-50"
-                    style={{
-                      background:
-                        "conic-gradient(from 0deg, color-mix(in oklch, var(--brand) 55%, transparent), transparent 40%, transparent 60%, color-mix(in oklch, var(--brand) 45%, transparent))",
-                      animation: "spin 16s linear infinite",
-                      maskImage: "radial-gradient(circle, transparent 62%, black 63%, black 100%)",
-                      WebkitMaskImage: "radial-gradient(circle, transparent 62%, black 63%, black 100%)",
-                    }}
-                  />
-                  <Avatar className="relative h-20 w-20 border-2 border-brand/40 shadow-lg float-y">
-                    <AvatarImage src={profile.avatarUrl} alt={profile.name} />
-                    <AvatarFallback className="bg-brand text-brand-foreground text-xl font-bold">AG</AvatarFallback>
-                  </Avatar>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-foreground">{profile.name}</h3>
-                  <p className="text-sm text-muted-foreground">Web developer for businesses</p>
-                  <span className="mt-1.5 inline-flex items-center gap-1.5 rounded-full border border-brand/30 bg-brand/8 px-2.5 py-0.5 text-[11px] font-medium text-brand">
-                    <span className="relative flex h-1.5 w-1.5">
-                      <span className="status-pulse absolute h-1.5 w-1.5 rounded-full bg-brand opacity-75" />
-                      <span className="relative h-1.5 w-1.5 rounded-full bg-brand" />
-                    </span>
-                    Available now
+            <div className="client-card group relative overflow-hidden rounded-2xl border border-border/60 bg-card/50">
+              <div className="relative">
+                {/* real studio portrait */}
+                <img
+                  src={profile.portraitUrl}
+                  alt="Abdelhady Gabriel — web developer for businesses, Cairo"
+                  width={640}
+                  height={960}
+                  loading="lazy"
+                  className="aspect-[2/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                />
+
+                {/* legibility gradient for the name plate */}
+                <div
+                  aria-hidden
+                  className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
+                />
+
+                {/* availability badge — floating over the photo */}
+                <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/45 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="status-pulse absolute h-1.5 w-1.5 rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-400" />
                   </span>
+                  Available now
+                </span>
+
+                {/* brand-gradient hairline on the photo's top edge */}
+                <div
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-brand via-brand-2 to-brand-3"
+                />
+
+                {/* name plate over the photo */}
+                <div className="absolute inset-x-0 bottom-0 p-5">
+                  <h3 className="text-lg font-bold text-white">{profile.name}</h3>
+                  <p className="mt-0.5 text-xs text-white/75">
+                    Web developer for businesses · Cairo
+                  </p>
                 </div>
               </div>
 
-              <dl className="mt-6 grid grid-cols-2 gap-3">
+              <dl className="grid grid-cols-2 gap-3 p-5">
                 {aboutLite.quickFacts.map((fact, i) => {
                   const Icon = FACT_ICONS[i % FACT_ICONS.length];
                   return (
@@ -110,6 +121,18 @@ export function AboutLite() {
                 technical, I&apos;ll explain it like you&apos;re the client — because you are.
               </p>
             </div>
+
+            <motion.a
+              href="#contact"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
+            >
+              Say hello on WhatsApp — I answer myself
+              <span aria-hidden>→</span>
+            </motion.a>
           </motion.div>
         </div>
       </div>
