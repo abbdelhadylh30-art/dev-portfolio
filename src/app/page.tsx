@@ -19,6 +19,7 @@ import { ClientHero } from "@/components/portfolio/client-mode/client-hero";
 import { Services } from "@/components/portfolio/client-mode/services";
 import { Results } from "@/components/portfolio/client-mode/results";
 import { ClientProcess } from "@/components/portfolio/client-mode/client-process";
+import { ClientPricing } from "@/components/portfolio/client-mode/client-pricing";
 import { AboutLite } from "@/components/portfolio/client-mode/about-lite";
 import { TrustFaq } from "@/components/portfolio/client-mode/trust-faq";
 import { ClientContact } from "@/components/portfolio/client-mode/client-contact";
@@ -114,6 +115,7 @@ export default async function Home() {
     services: <Services />,
     results: <Results />,
     process: <ClientProcess />,
+    pricing: <ClientPricing />,
     about: <AboutLite />,
     faq: <TrustFaq />,
     contact: <ClientContact />,

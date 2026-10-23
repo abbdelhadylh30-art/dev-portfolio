@@ -21,7 +21,7 @@ export type SitePage = {
   /** One-line teaser (used on the home index cards + footer nav). */
   blurb: string;
   /** lucide icon name is resolved by the caller — keep this data-only. */
-  icon: "home" | "globe" | "trophy" | "route" | "user" | "help" | "mail" | "code" | "briefcase" | "folder" | "layers" | "map" | "zap";
+  icon: "home" | "globe" | "trophy" | "route" | "user" | "help" | "mail" | "code" | "briefcase" | "folder" | "layers" | "map" | "zap" | "tag";
 };
 
 export const CLIENT_PAGES: SitePage[] = [
@@ -52,6 +52,13 @@ export const CLIENT_PAGES: SitePage[] = [
     kicker: "Process",
     blurb: "From free 15-minute chat to launch in 2–4 weeks.",
     icon: "route",
+  },
+  {
+    id: "pricing",
+    label: "Pricing",
+    kicker: "Packages",
+    blurb: "Real prices, task by task — from $149 one-pagers to full builds.",
+    icon: "tag",
   },
   {
     id: "about",

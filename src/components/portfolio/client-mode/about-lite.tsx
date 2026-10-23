@@ -20,7 +20,7 @@ export function AboutLite() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
           eyebrow="About"
-          counter={{ current: "04", total: "05" }}
+          counter={{ current: "05", total: "06" }}
           title={
             <>
               The person you&apos;ll <span className="brand-gradient-text">actually talk to</span>.

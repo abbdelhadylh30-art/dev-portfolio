@@ -24,7 +24,7 @@ export function ClientProcess() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
           eyebrow="How it works"
-          counter={{ current: "03", total: "05" }}
+          counter={{ current: "03", total: "06" }}
           title={
             <>
               No mystery. <span className="brand-gradient-text">No jargon</span>. No surprises.

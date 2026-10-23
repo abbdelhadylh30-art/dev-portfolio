@@ -25,7 +25,7 @@ export function Services() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
           eyebrow="What I do"
-          counter={{ current: "01", total: "05" }}
+          counter={{ current: "01", total: "06" }}
           title={
             <>
               Websites that <span className="brand-gradient-text">pay for themselves</span>.

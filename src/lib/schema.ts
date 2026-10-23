@@ -1,4 +1,4 @@
-import { profile, projects, skillGroups, services, faqs } from "@/lib/portfolio-data";
+import { profile, projects, skillGroups, services, faqs, pricingTiers } from "@/lib/portfolio-data";
 import { SITE_URL } from "@/lib/site-url";
 import type { PortfolioMode } from "@/lib/mode";
 
@@ -142,6 +142,29 @@ export function buildJsonLdGraph(mode: PortfolioMode): Record<string, unknown> {
             },
           })),
         },
+      },
+
+      /* ── OfferCatalog: fixed-price packages with real numbers ── */
+      {
+        "@type": "OfferCatalog",
+        "@id": `${base}/#pricing`,
+        name: "Fixed-price website packages",
+        description:
+          "Task-by-task packages with fixed prices in USD, delivery timelines and a 50/50 payment split — deposit to start, balance at launch.",
+        url: `${base}/#pricing`,
+        itemListElement: pricingTiers.flatMap((tier) =>
+          (tier.variants ?? [tier]).map((v) => ({
+            "@type": "Offer",
+            name: tier.variants ? `${tier.name} — ${v.name}` : tier.name,
+            description: tier.variants ? v.blurb : tier.tagline,
+            price: v.price,
+            priceCurrency: "USD",
+            url: `${base}/#pricing`,
+            availability: "https://schema.org/InStock",
+            areaServed: AREA_SERVED.map((name) => ({ "@type": "Country", name })),
+            seller: { "@id": `${base}/#professional-service` },
+          })),
+        ),
       },
 
       /* ── FAQPage (mirrors the live FAQ accordion) ─────────────── */

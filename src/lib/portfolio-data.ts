@@ -723,6 +723,7 @@ export const clientNavLinks: NavLink[] = [
   { label: "What I do", href: "#services" },
   { label: "Results", href: "#results" },
   { label: "How it works", href: "#process" },
+  { label: "Pricing", href: "#pricing" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];
@@ -883,6 +884,189 @@ export const clientProcess: ClientProcessStep[] = [
   },
 ];
 
+/* ───────────────────────────────────────────────────────────────────────────
+   Pricing — full price transparency, CreativeFlare-style: every package,
+   every task, every dollar out in the open, plus the deposit flow spelled
+   out so paying feels safe. Rendered by the Pricing section (#pricing) and
+   mirrored into the JSON-LD OfferCatalog in schema.ts.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+export type PricingTask = {
+  /** Task name, e.g. "Design". */
+  task: string;
+  /** What the client actually gets for it. */
+  detail: string;
+  /** When it happens, e.g. "Days 1–2" or "+2–3 days". */
+  when: string;
+};
+
+/** The one-pager comes in two flavours that share one card (UI toggle). */
+export type PricingVariant = {
+  name: string;
+  blurb: string;
+  price: number;
+  deposit: number;
+  duration: string;
+  tasks: PricingTask[];
+};
+
+export type PricingTier = {
+  id: string;
+  name: string;
+  tagline: string;
+  price: number;
+  deposit: number;
+  duration: string;
+  /** Highlighted "most chosen" card. */
+  popular?: boolean;
+  /** Set when the tier builds on the previous one. */
+  buildsOn?: string;
+  tasks: PricingTask[];
+  /** Two flavours on one card — only the one-pager uses this. */
+  variants?: PricingVariant[];
+};
+
+export const upgradeCreditNote =
+  "Start small, upgrade with zero risk: move up to a bigger package within 30 days and you only pay the difference — your one-pager or Launch site counts as credit.";
+
+export const paymentFlow: { num: string; title: string; body: string }[] = [
+  {
+    num: "01",
+    title: "50% deposit books your slot",
+    body: "You get an invoice and a welcome checklist — photos, text, colors, domain access. I start within 48 hours of receiving your content.",
+  },
+  {
+    num: "02",
+    title: "First design within 72 hours",
+    body: "A homepage concept in your brand, Arabic + English. Revision rounds are included — you react, I refine.",
+  },
+  {
+    num: "03",
+    title: "You approve, then I build",
+    body: "A private preview link from day one. Watch the site grow and test it on your own phone before anything is final.",
+  },
+  {
+    num: "04",
+    title: "Final 50% at launch",
+    body: "Your site goes live on your own domain within 48 hours of the last payment — training video and all passwords handed over.",
+  },
+  {
+    num: "05",
+    title: "14-day fix warranty",
+    body: "Anything that's my code and misbehaves in the first two weeks is fixed free — and the first month of small tweaks is on me too.",
+  },
+];
+
+export const pricingExtras = {
+  title: "The honesty section",
+  lead: "Everything above is the full price. Here is what sits outside it — priced openly, no surprises later.",
+  items: [
+    {
+      label: "Domain + hosting",
+      detail: "Your own account, ~$5–10/month. I set it up in your name — you own everything.",
+    },
+    {
+      label: "Extra revision round",
+      detail: "$30 flat, any package. The revision rounds listed inside each package are included.",
+    },
+    {
+      label: "Care plan (optional)",
+      detail: "$19/month: updates, daily backups, small edits within 48 hours. Cancel anytime.",
+    },
+  ],
+  custom: {
+    title: "Bigger than a storefront?",
+    body: "Custom dashboards, multi-branch systems, members' areas, internal tools — if it doesn't fit a package, it gets a custom quote in the same 15-minute chat.",
+    cta: "Ask for a custom quote",
+  },
+};
+
+export const pricingTiers: PricingTier[] = [
+  {
+    id: "onepager",
+    name: "One-Pager",
+    tagline: "One page, one goal, live this week.",
+    price: 149,
+    deposit: 75,
+    duration: "2–4 days",
+    tasks: [],
+    variants: [
+      {
+        name: "Portfolio",
+        blurb: "Who I am, what I do, contact me — for personal brands.",
+        price: 149,
+        deposit: 75,
+        duration: "2–3 days",
+        tasks: [
+          { task: "Kickoff", detail: "15-minute call or voice note — we scope the page.", when: "Day 1" },
+          { task: "Design", detail: "Hero → proof → offer → contact flow, 1 revision round.", when: "Day 1" },
+          { task: "Build", detail: "Single page, mobile-first, AR + EN, WhatsApp & call buttons.", when: "Days 1–2" },
+          { task: "Launch", detail: "Google indexing, loads under 1.5s, domain connected.", when: "Days 2–3" },
+        ],
+      },
+      {
+        name: "Landing page",
+        blurb: "Runs under a boosted post or ad — built to convert.",
+        price: 199,
+        deposit: 100,
+        duration: "3–4 days",
+        tasks: [
+          { task: "Kickoff", detail: "We define the ONE action: book, call, or order.", when: "Day 1" },
+          { task: "Conversion copy", detail: "Headline + offer written to sell, Arabic or English.", when: "Days 1–2" },
+          { task: "Build", detail: "Page + WhatsApp flow + thank-you state, 1 revision round.", when: "Days 2–3" },
+          { task: "Tracking", detail: "Facebook Pixel / GA event — so you know the ad worked.", when: "Day 3" },
+          { task: "Launch", detail: "Domain or subdomain, live and measured.", when: "Days 3–4" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "launch",
+    name: "Launch",
+    tagline: "The full business website — your online front door.",
+    price: 349,
+    deposit: 175,
+    duration: "5–7 days",
+    tasks: [
+      { task: "Discovery & structure", detail: "15-minute call, sitemap of up to 5 pages.", when: "Day 1" },
+      { task: "Design", detail: "Homepage concept in your brand, 2 revision rounds.", when: "Days 1–2" },
+      { task: "Build", detail: "3–5 pages, mobile-first, Arabic + English.", when: "Days 2–4" },
+      { task: "SEO & speed", detail: "Google indexing, meta tags, loads under 2 seconds.", when: "Days 4–5" },
+      { task: "Launch & handover", detail: "Domain connected, live, training video, all passwords.", when: "Days 5–7" },
+    ],
+  },
+  {
+    id: "business",
+    name: "Business",
+    tagline: "The site plus the machinery that books and sells.",
+    price: 649,
+    deposit: 325,
+    duration: "10–14 days",
+    popular: true,
+    buildsOn: "Everything in Launch, plus:",
+    tasks: [
+      { task: "Booking / menu / WhatsApp", detail: "Appointment form, menu, or WhatsApp ordering — wired to your phone.", when: "+2–3 days" },
+      { task: "Analytics & tracking", detail: "Google Analytics + Search Console + conversion events.", when: "+1 day" },
+      { task: "Copy polish (AR + EN)", detail: "Headlines rewritten to sell, not just describe.", when: "+1 day" },
+      { task: "Google Business Profile", detail: "Maps listing set up and optimized.", when: "+1 day" },
+    ],
+  },
+  {
+    id: "advanced",
+    name: "Advanced",
+    tagline: "E-commerce and custom builds with real payments.",
+    price: 1199,
+    deposit: 600,
+    duration: "3–4 weeks",
+    buildsOn: "Everything in Business, plus:",
+    tasks: [
+      { task: "E-commerce or custom", detail: "Online store with payments (Paymob / Stripe / cash on delivery) or a custom feature.", when: "+1–2 weeks" },
+      { task: "Security & performance", detail: "SSL, backups, hardening, 90+ Lighthouse score.", when: "+2–3 days" },
+      { task: "Live training", detail: "1-on-1 call + recorded video for your team.", when: "+1 day" },
+    ],
+  },
+];
+
 export type Guarantee = { title: string; body: string; icon: "price" | "own" | "time" | "support" };
 
 export const guarantees: Guarantee[] = [
@@ -913,7 +1097,11 @@ export type Faq = { q: string; a: string };
 export const faqs: Faq[] = [
   {
     q: "How much does a website cost?",
-    a: "It depends on what you need — but you'll get one fixed number before any work begins, and that number won't change. For most small businesses, a simple business website costs less than the money already spent on boosted posts that vanished in a week — and the site works for years. Booking systems and larger tools cost more. The free chat exists precisely so we can pin your exact number down in 15 minutes.",
+    a: "One-page sites start at $149, full business websites at $349, and booking or e-commerce builds at $649 — every package with its task list, timeline and deposit is laid out on the Pricing page. Whatever you pick, you get one fixed number before any work begins, and that number won't change.",
+  },
+  {
+    q: "How do payments work?",
+    a: "Split in two, matched to the timeline: a 50% deposit books your slot and unlocks the first design within 72 hours. The second half is due at launch — after you've seen the full site working on your own phone. Nothing goes live until you say so, and every launch carries a 14-day fix warranty.",
   },
   {
     q: "I already have a website — do I need a rebuild?",

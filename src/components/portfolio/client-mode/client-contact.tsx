@@ -20,7 +20,7 @@ export function ClientContact() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
           eyebrow="Contact"
-          counter={{ current: "05", total: "05" }}
+          counter={{ current: "06", total: "06" }}
           title={
             <>
               Let&apos;s talk about <span className="brand-gradient-text">your website</span>.

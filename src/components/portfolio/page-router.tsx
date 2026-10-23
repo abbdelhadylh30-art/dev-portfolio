@@ -18,6 +18,7 @@ import {
   Folder,
   Layers,
   Map,
+  Tag,
   Zap,
   ChevronLeft,
   ChevronRight,
@@ -377,6 +378,7 @@ const PAGE_ICONS: Record<SitePage["icon"], LucideIcon> = {
   layers: Layers,
   map: Map,
   zap: Zap,
+  tag: Tag,
 };
 
 function PageIndexGrid() {

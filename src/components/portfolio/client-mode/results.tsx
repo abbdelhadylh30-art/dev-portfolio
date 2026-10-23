@@ -26,7 +26,7 @@ export function Results() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
           eyebrow="Results"
-          counter={{ current: "02", total: "05" }}
+          counter={{ current: "02", total: "06" }}
           title={
             <>
               What businesses <span className="brand-gradient-text">actually got</span>.
