@@ -41,7 +41,9 @@ export function ClientFooter() {
               className="inline-flex items-center gap-1.5 transition-colors hover:text-brand"
             >
               <Phone className="h-3.5 w-3.5" />
-              {profile.phoneDisplay}
+              {/* dir=ltr — otherwise the bidi algorithm flips the digit
+                  groups in RTL ("6016 224 0103") and callers misread it */}
+              <span dir="ltr">{profile.phoneDisplay}</span>
             </a>
             <a
               href={`mailto:${profile.email}`}

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { trackEvent } from "@/lib/analytics";
 import { usePageRouter } from "@/components/portfolio/page-router";
+import { usePrefs } from "@/lib/i18n/language";
 import type { PortfolioMode } from "@/lib/mode";
 
 /**
@@ -18,15 +19,18 @@ import type { PortfolioMode } from "@/lib/mode";
  * in the resting state — only the appearance is dialed down.
  */
 export function SectionRail({ mode: _mode }: { mode: PortfolioMode }) {
-  const { pages, page, pageIndex, navigate } = usePageRouter();
+  const { page, pageIndex, navigate } = usePageRouter();
+  /* localizedPages mirrors `pages` with AR labels in Arabic — the navbar
+     already uses it; the rail was the last chrome piece showing EN. */
+  const { t, localizedPages } = usePrefs();
 
   return (
     <nav
-      aria-label="Page quick navigation"
-      className="pointer-events-none fixed right-7 top-1/2 z-40 hidden -translate-y-1/2 lg:block"
+      aria-label={t.pager.pagesAria}
+      className="pointer-events-none fixed right-7 top-1/2 z-40 hidden -translate-y-1/2 rtl:right-auto rtl:left-7 lg:block"
     >
       <ul className="group/rail pointer-events-auto flex flex-col items-end gap-3 rounded-full border border-transparent py-3 pl-2 pr-2.5 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 hover:border-border/50 hover:bg-background/60 hover:shadow-[0_8px_32px_-16px_rgba(0,0,0,0.55)] hover:backdrop-blur-md focus-within:border-border/50 focus-within:bg-background/60 focus-within:shadow-[0_8px_32px_-16px_rgba(0,0,0,0.55)] focus-within:backdrop-blur-md">
-        {pages.map((p, i) => {
+        {localizedPages.map((p, i) => {
           const isActive = page.id === p.id;
           return (
             <li key={p.id} className="group relative flex items-center">
@@ -43,7 +47,7 @@ export function SectionRail({ mode: _mode }: { mode: PortfolioMode }) {
 
               <button
                 type="button"
-                aria-label={`Go to ${p.label} page`}
+                aria-label={p.label}
                 aria-current={isActive ? "page" : undefined}
                 onClick={() => {
                   trackEvent("rail_click", { label: p.id });
@@ -67,7 +71,7 @@ export function SectionRail({ mode: _mode }: { mode: PortfolioMode }) {
       </ul>
       {/* Screen-reader context */}
       <span className="sr-only">
-        Page {pageIndex + 1} of {pages.length}
+        {t.pager.pagesAria} — {pageIndex + 1} / {localizedPages.length}
       </span>
     </nav>
   );

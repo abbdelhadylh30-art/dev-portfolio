@@ -84,11 +84,21 @@ export async function PATCH(request: Request) {
     );
   }
 
-  const updated = await db.message.update({
-    where: { id: parsed.data.id },
-    data: { read: parsed.data.read },
-    select: { id: true, read: true },
-  });
+  /* Prisma P2025 (record not found) would otherwise bubble up as a 500 —
+     a stale row in the admin UI is an expected condition, answer 404. */
+  let updated;
+  try {
+    updated = await db.message.update({
+      where: { id: parsed.data.id },
+      data: { read: parsed.data.read },
+      select: { id: true, read: true },
+    });
+  } catch {
+    return NextResponse.json(
+      { ok: false, error: "Message not found" },
+      { status: 404, headers: NOINDEX_HEADERS }
+    );
+  }
 
   return NextResponse.json({ ok: true, message: updated }, { headers: NOINDEX_HEADERS });
 }

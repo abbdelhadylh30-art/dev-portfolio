@@ -82,7 +82,10 @@ export function Results() {
                         className="stat-topline rounded-xl border border-border/50 bg-background/60 px-2 py-3 text-center"
                       >
                         <div className="brand-gradient-text text-lg font-bold tracking-tight sm:text-xl">
-                          {m.value}
+                          {/* dir=ltr keeps mixed tokens ("45×", "15→4", "<1.5s")
+                              in reading order inside RTL paragraphs — same
+                              island treatment as the hero stats */}
+                          <span dir="ltr">{m.value}</span>
                         </div>
                         <div className="mt-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                           {m.label}

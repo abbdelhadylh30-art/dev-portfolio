@@ -34,6 +34,10 @@ const ALLOWED_TYPES = [
   "faq_open",
   "service_click",
   "result_card_click",
+  "pricing_cta_click",
+  "pricing_variant_switch",
+  "language_switch",
+  "palette_switch",
 ] as const;
 const TypeSchema = z.enum(ALLOWED_TYPES);
 

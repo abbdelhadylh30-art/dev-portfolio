@@ -647,7 +647,7 @@ export const caseStudies: CaseStudy[] = [
     metrics: [
       { value: "6", label: "sections" },
       { value: "#1", label: "Google rank for name" },
-      { value: "1wk", label: "to index" },
+      { value: "1 wk", label: "to index" },
     ],
     tech: ["Next.js", "SEO", "Dark editorial"],
     icon: "search",
@@ -721,22 +721,12 @@ export const testimonials: Testimonial[] = [
  * about outcomes (more customers, less admin work), not implementation.
  * ─────────────────────────────────────────────────────────────────────────── */
 
-export const clientNavLinks: NavLink[] = [
-  { label: "What I do", href: "#services" },
-  { label: "Results", href: "#results" },
-  { label: "How it works", href: "#process" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
-];
-
-/** Client-facing hero stats — outcomes, not repo metrics. */
-export const clientStats: Stat[] = [
-  { label: "Every site loads in", value: "<2s", hint: "on a phone, on 3G" },
-  { label: "Google rank for a client", value: "#1", hint: "one week after launch" },
-  { label: "Faster than their old site", value: "45×", hint: "Knead Bakery · Wix rebuild" },
-  { label: "Languages, done properly", value: "AR+EN", hint: "Arabic & English, built right" },
-];
+/* NOTE — single source of truth: the client-mode COPY (hero stats,
+   services, results, process, pricing flow, guarantees, FAQ, about)
+   lives in src/lib/i18n/en.ts + ar.ts — that is what the UI renders.
+   This file keeps only the English data that feeds the JSON-LD graph
+   (services, faqs, pricingTiers via schema.ts) plus the dev-view
+   content, so the two layers can never silently drift apart again. */
 
 export type Service = {
   title: string;
@@ -801,57 +791,6 @@ export type ClientResult = {
   icon: "store" | "search" | "scissors" | "cta";
 };
 
-export const clientResults: ClientResult[] = [
-  {
-    client: "Knead Bakery",
-    headline: "A slow website was losing them orders",
-    story:
-      "“Customers give up before the menu even loads.” That's what the owner of a bakery in Abu Dhabi told me about their old Wix site — and every abandoned load was an order that walked out the door. We rebuilt it around how customers actually order: food grouped by time of day, pickup times shown up front.",
-    metrics: [
-      { value: "45×", label: "faster than the old site" },
-      { value: "15→4", label: "clearer menu categories" },
-      { value: "<1.5s", label: "loads on a phone" },
-    ],
-    icon: "store",
-  },
-  {
-    client: "Mohamed Medhat",
-    headline: "From invisible to #1 on Google",
-    story:
-      "A marketing professional in Cairo had no web presence at all. We built him a portfolio that matches the quality of his own brand audits — dark, editorial, mobile-perfect.",
-    metrics: [
-      { value: "#1", label: "on Google for his name" },
-      { value: "1 wk", label: "from launch to ranking" },
-      { value: "6", label: "polished sections" },
-    ],
-    icon: "search",
-  },
-  {
-    client: "A salon chain, Qatar",
-    headline: "Bookings that run themselves",
-    story:
-      "A luxury salon was running appointments over the phone — and losing bookings every time a call rang out during rush hour. We built them online booking with automatic WhatsApp reminders, in Arabic and English, so the chair fills itself even when the front desk is busy.",
-    metrics: [
-      { value: "24/7", label: "online booking" },
-      { value: "Auto", label: "WhatsApp reminders" },
-      { value: "AR+EN", label: "both languages, properly" },
-    ],
-    icon: "scissors",
-  },
-  {
-    client: "Your business",
-    headline: "The next story could be yours",
-    story:
-      "Every project above started the same way: a free 15-minute chat. No pressure, no jargon — I'll look at what you have now and tell you honestly what's worth fixing.",
-    metrics: [
-      { value: "Free", label: "15-minute chat" },
-      { value: "Fixed", label: "price before we start" },
-      { value: "2–4 wks", label: "typical launch time" },
-    ],
-    icon: "cta",
-  },
-];
-
 export type ClientProcessStep = {
   num: string;
   title: string;
@@ -859,38 +798,10 @@ export type ClientProcessStep = {
   icon: "chat" | "quote" | "build" | "launch";
 };
 
-export const clientProcess: ClientProcessStep[] = [
-  {
-    num: "01",
-    title: "A free 15-minute chat",
-    body: "WhatsApp or a call — you tell me about your business, I look at what you have now. I'll tell you honestly if you need a full rebuild or just a few fixes.",
-    icon: "chat",
-  },
-  {
-    num: "02",
-    title: "One fixed price, in writing",
-    body: "You know exactly what you'll pay before any work begins. No hourly meters, no surprise invoices, no 'it grew in scope'.",
-    icon: "quote",
-  },
-  {
-    num: "03",
-    title: "Progress you can watch",
-    body: "You get a private preview link from day one. Watch your site grow, tell me what to adjust — while it's cheap to adjust.",
-    icon: "build",
-  },
-  {
-    num: "04",
-    title: "Launch — and I stay",
-    body: "Your site goes live with your domain and hosting sorted. Then I stay on WhatsApp: free tweaks in the first month, fast replies always.",
-    icon: "launch",
-  },
-];
-
 /* ───────────────────────────────────────────────────────────────────────────
-   Pricing — full price transparency, CreativeFlare-style: every package,
-   every task, every dollar out in the open, plus the deposit flow spelled
-   out so paying feels safe. Rendered by the Pricing section (#pricing) and
-   mirrored into the JSON-LD OfferCatalog in schema.ts.
+   Pricing — the fixed-price package data. Rendered into the JSON-LD
+   OfferCatalog by schema.ts; the rendered pricing UI copy lives in the
+   i18n files and must be kept in sync with the numbers here.
    ─────────────────────────────────────────────────────────────────────────── */
 
 export type PricingTask = {
@@ -926,61 +837,6 @@ export type PricingTier = {
   tasks: PricingTask[];
   /** Two flavours on one card — only the one-pager uses this. */
   variants?: PricingVariant[];
-};
-
-export const upgradeCreditNote =
-  "Start small, upgrade with zero risk: move up to a bigger package within 30 days and you only pay the difference — your one-pager or Launch site counts as credit.";
-
-export const paymentFlow: { num: string; title: string; body: string }[] = [
-  {
-    num: "01",
-    title: "50% deposit books your slot",
-    body: "You get an invoice and a welcome checklist — photos, text, colors, domain access. I start within 48 hours of receiving your content.",
-  },
-  {
-    num: "02",
-    title: "First design within 72 hours",
-    body: "A homepage concept in your brand, Arabic + English. Revision rounds are included — you react, I refine.",
-  },
-  {
-    num: "03",
-    title: "You approve, then I build",
-    body: "A private preview link from day one. Watch the site grow and test it on your own phone before anything is final.",
-  },
-  {
-    num: "04",
-    title: "Final 50% at launch",
-    body: "Your site goes live on your own domain within 48 hours of the last payment — training video and all passwords handed over.",
-  },
-  {
-    num: "05",
-    title: "14-day fix warranty",
-    body: "Anything that's my code and misbehaves in the first two weeks is fixed free — and the first month of small tweaks is on me too.",
-  },
-];
-
-export const pricingExtras = {
-  title: "The honesty section",
-  lead: "Everything above is the full price. Here is what sits outside it — priced openly, no surprises later.",
-  items: [
-    {
-      label: "Domain + hosting",
-      detail: "Your own account, ~$5–10/month. I set it up in your name — you own everything.",
-    },
-    {
-      label: "Extra revision round",
-      detail: "$30 flat, any package. The revision rounds listed inside each package are included.",
-    },
-    {
-      label: "Care plan (optional)",
-      detail: "$19/month: updates, daily backups, small edits within 48 hours. Cancel anytime.",
-    },
-  ],
-  custom: {
-    title: "Bigger than a storefront?",
-    body: "Custom dashboards, multi-branch systems, members' areas, internal tools — if it doesn't fit a package, it gets a custom quote in the same 15-minute chat.",
-    cta: "Ask for a custom quote",
-  },
 };
 
 export const pricingTiers: PricingTier[] = [
@@ -1071,29 +927,6 @@ export const pricingTiers: PricingTier[] = [
 
 export type Guarantee = { title: string; body: string; icon: "price" | "own" | "time" | "support" };
 
-export const guarantees: Guarantee[] = [
-  {
-    title: "Fixed price, agreed up front",
-    body: "The number in the quote is the number you pay. If I misjudge the work, that's my cost — not yours.",
-    icon: "price",
-  },
-  {
-    title: "You own everything",
-    body: "Your domain, your hosting, your content, your code. If we ever part ways, it's all yours — no hostage-taking.",
-    icon: "own",
-  },
-  {
-    title: "On-time, in writing",
-    body: "The launch date is part of the quote. You'll know what 'done' means before we start.",
-    icon: "time",
-  },
-  {
-    title: "Support after launch",
-    body: "Free tweaks in the first month, same-day WhatsApp replies after that. A website is a living thing — it needs a caretaker.",
-    icon: "support",
-  },
-];
-
 export type Faq = { q: string; a: string };
 
 export const faqs: Faq[] = [
@@ -1126,16 +959,3 @@ export const faqs: Faq[] = [
     a: "Every site I ship includes what Google actually rewards: fast pages, mobile-first design, proper structure, and clean Arabic/English content. One client reached #1 for his own name within a week of launch. No honest developer promises rankings — but the fundamentals will be right.",
   },
 ];
-
-export const aboutLite = {
-  paragraphs: [
-    "Yes, that's a real photo — Abdelhady Gabriel, web developer in Cairo, and the only person you'll deal with on your project. For the last three years I've built websites for businesses across Egypt and the Gulf: a bakery in Abu Dhabi, a salon chain in Qatar, a marketing consultant in Cairo. Different industries, same job every time: look credible online, get found on Google, and turn visitors into paying customers.",
-    "I work in Arabic and English, I answer my own WhatsApp, and I treat your budget like it's my own. No account managers, no “let me check with the team” — when you ask who is actually building your site, the answer is the person in this photo. A clear plan, one fixed price, and a website that does its job. That's the whole pitch.",
-  ],
-  quickFacts: [
-    { label: "Based in", value: "Cairo, Egypt" },
-    { label: "Working with", value: "Egypt & the Gulf" },
-    { label: "Languages", value: "Arabic & English" },
-    { label: "Replies", value: "Same day, on WhatsApp" },
-  ],
-};

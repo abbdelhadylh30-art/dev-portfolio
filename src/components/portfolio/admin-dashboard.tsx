@@ -1590,7 +1590,7 @@ export function AdminDashboard() {
                   autoComplete="off"
                   value={token}
                   onChange={(e) => setToken(e.target.value)}
-                  placeholder="ag-portfolio-dev-2026"
+                  placeholder="••••••••"
                   className="font-mono text-sm"
                 />
                 <Button
@@ -1614,9 +1614,8 @@ export function AdminDashboard() {
               </div>
             )}
             <p className="font-mono text-[10px] text-muted-foreground/70">
-              Default dev token is{" "}
-              <code className="text-brand">ag-portfolio-dev-2026</code>. Override
-              with <code>PORTFOLIO_ADMIN_TOKEN</code> env var in production.
+              The token is the <code className="text-brand">PORTFOLIO_ADMIN_TOKEN</code> env
+              var value — set it in Vercel (or locally) to unlock the dashboard.
             </p>
           </form>
         ) : (

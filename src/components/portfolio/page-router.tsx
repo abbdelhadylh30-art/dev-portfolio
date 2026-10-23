@@ -423,7 +423,7 @@ function PageIndexGrid() {
               <button
                 type="button"
                 onClick={() => navigate(p.id)}
-                className="group relative flex w-full items-start gap-4 overflow-hidden rounded-xl border border-border/70 bg-card/70 p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/50 hover:shadow-[0_18px_50px_-24px_color-mix(in_oklch,var(--brand)_50%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
+                className="group relative flex w-full items-start gap-4 overflow-hidden rounded-xl border border-border/70 bg-card/70 p-4 text-start transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/50 hover:shadow-[0_18px_50px_-24px_color-mix(in_oklch,var(--brand)_50%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
               >
                 {/* Index number */}
                 <span className="absolute right-3 top-3 font-mono text-[10px] font-semibold text-muted-foreground/40 transition-colors group-hover:text-brand/70">
