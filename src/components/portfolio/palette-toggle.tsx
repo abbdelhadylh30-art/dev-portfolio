@@ -12,11 +12,11 @@ import { usePrefs, PALETTES, type PaletteId } from "@/lib/i18n/language";
 const SWATCHES: Record<PaletteId, string> = {
   /* Mini tri-hue preview of each palette's brand sweep. */
   sunset:
-    "linear-gradient(120deg, oklch(0.62 0.2 33), oklch(0.69 0.17 65), oklch(0.65 0.19 12))",
+    "linear-gradient(120deg, oklch(0.62 0.16 35), oklch(0.72 0.14 65), oklch(0.58 0.13 25))",
   royal:
-    "linear-gradient(120deg, oklch(0.5 0.09 215), oklch(0.72 0.13 78), oklch(0.63 0.15 25))",
+    "linear-gradient(120deg, oklch(0.45 0.08 210), oklch(0.75 0.12 75), oklch(0.6 0.12 30))",
   midnight:
-    "linear-gradient(120deg, oklch(0.175 0.015 65), oklch(0.8 0.14 72), oklch(0.7 0.13 15))",
+    "linear-gradient(120deg, oklch(0.14 0.012 250), oklch(0.75 0.14 180), oklch(0.78 0.13 70))",
 };
 
 export function PaletteToggle() {
