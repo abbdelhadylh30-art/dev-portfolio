@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Github, Command, BadgeCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -10,17 +10,41 @@ import { RoleRotator } from "@/components/portfolio/role-rotator";
 import { useUIStore } from "@/lib/ui-store";
 import { LiveStats } from "@/components/portfolio/live-stats";
 import { trackEvent } from "@/lib/analytics";
+import { ENTRY_EASE } from "@/components/portfolio/reveal";
+import { entrySequenceDone } from "@/components/portfolio/entry-curtain";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 18 },
-  show: (i: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] as const },
-  }),
-};
+/**
+ * Signature hero entry — fade-up + micro-scale + defocus with the site's
+ * 0.78s expo settle. On the very first load the base delay lets the hero
+ * emerge from beneath the EntryCurtain's exit; afterwards (page navigations)
+ * the sequence starts immediately. Reduced motion collapses to a crossfade.
+ */
+function useHeroEntry() {
+  const reduce = useReducedMotion();
+  const base = reduce ? 0 : entrySequenceDone ? 0 : 0.5;
+  return {
+    hidden: { opacity: 0, y: 27, scale: 0.987, filter: "blur(5px)" },
+    show: (i: number = 0) => ({
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      filter: "blur(0px)",
+      transition: {
+        duration: reduce ? 0.24 : 0.78,
+        delay: base + i * (reduce ? 0.03 : 0.085),
+        ease: reduce ? ("easeOut" as const) : ENTRY_EASE,
+      },
+    }),
+  };
+}
+
+/** Moonrise arc + starfield coordinates for the Developer-view ambience. */
+const HERO_STARS: ReadonlyArray<readonly [number, number, number]> = [
+  [16, 18, 0], [58, 10, 0.6], [76, 26, 1.1], [34, 6, 0.3], [90, 14, 0.85], [47, 20, 1.4],
+];
 
 export function Hero() {
+  const fadeUp = useHeroEntry();
   return (
     <section
       id="top"
@@ -30,6 +54,17 @@ export function Hero() {
       <div className="pointer-events-none absolute inset-0 -z-10 bg-grid bg-grid-fade" />
       {/* Aurora background — richer animated tri-hue gradient mesh */}
       <div className="aurora-bg pointer-events-none absolute inset-0 -z-10 opacity-60" />
+      {/* Moonrise arc — silver-indigo ambience for the Developer night sky */}
+      <div aria-hidden className="moon-arc pointer-events-none absolute -top-28 right-[6%] -z-10 h-64 w-64" />
+      {/* Starfield accents — twinkling in the hero's upper field */}
+      {HERO_STARS.map(([left, top, delay], i) => (
+        <span
+          key={i}
+          aria-hidden
+          className="hero-star pointer-events-none -z-10"
+          style={{ left: `${left}%`, top: `${top}%`, animationDelay: `${delay}s` }}
+        />
+      ))}
       {/* Brand glow */}
       <div className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-72 w-[42rem] -translate-x-1/2 rounded-full bg-brand/15 blur-[100px] pulse-slow" />
       {/* Secondary ambient orb */}

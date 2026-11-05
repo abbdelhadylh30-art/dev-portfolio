@@ -1882,3 +1882,271 @@ html[dir="rtl"] .section-hairline {
 html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
   inset-inline-start: auto;
 }
+
+/* =================================================================== */
+/*  SUN & MOON ENTRY SYSTEM                                            */
+/*  One-shot first-paint curtain + hero ambience + mode-flip ceremony. */
+/*  Sun (Business) = warm cream sky, coral sunrise, seven light rays.  */
+/*  Moon (Developer) = indigo night, silver crescent, starfield.      */
+/* =================================================================== */
+
+/* --- 1. Entry curtain shell ----------------------------------------- */
+.entry-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  will-change: clip-path;
+}
+.entry-curtain--sun { background: oklch(0.985 0.013 82); }
+.entry-curtain--moon { background: oklch(0.15 0.02 265); }
+
+/* Pure-CSS failsafe: if JS never runs, the curtain removes itself. */
+.entry-curtain-failsafe {
+  animation: dp-curtain-failsafe 3.2s linear 0.4s forwards;
+}
+@keyframes dp-curtain-failsafe {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+.entry-scene {
+  position: absolute;
+  inset: 0;
+}
+
+/* --- 2. Sun (Business) scene ---------------------------------------- */
+.entry-sun-sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 46% at 50% 96%, oklch(0.9 0.075 68 / 0.9), transparent 62%),
+    linear-gradient(to top, oklch(0.955 0.045 74) 0%, oklch(0.985 0.013 82) 46%);
+}
+.entry-sun-disc {
+  position: absolute;
+  left: 50%;
+  bottom: 24%;
+  width: 110px;
+  height: 110px;
+  margin-left: -55px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 38% 34%, oklch(0.86 0.12 74), oklch(0.66 0.19 38) 58%, oklch(0.6 0.2 33));
+  box-shadow:
+    0 0 34px oklch(0.72 0.18 55 / 0.8),
+    0 0 90px 18px oklch(0.8 0.14 70 / 0.45);
+  animation: dp-sunrise 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes dp-sunrise {
+  from { opacity: 0; transform: translateY(46px) scale(0.86); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.entry-sun-ray {
+  position: absolute;
+  left: 50%;
+  bottom: calc(24% + 48px);
+  width: 2px;
+  height: 130px;
+  margin-left: -1px;
+  transform-origin: 50% 100%;
+  background: linear-gradient(to top, oklch(0.72 0.17 45 / 0.75), transparent 85%);
+  opacity: 0;
+  animation: dp-ray-sweep 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes dp-ray-sweep {
+  from { opacity: 0; transform: rotate(var(--ray-a, 0deg)) scaleY(0.1); }
+  35%  { opacity: 0.9; }
+  to   { opacity: 0.8; transform: rotate(var(--ray-a, 0deg)) scaleY(1); }
+}
+.entry-sun-horizon {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 24%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, oklch(0.72 0.17 52 / 0.75), transparent);
+  animation: dp-horizon-glow 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes dp-horizon-glow {
+  from { opacity: 0; transform: scaleX(0.4); }
+  to   { opacity: 1; transform: scaleX(1); }
+}
+
+/* --- 3. Moon (Developer) scene --------------------------------------- */
+.entry-moon-sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 62% 44% at 68% 30%, oklch(0.24 0.045 268 / 0.85), transparent 60%),
+    radial-gradient(ellipse 80% 60% at 30% 88%, oklch(0.2 0.04 262 / 0.7), transparent 64%),
+    linear-gradient(to bottom, oklch(0.13 0.02 265), oklch(0.17 0.025 268));
+}
+.entry-star {
+  position: absolute;
+  border-radius: 9999px;
+  background: oklch(0.94 0.015 260);
+  box-shadow: 0 0 6px oklch(0.9 0.03 260 / 0.8);
+  opacity: 0;
+  animation: dp-star-twinkle 1.7s ease-in-out infinite;
+}
+@keyframes dp-star-twinkle {
+  0%, 100% { opacity: 0.12; transform: scale(0.72); }
+  50%      { opacity: 1; transform: scale(1); }
+}
+.entry-moon-disc {
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  width: 96px;
+  height: 96px;
+  margin-left: -48px;
+  border-radius: 9999px;
+  box-shadow:
+    inset -24px 10px 0 2px oklch(0.93 0.012 260),
+    0 0 26px oklch(0.85 0.04 260 / 0.55),
+    0 0 70px 12px oklch(0.7 0.06 265 / 0.35);
+  animation: dp-moon-drift 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes dp-moon-drift {
+  from { opacity: 0; transform: translateY(16px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* --- 4. Curtain name plate -------------------------------------------- */
+.entry-nameplate {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+.entry-nameplate-glyph {
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+}
+.entry-nameplate-glyph--sun {
+  background: radial-gradient(circle at 35% 35%, oklch(0.86 0.12 74), oklch(0.66 0.19 38));
+  box-shadow: 0 0 14px oklch(0.72 0.18 55 / 0.8);
+}
+.entry-nameplate-glyph--moon {
+  background: oklch(0.92 0.012 260);
+  box-shadow:
+    inset -4px 2px 0 0 oklch(0.2 0.03 265),
+    0 0 12px oklch(0.85 0.04 260 / 0.7);
+}
+.entry-nameplate-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+.entry-curtain--sun .entry-nameplate-text { color: oklch(0.4 0.05 50); }
+.entry-curtain--moon .entry-nameplate-text { color: oklch(0.9 0.02 260); }
+.entry-nameplate-sub {
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+.entry-curtain--sun .entry-nameplate-sub { color: oklch(0.55 0.06 60); }
+.entry-curtain--moon .entry-nameplate-sub { color: oklch(0.75 0.03 260); }
+
+/* --- 5. Hero ambience: Moon (Developer view) --------------------------- */
+.moon-arc {
+  border-radius: 9999px;
+  background: radial-gradient(circle at 62% 38%, oklch(0.85 0.05 260 / 0.16), transparent 58%);
+  box-shadow: 0 0 90px 20px oklch(0.75 0.06 265 / 0.08);
+  filter: blur(2px);
+}
+.hero-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 9999px;
+  background: oklch(0.9 0.03 260);
+  opacity: 0.1;
+  animation: dp-hero-star 3.4s ease-in-out infinite;
+}
+@keyframes dp-hero-star {
+  0%, 100% { opacity: 0.08; transform: scale(0.8); }
+  50%      { opacity: 0.9; transform: scale(1); }
+}
+
+/* --- 6. Hero ambience: Sun (Business view) ------------------------------ */
+.sunrise-glow {
+  border-radius: 9999px;
+  background: radial-gradient(ellipse at 50% 78%, oklch(0.88 0.09 64 / 0.5), transparent 62%);
+  filter: blur(6px);
+}
+.sunrise-ray {
+  position: absolute;
+  left: 50%;
+  bottom: -2rem;
+  width: 2px;
+  height: 34vh;
+  margin-left: -1px;
+  transform-origin: 50% 100%;
+  background: linear-gradient(to top, color-mix(in oklch, var(--brand) 45%, transparent), transparent 80%);
+  opacity: 0;
+  animation: dp-sunrise-ray 2.8s ease-in-out infinite;
+}
+@keyframes dp-sunrise-ray {
+  0%   { opacity: 0; transform: rotate(var(--ray-a, 0deg)) scaleY(0.7); }
+  45%  { opacity: 0.45; }
+  100% { opacity: 0; transform: rotate(var(--ray-a, 0deg)) scaleY(1); }
+}
+
+/* --- 7. Mode-flip ceremony tint (Business ⇄ Developer) ------------------ */
+.flip-tint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.flip-tint--sun {
+  background:
+    radial-gradient(circle at 50% 46%, oklch(0.93 0.06 70 / 0.95), transparent 55%),
+    oklch(0.985 0.013 82);
+}
+.flip-tint--moon {
+  background:
+    radial-gradient(circle at 50% 46%, oklch(0.26 0.05 266 / 0.9), transparent 58%),
+    oklch(0.15 0.02 265);
+}
+.flip-glyph {
+  width: 46px;
+  height: 46px;
+  border-radius: 9999px;
+}
+.flip-glyph--sun {
+  background: radial-gradient(circle at 36% 34%, oklch(0.87 0.12 74), oklch(0.66 0.19 38) 60%);
+  box-shadow:
+    0 0 30px oklch(0.72 0.18 55 / 0.75),
+    0 0 80px 14px oklch(0.8 0.14 70 / 0.4);
+}
+.flip-glyph--moon {
+  background: oklch(0.92 0.012 260);
+  box-shadow:
+    inset -12px 5px 0 0 oklch(0.17 0.03 265),
+    0 0 30px oklch(0.85 0.04 260 / 0.6),
+    0 0 80px 14px oklch(0.7 0.06 265 / 0.35);
+}
+
+/* --- 8. Reduced motion: keep the meaning, drop the movement -------------- */
+@media (prefers-reduced-motion: reduce) {
+  .entry-sun-ray,
+  .entry-star,
+  .hero-star,
+  .sunrise-ray,
+  .entry-curtain-failsafe {
+    animation: none !important;
+  }
+  .entry-star,
+  .hero-star {
+    opacity: 0.5;
+  }
+}

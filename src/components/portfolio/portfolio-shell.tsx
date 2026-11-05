@@ -8,6 +8,8 @@ import { Navbar } from "@/components/portfolio/navbar";
 import { SectionRail } from "@/components/portfolio/section-rail";
 import { ScrollProgress } from "@/components/portfolio/scroll-progress";
 import { ModeSync } from "@/components/portfolio/mode-sync";
+import { EntryCurtain } from "@/components/portfolio/entry-curtain";
+import { ModeFlipOverlay } from "@/components/portfolio/mode-flip-overlay";
 import { WhatsAppFab } from "@/components/portfolio/whatsapp-fab";
 import { Contact, Footer } from "@/components/portfolio/contact";
 import { CommandPalette } from "@/components/portfolio/command-palette";
@@ -93,6 +95,12 @@ export function PortfolioShell({
       elements={mode === "client" ? clientElements : devElements}
     >
       <PrefsProvider>
+        {/* One-shot Sun/Moon first-paint sequence (skips itself on repeat
+            visits and for reduced-motion visitors). */}
+        <EntryCurtain mode={mode} />
+        {/* Business ⇄ Developer clip-path flip ceremony. */}
+        <ModeFlipOverlay />
+
         {/* Shared chrome (inside the provider so navbar + rail read the
             active page from the router context) */}
         <ScrollProgress />

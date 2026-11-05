@@ -1,18 +1,44 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { ReactNode } from "react";
+
+/**
+ * ── Signature motion constants ────────────────────────────────────────
+ * One easing + one duration own every first-paint and scroll reveal on
+ * the site, so Business and Developer views share the same physical
+ * "weight" when things appear. The long tail of cubic-bezier(.16,1,.3,1)
+ * gives entrances an expo-like settle; blur + micro-scale add depth so
+ * panels arrive from slightly "behind" the page instead of sliding up
+ * flat.
+ */
+export const ENTRY_EASE = [0.16, 1, 0.3, 1] as const;
+export const ENTRY_DURATION = 0.78;
+
+/** Reduced-motion twin: same choreography, near-instant and blur-free. */
+export const ENTRY_DURATION_SAFE = 0.24;
 
 /**
  * Shared Framer Motion variants so all sections animate with the
  * same easing + stagger cadence (one source of truth for the page).
  */
 export const revealVariants: Variants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 27, scale: 0.987, filter: "blur(5px)" },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+    scale: 1,
+    filter: "blur(0px)",
+    transition: { duration: ENTRY_DURATION, ease: ENTRY_EASE },
+  },
+};
+
+/** Safe (reduced-motion) twin of `revealVariants`. */
+export const revealVariantsSafe: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { duration: ENTRY_DURATION_SAFE, ease: "easeOut" },
   },
 };
 
@@ -33,24 +59,39 @@ type RevealProps = {
 };
 
 /**
- * Single-element scroll-reveal. Wraps any block with a subtle fade-up.
- * Defaults to `once: true` so it doesn't re-trigger on scroll-up.
+ * Single-element scroll-reveal with the signature settle: fade-up +
+ * micro-scale + defocus. Wraps any block; defaults to `once: true` so
+ * it doesn't re-trigger on scroll-up. Falls back to a plain crossfade
+ * when the visitor prefers reduced motion.
  */
 export function Reveal({
   children,
   delay = 0,
-  y = 18,
+  y = 22,
   className,
   once = true,
   as = "div",
 }: RevealProps) {
+  const reduce = useReducedMotion();
   const MotionTag = motion[as];
   return (
     <MotionTag
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={
+        reduce
+          ? { opacity: 0 }
+          : { opacity: 0, y, scale: 0.985, filter: "blur(4px)" }
+      }
+      whileInView={
+        reduce
+          ? { opacity: 1 }
+          : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+      }
       viewport={{ once, margin: "-80px" }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: reduce ? ENTRY_DURATION_SAFE : 0.66,
+        delay,
+        ease: reduce ? "easeOut" : ENTRY_EASE,
+      }}
       className={className}
     >
       {children}

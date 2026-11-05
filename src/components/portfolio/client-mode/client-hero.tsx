@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import type * as React from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, BadgeCheck, MessageCircle, ShieldCheck, Timer, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -8,15 +9,32 @@ import { profile } from "@/lib/portfolio-data";
 import { usePrefs } from "@/lib/i18n/language";
 import { AnimatedCounter } from "@/components/portfolio/animated-counter";
 import { trackEvent } from "@/lib/analytics";
+import { ENTRY_EASE } from "@/components/portfolio/reveal";
+import { entrySequenceDone } from "@/components/portfolio/entry-curtain";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 18 },
-  show: (i: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, delay: i * 0.09, ease: [0.22, 1, 0.36, 1] as const },
-  }),
-};
+/**
+ * Signature hero entry (Sun view) — same 0.78s settle as the Developer
+ * hero, delayed once per load so the Business hero rises out of the
+ * EntryCurtain's sunrise lift. Reduced motion collapses to a crossfade.
+ */
+function useHeroEntry() {
+  const reduce = useReducedMotion();
+  const base = reduce ? 0 : entrySequenceDone ? 0 : 0.5;
+  return {
+    hidden: { opacity: 0, y: 27, scale: 0.987, filter: "blur(5px)" },
+    show: (i: number = 0) => ({
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      filter: "blur(0px)",
+      transition: {
+        duration: reduce ? 0.24 : 0.78,
+        delay: base + i * (reduce ? 0.03 : 0.09),
+        ease: reduce ? ("easeOut" as const) : ENTRY_EASE,
+      },
+    }),
+  };
+}
 
 const TRUST_ICONS = [Wallet, ShieldCheck, Timer] as const;
 
@@ -27,6 +45,7 @@ const TRUST_ICONS = [Wallet, ShieldCheck, Timer] as const;
  */
 export function ClientHero() {
   const { t } = usePrefs();
+  const fadeUp = useHeroEntry();
   return (
     <section
       id="top"
@@ -35,6 +54,17 @@ export function ClientHero() {
       {/* Backgrounds — aurora mesh + dotted grid (same family as dev hero) */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-grid bg-grid-fade" />
       <div className="aurora-bg pointer-events-none absolute inset-0 -z-10 opacity-70" />
+      {/* Sunrise glow — warm horizon ambience for the Business daylight sky */}
+      <div aria-hidden className="sunrise-glow pointer-events-none absolute -bottom-24 left-1/2 -z-10 h-72 w-[54rem] -translate-x-1/2" />
+      {/* Sun ray accents rising from the horizon */}
+      {[[-64, 0.2], [-32, 0.45], [0, 0.7], [32, 0.45], [64, 0.2]].map(([angle, delay], i) => (
+        <span
+          key={i}
+          aria-hidden
+          className="sunrise-ray pointer-events-none -z-10"
+          style={{ "--ray-a": `${angle}deg`, animationDelay: `${delay}s` } as React.CSSProperties}
+        />
+      ))}
       <div className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-72 w-[42rem] -translate-x-1/2 rounded-full bg-brand/15 blur-[100px] pulse-slow" />
 
       {/* Floating decor orbs — tri-hue ambient motion */}

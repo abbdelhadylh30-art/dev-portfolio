@@ -26,8 +26,9 @@ export function ModeToggle({ mode, compact = false }: { mode: PortfolioMode; com
     if (next === mode || pending) return;
     setPending(true);
 
-    // 1) Instant, deterministic client-side swap.
-    useModeTransform.getState().setLiveMode(next);
+    // 1) Play the 450ms clip-path flip ceremony (seal → swap → iris).
+    //    Reduced-motion visitors skip straight to the instant swap.
+    useModeTransform.getState().beginFlip(next);
     trackEvent("mode_switch", { label: next });
 
     // 2) Persist + refresh server metadata when the cookie verifiably
