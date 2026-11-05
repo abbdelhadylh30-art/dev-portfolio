@@ -21,9 +21,9 @@ import { useModeTransform } from "@/lib/mode-transform";
  */
 
 /** Duration of the seal (cover) phase in ms. */
-const COVER_MS = 190;
+const COVER_MS = 220;
 /** Duration of the iris (reveal) phase in ms. */
-const IRIS_MS = 260;
+const IRIS_MS = 300;
 
 export function ModeFlipOverlay() {
   const flipTo = useModeTransform((s) => s.flipTo);
