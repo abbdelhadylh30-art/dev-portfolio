@@ -3,7 +3,7 @@
  * Every visible string on the site is sourced from here.
  *
  * Repository data was synced from github.com/abbdelhadylh30-art
- * (17 public repositories, synced from the GitHub REST API).
+ * (14 public repositories, synced from the GitHub REST API).
  */
 
 export type LanguageBreakdown = { name: string; percent: number; bytes: number };
@@ -99,7 +99,7 @@ export const navLinks: NavLink[] = [
 ];
 
 export const stats: Stat[] = [
-  { label: "Public Repositories", value: "9", hint: "shipped on GitHub" },
+  { label: "Public Repositories", value: "14", hint: "shipped on GitHub" },
   { label: "Client Load Time", value: "<2s", hint: "every site I ship" },
   { label: "Google Rank Hit", value: "#1", hint: "client name search · 1 week" },
   { label: "Faster Rebuild", value: "45×", hint: "Wix → Next.js · Knead Bakery" },
@@ -775,7 +775,7 @@ export type Highlight = {
 
 export const highlights: Highlight[] = [
   {
-    text: "17 repos shipped",
+    text: "14 repos shipped",
     context: "github.com/abbdelhadylh30-art",
     icon: "git",
   },
