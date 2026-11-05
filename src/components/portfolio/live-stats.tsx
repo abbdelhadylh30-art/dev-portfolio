@@ -40,8 +40,8 @@ export function LiveStats() {
     load();
   }, []);
 
-  const items = stats
-    ? [
+  const items = stats && stats.source !== "fallback"
+    && stats.source !== "fallback" ? [
         {
           icon: Users,
           label: "Followers",
@@ -88,7 +88,7 @@ export function LiveStats() {
         {loading ? "Syncing from GitHub…" : error ? "Live sync offline" : "Live from GitHub"}
       </span>
 
-      {!loading && !error && stats
+      {!loading && !error && stats && stats.source !== "fallback"
         ? items.map((it) => (
             <span
               key={it.label}
