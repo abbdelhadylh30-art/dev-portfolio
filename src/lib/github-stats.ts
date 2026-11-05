@@ -161,9 +161,9 @@ export async function getCachedGitHubStats(): Promise<GitHubStats> {
     // UI degrades gracefully instead of throwing.
     const fallback: GitHubStats = {
       username: profile.githubUsername,
-      followers: 0,
+      followers: 0, // fallback — set GITHUB_TOKEN in Vercel to enable live data
       following: 0,
-      publicRepos: projects.length,
+      publicRepos: 14, // corrected public count
       accountCreatedAt: "",
       totalStars: 0,
       totalForks: 0,
