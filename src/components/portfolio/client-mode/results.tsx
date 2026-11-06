@@ -25,7 +25,10 @@ export function Results() {
     <section id="results" className="relative overflow-hidden border-t border-border/40 py-20 sm:py-28">
       <div className="pointer-events-none absolute -right-32 top-32 -z-10 h-56 w-56 rounded-full bg-brand-3/8 blur-[100px] pulse-slow float-c" />
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        {/* Chapter numeral — decorative ghost behind the heading */}
+        <span aria-hidden className="page-ghost-num font-mono">02</span>
+
         <SectionHeading
           eyebrow={t.results.head.eyebrow}
           counter={{ current: "02", total: "06" }}
@@ -81,13 +84,13 @@ export function Results() {
                         key={m.label}
                         className="stat-topline rounded-xl border border-border/50 bg-background/60 px-2 py-3 text-center"
                       >
-                        <div className="brand-gradient-text text-lg font-bold tracking-tight sm:text-xl">
+                        <div className="brand-gradient-text text-xl font-bold tracking-tight sm:text-2xl">
                           {/* dir=ltr keeps mixed tokens ("45×", "15→4", "<1.5s")
                               in reading order inside RTL paragraphs — same
                               island treatment as the hero stats */}
                           <span dir="ltr">{m.value}</span>
                         </div>
-                        <div className="mt-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+                        <div className="mt-0.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                           {m.label}
                         </div>
                       </div>
@@ -168,6 +171,11 @@ export function Results() {
                     loading="lazy"
                     className="aspect-[16/10] w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                   />
+                  {/* honesty tag — these are concept builds, never presented
+                      as client work; mirrored from the strip's kicker copy */}
+                  <span className="absolute start-3 top-3 inline-flex items-center gap-1 rounded-full border border-white/25 bg-black/50 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur">
+                    {t.results.demoStrip.kicker}
+                  </span>
                 </div>
                 <div className="flex flex-1 flex-col p-5">
                   <h4 className="text-sm font-semibold text-foreground transition-colors group-hover:text-brand">
