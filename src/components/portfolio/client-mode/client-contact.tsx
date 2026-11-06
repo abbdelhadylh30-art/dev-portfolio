@@ -20,12 +20,12 @@ export function ClientContact() {
       <div className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-brand/12 blur-[110px] pulse-slow float-a" />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-        {/* Chapter numeral — decorative ghost behind the heading */}
-        <span aria-hidden className="page-ghost-num font-mono">06</span>
+        {/* Page numeral — matches the navbar pager (08/08) */}
+        <span aria-hidden className="page-ghost-num font-mono">08</span>
 
         <SectionHeading
           eyebrow={t.contact.head.eyebrow}
-          counter={{ current: "06", total: "06" }}
+          counter={{ current: "08", total: "08" }}
           title={<GradTitle parts={t.contact.head.title} />}
           description={t.contact.head.description}
         />
