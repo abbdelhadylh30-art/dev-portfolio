@@ -17,7 +17,9 @@ import type { PortfolioMode } from "@/lib/mode";
  *     drifting into place inside a sixteen-star twinkling field, then
  *     the night irises open onto the page.
  *
- * Timing: 1.7s scene → 1.05s exit (~2.75s total). The exported
+ * Timing: 1.0s scene → 1.0s exit (~2.0s total). Every layer stays in
+ * continuous motion across the whole window (2s scene settle, 2s
+ * sunrise/moonrise) so nothing ever freezes mid-frame. The exported
  * `entrySequenceDone` flag lets the heroes stagger their own entrance
  * under the curtain exactly once per load (later page navigations skip
  * the base delay).
@@ -61,7 +63,7 @@ export function EntryCurtain({ mode }: { mode: PortfolioMode }) {
     }
   }, [reduce]);
 
-  /* Pure-CSS failsafe: if JS never runs, a 3.2s keyframe hides the
+  /* Pure-CSS failsafe: if JS never runs, a ~3s keyframe hides the
      overlay (see .entry-curtain-failsafe in globals.css). */
   if (phase === "done") return null;
 
@@ -84,14 +86,15 @@ export function EntryCurtain({ mode }: { mode: PortfolioMode }) {
       className={`entry-curtain entry-curtain-failsafe ${isSun ? "entry-curtain--sun" : "entry-curtain--moon"}`}
       aria-hidden
       role="presentation"
-      initial={{ clipPath: playClip, pointerEvents: "auto" as const }}
+      initial={{ clipPath: playClip, scale: 1, pointerEvents: "auto" as const }}
       animate={{
         clipPath: phase === "out" ? exitClip : playClip,
+        scale: phase === "out" ? 1.045 : 1,
         pointerEvents: phase === "out" ? "none" : "auto",
       }}
       transition={
         phase === "out"
-          ? { duration: 1.05, ease: isSun ? [0.7, 0, 0.3, 1] : ENTRY_EASE }
+          ? { duration: 1.0, ease: [0.7, 0, 0.3, 1] }
           : { duration: 0 }
       }
       onAnimationComplete={() => {
@@ -113,7 +116,7 @@ export function EntryCurtain({ mode }: { mode: PortfolioMode }) {
 
 function SunScene({ phase, onExit }: { phase: Phase; onExit: () => void }) {
   React.useEffect(() => {
-    const t = window.setTimeout(onExit, 1700);
+    const t = window.setTimeout(onExit, 1000);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -150,10 +153,10 @@ function SunScene({ phase, onExit }: { phase: Phase; onExit: () => void }) {
         initial={{ opacity: 0, y: 14, filter: "blur(6px)" }}
         animate={
           phase === "out"
-            ? { opacity: 0, y: -10, filter: "blur(4px)" }
+            ? { opacity: 0, y: -14, filter: "blur(6px)" }
             : { opacity: 1, y: 0, filter: "blur(0px)" }
         }
-        transition={{ duration: phase === "out" ? 0.45 : 0.9, ease: ENTRY_EASE, delay: phase === "out" ? 0 : 0.35 }}
+        transition={{ duration: phase === "out" ? 0.5 : 0.7, ease: ENTRY_EASE, delay: phase === "out" ? 0 : 0.25 }}
       >
         <span className="entry-nameplate-glyph entry-nameplate-glyph--sun" aria-hidden />
         <span className="entry-nameplate-text">Abdelhady Gabriel</span>
@@ -169,7 +172,7 @@ function SunScene({ phase, onExit }: { phase: Phase; onExit: () => void }) {
 
 function MoonScene({ phase, onExit }: { phase: Phase; onExit: () => void }) {
   React.useEffect(() => {
-    const t = window.setTimeout(onExit, 1700);
+    const t = window.setTimeout(onExit, 1000);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -204,10 +207,10 @@ function MoonScene({ phase, onExit }: { phase: Phase; onExit: () => void }) {
         initial={{ opacity: 0, y: 14, filter: "blur(6px)" }}
         animate={
           phase === "out"
-            ? { opacity: 0, y: -10, filter: "blur(4px)" }
+            ? { opacity: 0, y: -14, filter: "blur(6px)" }
             : { opacity: 1, y: 0, filter: "blur(0px)" }
         }
-        transition={{ duration: phase === "out" ? 0.45 : 0.9, ease: ENTRY_EASE, delay: phase === "out" ? 0 : 0.35 }}
+        transition={{ duration: phase === "out" ? 0.5 : 0.7, ease: ENTRY_EASE, delay: phase === "out" ? 0 : 0.25 }}
       >
         <span className="entry-nameplate-glyph entry-nameplate-glyph--moon" aria-hidden />
         <span className="entry-nameplate-text">Abdelhady Gabriel</span>
