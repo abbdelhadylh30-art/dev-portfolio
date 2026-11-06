@@ -1083,6 +1083,10 @@ export type ClientResult = {
   client: string;
   headline: string;
   story: string;
+  /** Optional live-site URL — renders a "see it live" link on the card. */
+  url?: string;
+  /** Label for the live-site link (i18n supplies the wording). */
+  urlLabel?: string;
   metrics: { value: string; label: string }[];
   icon: "store" | "search" | "scissors" | "cta";
 };
