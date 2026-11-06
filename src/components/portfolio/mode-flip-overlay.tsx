@@ -32,9 +32,13 @@ export function ModeFlipOverlay() {
   React.useEffect(() => {
     if (!flipTo) return;
     setSwapped(false);
-    /* Midpoint: the live tree swaps underneath the fully-sealed overlay. */
+    /* Midpoint: the live tree swaps underneath the fully-sealed overlay.
+       swapLiveMode (NOT setLiveMode): setLiveMode would null `flipTo`
+       and unmount this overlay at the seal's peak, skipping the iris —
+       swapLiveMode keeps `flipTo` set so the 0.64s iris plays, and
+       `endFlip` below releases the overlay when the ceremony completes. */
     const swap = window.setTimeout(() => {
-      useModeTransform.getState().setLiveMode(flipTo);
+      useModeTransform.getState().swapLiveMode(flipTo);
       setSwapped(true);
     }, COVER_MS);
     /* Ceremony complete: release the overlay. */
