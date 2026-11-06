@@ -3,7 +3,7 @@
 import { motion, useScroll, useSpring } from "framer-motion";
 
 /**
- * Thin emerald progress bar pinned to the very top of the viewport,
+ * Thin moonlight progress bar pinned to the very top of the viewport,
  * reflecting page scroll depth. Sits above the navbar (z-60).
  */
 export function ScrollProgress() {
