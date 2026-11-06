@@ -30,12 +30,12 @@ export function ClientProcess() {
       <div className="pointer-events-none absolute -left-32 bottom-32 -z-10 h-56 w-56 rounded-full bg-brand-2/8 blur-[100px] pulse-slow float-a" />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-        {/* Chapter numeral — decorative ghost behind the heading */}
-        <span aria-hidden className="page-ghost-num font-mono">03</span>
+        {/* Page numeral — matches the navbar pager (04/08) */}
+        <span aria-hidden className="page-ghost-num font-mono">04</span>
 
         <SectionHeading
           eyebrow={t.process.head.eyebrow}
-          counter={{ current: "03", total: "06" }}
+          counter={{ current: "04", total: "08" }}
           title={<GradTitle parts={t.process.head.title} />}
           description={t.process.head.description}
         />
