@@ -25,12 +25,12 @@ export function Services() {
       <div className="pointer-events-none absolute -left-32 top-40 -z-10 h-56 w-56 rounded-full bg-brand-2/8 blur-[100px] pulse-slow float-b" />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-        {/* Chapter numeral — decorative ghost behind the heading */}
-        <span aria-hidden className="page-ghost-num font-mono">01</span>
+        {/* Page numeral — matches the navbar pager (02/08) */}
+        <span aria-hidden className="page-ghost-num font-mono">02</span>
 
         <SectionHeading
           eyebrow={t.services.head.eyebrow}
-          counter={{ current: "01", total: "06" }}
+          counter={{ current: "02", total: "08" }}
           title={<GradTitle parts={t.services.head.title} />}
           description={t.services.head.description}
         />
