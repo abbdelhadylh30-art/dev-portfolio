@@ -5,7 +5,7 @@ import type { MetadataRoute } from "next";
  * "Add to home screen") the site's name, colors and icons, and makes
  * the brand render correctly when the site is installed or bookmarked.
  *
- * Colors follow the Developer skin (near-black background, emerald
+ * Colors follow the Developer skin (night-indigo background, moonlight
  * brand) — the identity the favicon already carries.
  */
 export default function manifest(): MetadataRoute.Manifest {
@@ -17,8 +17,8 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/",
     scope: "/",
     display: "standalone",
-    background_color: "#0a0e0c",
-    theme_color: "#10b981",
+    background_color: "#0e0d19",
+    theme_color: "#818cf8",
     icons: [
       { src: "/icon", sizes: "32x32", type: "image/png" },
       { src: "/apple-icon", sizes: "180x180", type: "image/png" },
