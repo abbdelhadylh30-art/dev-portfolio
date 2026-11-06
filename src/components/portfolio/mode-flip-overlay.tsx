@@ -9,9 +9,9 @@ import { useModeTransform } from "@/lib/mode-transform";
  * The Business ⇄ Developer flip ceremony, restored.
  *
  * When `flipTo` is set in the live-mode store, this overlay seals the
- * screen with a clip-path circle in the NEW mode's skin tint (0.52s),
+ * screen with a clip-path circle in the NEW mode's skin tint (0.6s),
  * the tree swap happens underneath at the midpoint, then the seal irises
- * closed into the new view (0.64s) — ~1.16s of ceremony total, so the
+ * closed into the new view (0.9s) — ~1.5s of ceremony total, so the
  * swap reads as a deliberate "day ⇄ night" cut instead of an abrupt
  * content blink.
  *
@@ -21,9 +21,9 @@ import { useModeTransform } from "@/lib/mode-transform";
  */
 
 /** Duration of the seal (cover) phase in ms. */
-const COVER_MS = 520;
+const COVER_MS = 600;
 /** Duration of the iris (reveal) phase in ms. */
-const IRIS_MS = 640;
+const IRIS_MS = 900;
 
 export function ModeFlipOverlay() {
   const flipTo = useModeTransform((s) => s.flipTo);
@@ -35,7 +35,7 @@ export function ModeFlipOverlay() {
     /* Midpoint: the live tree swaps underneath the fully-sealed overlay.
        swapLiveMode (NOT setLiveMode): setLiveMode would null `flipTo`
        and unmount this overlay at the seal's peak, skipping the iris —
-       swapLiveMode keeps `flipTo` set so the 0.64s iris plays, and
+       swapLiveMode keeps `flipTo` set so the 0.9s iris plays, and
        `endFlip` below releases the overlay when the ceremony completes. */
     const swap = window.setTimeout(() => {
       useModeTransform.getState().swapLiveMode(flipTo);
@@ -74,8 +74,8 @@ export function ModeFlipOverlay() {
         }
         transition={
           swapped
-            ? { duration: IRIS_MS / 1000, ease: [0.22, 1, 0.36, 1], delay: 0.02 }
-            : { duration: COVER_MS / 1000, ease: [0.45, 0.05, 0.55, 0.95] }
+            ? { duration: IRIS_MS / 1000, ease: [0.16, 1, 0.3, 1], delay: 0.02 }
+            : { duration: COVER_MS / 1000, ease: [0.65, 0, 0.35, 1] }
         }
       >
         {/* Celestial glyph surfacing at the seal's midpoint */}
