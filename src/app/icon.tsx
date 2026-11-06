@@ -7,7 +7,7 @@ export const contentType = "image/png";
 
 /**
  * /favicon (32×32) — the "AG" monogram on the dark Developer-skin
- * charcoal with the emerald brand mark. Served at /icon and wired into
+ * night charcoal with the moonlight brand mark. Served at /icon and wired into
  * <head> automatically by the App Router file convention.
  *
  * Uses the same bundled-font strategy as /api/og (public/fonts/inter-bold.ttf,
@@ -40,10 +40,10 @@ export default async function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #0d1411 0%, #0a0e0c 100%)",
+          background: "linear-gradient(135deg, #141224 0%, #0e0d19 100%)",
           borderRadius: 7,
-          border: "1px solid rgba(52, 211, 153, 0.35)",
-          color: "#34d399",
+          border: "1px solid rgba(165, 180, 252, 0.4)",
+          color: "#a5b4fc",
           fontSize: 16,
           fontWeight: 700,
           letterSpacing: 0.5,
