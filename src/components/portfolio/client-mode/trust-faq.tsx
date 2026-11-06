@@ -34,9 +34,14 @@ export function TrustFaq() {
     <section id="answers" className="band-panel relative overflow-hidden border-t border-border/40 py-20 sm:py-28">
       <div className="pointer-events-none absolute -left-32 top-24 -z-10 h-56 w-56 rounded-full bg-brand-2/8 blur-[100px] pulse-slow float-a" />
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        {/* Page numeral — matches the navbar pager (07/08); the FAQ page
+            was the only one missing its ghost numeral */}
+        <span aria-hidden className="page-ghost-num font-mono">07</span>
+
         <SectionHeading
           eyebrow={t.faq.head.eyebrow}
+          counter={{ current: "07", total: "08" }}
           title={<GradTitle parts={t.faq.head.title} />}
           description={t.faq.head.description}
         />
