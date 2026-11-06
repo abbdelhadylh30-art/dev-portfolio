@@ -20,7 +20,7 @@ import { trackEvent } from "@/lib/analytics";
  * Palette: three hand-tuned colour variants ("sunset" | "royal" |
  * "midnight") scoped to the Business skin via <html data-palette> —
  * see the [data-palette=…] blocks in globals.css. The Developer view
- * keeps its fixed identity: dark + emerald, English, LTR — flipping
+ * keeps its fixed identity: dark + moonlight, English, LTR — flipping
  * to dev mode temporarily pins EN/LTR without clearing the stored
  * preference, so returning to Business restores it.
  */
@@ -97,7 +97,7 @@ export function PrefsProvider({ children }: { children: React.ReactNode }) {
   /* Apply document attributes whenever (lang, palette, mode) settle. */
   React.useEffect(() => {
     if (!hydrated) return;
-    /* Developer view keeps its fixed identity: dark + emerald, EN, LTR. */
+    /* Developer view keeps its fixed identity: dark + moonlight, EN, LTR. */
     applyDocumentAttrs(liveMode === "dev" ? "en" : lang, palette);
   }, [lang, palette, liveMode, hydrated]);
 
