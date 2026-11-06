@@ -81,7 +81,7 @@ function CommitCard({ commit, index }: { commit: RepoCommit; index: number }) {
           </span>
           {lang && (
             <span
-              className="inline-flex shrink-0 items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-muted-foreground/70"
+              className="inline-flex shrink-0 items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground/70"
               title={`${lang.name} — dominant language in ${commit.repo}`}
             >
               <span
@@ -117,14 +117,14 @@ function CommitCard({ commit, index }: { commit: RepoCommit; index: number }) {
           )}
           <span className="truncate">{commit.author ?? "unknown"}</span>
         </span>
-        <span className="inline-flex shrink-0 items-center gap-1 font-mono text-[10px] text-muted-foreground/60">
+        <span className="inline-flex shrink-0 items-center gap-1 font-mono text-[10px] text-muted-foreground/75">
           {relativeTime(commit.committedAt)}
           <ArrowUpRight className="h-3 w-3 opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100 group-hover:text-brand" />
         </span>
       </div>
 
       {project?.primaryTech?.[0] && (
-        <span className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 font-mono text-[9px] uppercase tracking-wider text-muted-foreground/0 transition-colors group-hover:text-muted-foreground/40">
+        <span className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground/40 transition-colors group-hover:text-muted-foreground/70">
           {project.primaryTech[0]}
         </span>
       )}
@@ -273,7 +273,7 @@ export function ShippedStrip() {
               onClick={() => selectFilter("all")}
             >
               All
-              <span className="text-muted-foreground/60">{commits.length}</span>
+              <span className="text-muted-foreground/75">{commits.length}</span>
             </button>
             {repos.map((repo) => {
               const slug = commits.find((c) => c.repo === repo)?.slug ?? "";
@@ -307,7 +307,7 @@ export function ShippedStrip() {
               ))}
         </div>
 
-        <p className="mt-5 text-center font-mono text-[10px] text-muted-foreground/60">
+        <p className="mt-5 text-center font-mono text-[10px] text-muted-foreground/75">
           Every card links straight to the commit on{" "}
           <span className="text-brand">github.com</span> — click through to see
           the diff.

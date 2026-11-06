@@ -31,8 +31,8 @@ export function ProcessStrip() {
               Process
             </span>
             <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl text-balance">
-              Spec <span className="text-muted-foreground/40">→</span> Ship{" "}
-              <span className="text-muted-foreground/40">→</span>{" "}
+              Spec <span className="text-muted-foreground/60">→</span> Ship{" "}
+              <span className="text-muted-foreground/60">→</span>{" "}
               <span className="text-brand">Sharpen</span>.
             </h2>
           </div>
@@ -64,7 +64,7 @@ export function ProcessStrip() {
               >
                 {/* Top row: number + icon */}
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-3xl font-bold text-muted-foreground/15 transition-colors group-hover:text-brand/40">
+                  <span className="font-mono text-3xl font-bold text-muted-foreground/30 transition-colors group-hover:text-brand/70">
                     {step.num}
                   </span>
                   <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand/15 text-brand transition-colors group-hover:bg-brand group-hover:text-brand-foreground">
@@ -96,7 +96,7 @@ export function ProcessStrip() {
                     aria-hidden
                     className="pointer-events-none absolute -right-3 top-1/2 hidden -translate-y-1/2 md:block"
                   >
-                    <ArrowRight className="h-4 w-4 text-muted-foreground/40" />
+                    <ArrowRight className="h-4 w-4 text-muted-foreground/70" />
                   </span>
                 )}
               </motion.article>

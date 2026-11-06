@@ -59,20 +59,21 @@
   --secondary: oklch(0.96 0.008 270);
   --secondary-foreground: oklch(0.22 0.02 275);
   --muted: oklch(0.96 0.005 270);
-  --muted-foreground: oklch(0.5 0.02 275);
+  --muted-foreground: oklch(0.46 0.02 275);
   --accent: oklch(0.95 0.025 280);
   --accent-foreground: oklch(0.22 0.03 280);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.9 0.01 270);
   --input: oklch(0.9 0.01 270);
-  --ring: oklch(0.55 0.11 280);
-  /* Moonlight periwinkle brand — the night-sky identity */
-  --brand: oklch(0.55 0.15 280);
+  --ring: oklch(0.53 0.11 280);
+  /* Moonlight periwinkle brand — the night-sky identity.
+     L tuned so text-brand and white-on-brand both clear WCAG AA (≥4.5). */
+  --brand: oklch(0.53 0.15 280);
   --brand-foreground: oklch(0.985 0 0);
   --brand-muted: oklch(0.93 0.03 280);
-  --chart-1: oklch(0.55 0.15 280);
-  --chart-2: oklch(0.6 0.11 255);
-  --chart-3: oklch(0.5 0.12 300);
+  --chart-1: oklch(0.53 0.15 280);
+  --chart-2: oklch(0.56 0.1 300);
+  --chart-3: oklch(0.56 0.09 255);
   --chart-4: oklch(0.64 0.11 265);
   --chart-5: oklch(0.6 0.1 310);
   --sidebar: oklch(0.985 0 0);
@@ -97,7 +98,7 @@
   --secondary: oklch(0.23 0.025 275);
   --secondary-foreground: oklch(0.96 0.008 265);
   --muted: oklch(0.21 0.02 275);
-  --muted-foreground: oklch(0.7 0.02 265);
+  --muted-foreground: oklch(0.73 0.02 265);
   --accent: oklch(0.25 0.035 278);
   --accent-foreground: oklch(0.95 0.015 270);
   --destructive: oklch(0.704 0.191 22.216);
@@ -188,7 +189,7 @@ html:has(body[data-view="client"])::-webkit-scrollbar-thumb {
   background-color: oklch(0.8 0.07 48);
 }
 html:has(body[data-view="client"])::-webkit-scrollbar-thumb:hover {
-  background-color: oklch(0.62 0.2 33);
+  background-color: oklch(0.57 0.19 33);
 }
 html:has(body[data-view="client"])::-webkit-scrollbar-thumb:active {
   background-color: oklch(0.55 0.19 38);
@@ -1028,7 +1029,7 @@ html:has(body[data-view="client"])::-webkit-scrollbar-thumb:active {
 }
 .contact-form-shell input::placeholder,
 .contact-form-shell textarea::placeholder {
-  color: color-mix(in oklch, var(--muted-foreground) 65%, transparent);
+  color: color-mix(in oklch, var(--muted-foreground) 85%, transparent);
 }
 .contact-form-shell input:focus-visible,
 .contact-form-shell textarea:focus-visible {
@@ -1299,8 +1300,8 @@ html:has(body[data-view="client"])::-webkit-scrollbar-thumb:active {
 
 /* --- Accent tokens (lavender 295 / ice-blue 250 — one moonlight family) --- */
 :root {
-  --brand-2: oklch(0.62 0.1 300);
-  --brand-3: oklch(0.6 0.09 255);
+  --brand-2: oklch(0.56 0.1 300);
+  --brand-3: oklch(0.56 0.09 255);
 }
 .dark {
   --brand-2: oklch(0.85 0.09 295);
@@ -1612,38 +1613,39 @@ html:has(body[data-view="client"])::-webkit-scrollbar-thumb:active {
   --card-foreground: oklch(0.28 0.036 50);
   --popover: oklch(0.998 0.007 85);
   --popover-foreground: oklch(0.28 0.036 50);
-  --primary: oklch(0.62 0.2 33);
+  --primary: oklch(0.57 0.19 33);
   --primary-foreground: oklch(0.99 0.012 80);
   --secondary: oklch(0.955 0.03 76);
   --secondary-foreground: oklch(0.37 0.06 48);
   --muted: oklch(0.955 0.024 78);
-  --muted-foreground: oklch(0.51 0.036 58);
+  --muted-foreground: oklch(0.47 0.036 58);
   --accent: oklch(0.945 0.046 68);
   --accent-foreground: oklch(0.37 0.065 48);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.893 0.034 74);
   --input: oklch(0.893 0.034 74);
-  --ring: oklch(0.62 0.2 33);
-  /* Friendly tri-hue: coral → amber → rose (amber darkened a touch so
-     gradient sweeps stay readable on the cream canvas) */
-  --brand: oklch(0.62 0.2 33);
+  --ring: oklch(0.57 0.19 33);
+  /* Friendly tri-hue: coral → amber → rose. Deepened just enough that
+     text-brand, white-on-brand buttons and the gradient text all clear
+     WCAG AA (≥4.5:1) on the cream canvas while staying warm. */
+  --brand: oklch(0.57 0.19 33);
   --brand-foreground: oklch(0.99 0.012 80);
   --brand-muted: oklch(0.93 0.055 55);
-  --brand-2: oklch(0.69 0.17 65);
-  --brand-3: oklch(0.65 0.19 12);
-  --chart-1: oklch(0.62 0.2 33);
-  --chart-2: oklch(0.69 0.17 65);
-  --chart-3: oklch(0.65 0.19 12);
-  --chart-4: oklch(0.68 0.14 45);
-  --chart-5: oklch(0.78 0.13 80);
+  --brand-2: oklch(0.56 0.16 65);
+  --brand-3: oklch(0.56 0.17 12);
+  --chart-1: oklch(0.57 0.19 33);
+  --chart-2: oklch(0.56 0.16 65);
+  --chart-3: oklch(0.56 0.17 12);
+  --chart-4: oklch(0.58 0.14 45);
+  --chart-5: oklch(0.6 0.13 80);
   --sidebar: oklch(0.998 0.007 85);
   --sidebar-foreground: oklch(0.28 0.036 50);
-  --sidebar-primary: oklch(0.62 0.2 33);
+  --sidebar-primary: oklch(0.57 0.19 33);
   --sidebar-primary-foreground: oklch(0.99 0.012 80);
   --sidebar-accent: oklch(0.945 0.046 68);
   --sidebar-accent-foreground: oklch(0.37 0.065 48);
   --sidebar-border: oklch(0.893 0.034 74);
-  --sidebar-ring: oklch(0.62 0.2 33);
+  --sidebar-ring: oklch(0.57 0.19 33);
 }
 
 /* Defensive: if .dark ever lands on <html> while the Business tree is
@@ -1732,13 +1734,13 @@ html[data-palette="royal"] body[data-view="client"] {
   --brand: oklch(0.45 0.08 210);
   --brand-foreground: oklch(0.99 0.004 95);
   --brand-muted: oklch(0.92 0.03 200);
-  --brand-2: oklch(0.75 0.12 75);
-  --brand-3: oklch(0.6 0.12 30);
+  --brand-2: oklch(0.56 0.12 75);
+  --brand-3: oklch(0.55 0.12 30);
   --chart-1: oklch(0.45 0.08 210);
-  --chart-2: oklch(0.75 0.12 75);
-  --chart-3: oklch(0.6 0.12 30);
+  --chart-2: oklch(0.56 0.12 75);
+  --chart-3: oklch(0.55 0.12 30);
   --chart-4: oklch(0.55 0.09 190);
-  --chart-5: oklch(0.65 0.1 85);
+  --chart-5: oklch(0.58 0.1 85);
   --sidebar: oklch(0.995 0.003 95);
   --sidebar-foreground: oklch(0.22 0.025 220);
   --sidebar-primary: oklch(0.45 0.08 210);
@@ -2057,9 +2059,9 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
   font-size: 0.62rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  opacity: 0.65;
+  opacity: 0.85;
 }
-.entry-curtain--sun .entry-nameplate-sub { color: oklch(0.55 0.06 60); }
+.entry-curtain--sun .entry-nameplate-sub { color: oklch(0.47 0.055 55); }
 .entry-curtain--moon .entry-nameplate-sub { color: oklch(0.76 0.04 265); }
 
 /* --- 5. Hero ambience: Moon (Developer view) --------------------------- */

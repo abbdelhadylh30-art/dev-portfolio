@@ -352,7 +352,7 @@ export function ContactForm({ labels }: { labels?: FormLabels }) {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                {L.subject} <span className="text-muted-foreground/50">{L.subjectOptional}</span>
+                {L.subject} <span className="text-muted-foreground">{L.subjectOptional}</span>
               </FormLabel>
               <FormControl>
                 <Input
@@ -442,7 +442,7 @@ export function ContactForm({ labels }: { labels?: FormLabels }) {
         </div>
 
         <div className="flex items-center justify-between gap-3 pt-1">
-          <p className="font-mono text-[11px] text-muted-foreground/70">
+          <p className="font-mono text-[11px] text-muted-foreground">
             {L.note}
           </p>
           <Button

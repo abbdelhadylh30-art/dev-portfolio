@@ -520,7 +520,7 @@ function AnalyticsTab({
           <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
             {totalEvents} total events
           </span>
-          <span className="text-muted-foreground/40">·</span>
+          <span className="text-muted-foreground/60">·</span>
           {data && (
             <Badge className="rounded-full bg-brand/10 text-brand border border-brand/20 font-mono text-[10px] uppercase tracking-wider">
               {data.last24} last 24h
@@ -577,7 +577,7 @@ function AnalyticsTab({
 
       {data && data.total === 0 && (
         <div className="rounded-xl border border-dashed border-border/60 p-8 text-center">
-          <BarChart3 className="mx-auto h-8 w-8 text-muted-foreground/50" />
+          <BarChart3 className="mx-auto h-8 w-8 text-muted-foreground/70" />
           <p className="mt-2 text-sm text-muted-foreground">
             No events recorded yet. Interactions on the portfolio (palette
             opens, project clicks, theme toggles, etc.) will appear here.
@@ -606,7 +606,7 @@ function AnalyticsTab({
                       type="button"
                       onClick={() => setChartMode(m)}
                       aria-pressed={chartMode === m}
-                      className={`chart-mode-pill rounded-full px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-wider ${
+                      className={`chart-mode-pill rounded-full px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider ${
                         chartMode === m
                           ? "bg-brand text-brand-foreground"
                           : "text-muted-foreground hover:text-foreground"
@@ -623,7 +623,7 @@ function AnalyticsTab({
                 topTypes={data.topTypes.slice(0, 6).map((t) => t.type)}
                 mode={chartMode}
               />
-              <p className="mt-2 font-mono text-[9px] leading-relaxed text-muted-foreground/70">
+              <p className="mt-2 font-mono text-[10px] leading-relaxed text-muted-foreground/70">
                 {chartMode === "overlay"
                   ? "overlay · each type scaled to the busiest type's peak"
                   : "stacked · bands sum to the daily total · top type on top"}
@@ -746,9 +746,9 @@ function AnalyticsTab({
                     {EVENT_LABELS[e.type] ?? e.type}
                   </span>
                   {e.slug && (
-                    <span className="text-foreground/60">/{e.slug}</span>
+                    <span className="text-foreground/75">/{e.slug}</span>
                   )}
-                  <span className="ml-auto text-muted-foreground/60">
+                  <span className="ml-auto text-muted-foreground/75">
                     {relativeTime(e.createdAt)}
                   </span>
                 </li>
@@ -1062,7 +1062,7 @@ function NowTab({
             {payload?.source === "db" ? "Editing live content" : "First-time setup"}
           </span>
           {payload && (
-            <span className="font-mono text-[10px] text-muted-foreground/60">
+            <span className="font-mono text-[10px] text-muted-foreground/75">
               last saved {relativeTime(payload.updatedAt)}
             </span>
           )}
@@ -1164,7 +1164,7 @@ function NowTab({
               placeholder="A living snapshot of what I'm building, learning and reading."
               className="font-mono text-sm"
             />
-            <div className="mt-1 flex items-center justify-between font-mono text-[10px] text-muted-foreground/60">
+            <div className="mt-1 flex items-center justify-between font-mono text-[10px] text-muted-foreground/75">
               <span>Plain text · max 280 chars</span>
               <span>{blurb.length}/280</span>
             </div>
@@ -1178,7 +1178,7 @@ function NowTab({
                   <History className="h-3 w-3" />
                   Version history
                 </span>
-                <span className="font-mono text-[10px] text-muted-foreground/60">
+                <span className="font-mono text-[10px] text-muted-foreground/75">
                   {historyHasMore
                     ? `${history.length} of ${historyTotal} snapshots · restore or delete`
                     : `${historyTotal} snapshot${historyTotal === 1 ? "" : "s"} · restore or delete`}
@@ -1221,7 +1221,7 @@ function NowTab({
                                   {entry.blurb}
                                 </span>
                               ) : (
-                                <span className="font-mono text-[10px] italic text-muted-foreground/60">
+                                <span className="font-mono text-[10px] italic text-muted-foreground/75">
                                   (no blurb)
                                 </span>
                               )}
@@ -1323,7 +1323,7 @@ function NowTab({
                 </button>
               )}
 
-              <p className="mt-3 font-mono text-[10px] leading-relaxed text-muted-foreground/60">
+              <p className="mt-3 font-mono text-[10px] leading-relaxed text-muted-foreground/75">
                 Tip: <span className="text-brand">restore</span> re-activates an
                 old snapshot (nothing is lost);{" "}
                 <span className="text-destructive">delete</span> removes it
@@ -1343,7 +1343,7 @@ function NowTab({
                       <Code2 className="h-3 w-3" />
                       Markdown source
                     </span>
-                    <span className="font-mono text-[10px] text-muted-foreground/60">
+                    <span className="font-mono text-[10px] text-muted-foreground/75">
                       {body.length} chars
                     </span>
                   </div>
@@ -1364,7 +1364,7 @@ function NowTab({
                       <Eye className="h-3 w-3" />
                       Live preview
                     </span>
-                    <span className="font-mono text-[10px] text-muted-foreground/60">
+                    <span className="font-mono text-[10px] text-muted-foreground/75">
                       rendered client-side
                     </span>
                   </div>
@@ -1376,7 +1376,7 @@ function NowTab({
                       }}
                     />
                   ) : (
-                    <div className="grid min-h-[280px] place-items-center text-xs text-muted-foreground/60">
+                    <div className="grid min-h-[280px] place-items-center text-xs text-muted-foreground/75">
                       Nothing to preview yet.
                     </div>
                   )}
@@ -1666,7 +1666,7 @@ export function AdminDashboard() {
                     <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
                       {messages.length} total
                     </span>
-                    <span className="text-muted-foreground/40">·</span>
+                    <span className="text-muted-foreground/60">·</span>
                     <Badge className="rounded-full bg-brand/10 text-brand border border-brand/20 font-mono text-[10px] uppercase tracking-wider">
                       {unread} unread
                     </Badge>
@@ -1690,7 +1690,7 @@ export function AdminDashboard() {
                 {/* List */}
                 {messages.length === 0 ? (
                   <div className="rounded-xl border border-dashed border-border/60 p-8 text-center">
-                    <Inbox className="mx-auto h-8 w-8 text-muted-foreground/50" />
+                    <Inbox className="mx-auto h-8 w-8 text-muted-foreground/70" />
                     <p className="mt-2 text-sm text-muted-foreground">
                       No messages yet. Submissions from the contact form will
                       appear here.
@@ -1760,7 +1760,7 @@ export function AdminDashboard() {
                             <div className="border-t border-border/50 p-3 pt-3 space-y-3">
                               <div className="grid grid-cols-1 gap-1 font-mono text-[11px] text-muted-foreground sm:grid-cols-2">
                                 <span>
-                                  <span className="text-muted-foreground/60">
+                                  <span className="text-muted-foreground/75">
                                     From:{" "}
                                   </span>
                                   {m.name} ·{" "}
@@ -1772,7 +1772,7 @@ export function AdminDashboard() {
                                   </a>
                                 </span>
                                 <span>
-                                  <span className="text-muted-foreground/60">
+                                  <span className="text-muted-foreground/75">
                                     Received:{" "}
                                   </span>
                                   {new Date(m.createdAt).toLocaleString("en-US", {
@@ -1782,7 +1782,7 @@ export function AdminDashboard() {
                                 </span>
                                 {m.projectType && (
                                   <span className="flex items-center gap-2">
-                                    <span className="text-muted-foreground/60">
+                                    <span className="text-muted-foreground/75">
                                       Type:{" "}
                                     </span>
                                     <TypeChip type={m.projectType} />

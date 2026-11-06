@@ -48,7 +48,7 @@ export function ClientProcess() {
                 {idx < t.process.items.length - 1 && (
                   <span
                     aria-hidden
-                    className={`absolute top-1/2 z-10 hidden -translate-y-1/2 text-brand/60 lg:block float-c ${
+                    className={`absolute top-1/2 z-10 hidden -translate-y-1/2 text-brand/80 lg:block float-c ${
                       isRtl ? "-left-3.5" : "-right-3.5"
                     }`}
                   >

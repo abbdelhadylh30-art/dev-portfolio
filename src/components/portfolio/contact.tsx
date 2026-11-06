@@ -193,7 +193,7 @@ export function Contact() {
                     {profile.location}
                   </div>
                 </div>
-                <span className="hidden sm:inline text-muted-foreground/40">
+                <span className="hidden sm:inline text-muted-foreground/70">
                   ·
                 </span>
                 <div>
@@ -338,13 +338,13 @@ export function Footer() {
               </span>
               <span className="text-brand">all systems operational</span>
             </span>
-            <span className="hidden sm:inline text-muted-foreground/40">·</span>
+            <span className="hidden sm:inline text-muted-foreground/60">·</span>
             <span className="inline-flex items-center gap-1.5">
               Press{" "}
               <kbd className="kbd-key">?</kbd>{" "}
               for shortcuts
             </span>
-            <span className="hidden sm:inline text-muted-foreground/40">·</span>
+            <span className="hidden sm:inline text-muted-foreground/60">·</span>
             <span>
               Repo synced from{" "}
               <a
@@ -356,7 +356,7 @@ export function Footer() {
                 github.com/{profile.githubUsername}
               </a>
             </span>
-            <span className="hidden sm:inline text-muted-foreground/40">·</span>
+            <span className="hidden sm:inline text-muted-foreground/60">·</span>
             <a
               href={profile.githubUrl}
               target="_blank"

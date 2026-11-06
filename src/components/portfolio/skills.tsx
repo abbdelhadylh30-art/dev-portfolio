@@ -94,7 +94,7 @@ export function Skills() {
                   />
                 ))}
               </div>
-              <div className="mt-4 flex items-center justify-between border-t border-border/30 pt-3 text-[11px] font-mono text-muted-foreground/60">
+              <div className="mt-4 flex items-center justify-between border-t border-border/30 pt-3 text-[11px] font-mono text-muted-foreground/75">
                 <span>{group.skills.length} skills tracked</span>
                 <span className="inline-flex items-center gap-1">
                   <span className="h-1.5 w-1.5 rounded-full bg-brand/70" />

@@ -48,7 +48,7 @@ export function SectionHeading({
         {counter && (
           <span className="section-counter" aria-hidden>
             <span className="text-brand">{counter.current}</span>
-            <span className="text-muted-foreground/50">/ {counter.total}</span>
+            <span className="text-muted-foreground/70">/ {counter.total}</span>
           </span>
         )}
       </div>

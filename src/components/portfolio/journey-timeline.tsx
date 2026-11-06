@@ -79,10 +79,10 @@ export function JourneyTimeline() {
                     <span className="font-mono text-[11px] uppercase tracking-wider text-brand">
                       {entry.label}
                     </span>
-                    <span className="font-mono text-[10px] text-muted-foreground/60">
+                    <span className="font-mono text-[10px] text-muted-foreground/75">
                       {CATEGORY_LABELS[entry.category]}
                     </span>
-                    <span className="ml-auto inline-flex items-center gap-1 font-mono text-[10px] text-muted-foreground/60">
+                    <span className="ml-auto inline-flex items-center gap-1 font-mono text-[10px] text-muted-foreground/75">
                       <GitBranch className="h-3 w-3" />
                       {String(i + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
                     </span>

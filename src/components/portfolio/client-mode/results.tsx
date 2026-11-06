@@ -66,7 +66,7 @@ export function Results() {
                     </div>
                   </div>
                   {!isCta && (
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
                       {String(idx + 1).padStart(2, "0")}
                     </span>
                   )}
@@ -173,7 +173,7 @@ export function Results() {
                   <h4 className="text-sm font-semibold text-foreground transition-colors group-hover:text-brand">
                     {d.name}
                   </h4>
-                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wide text-muted-foreground/70">
+                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
                     {d.niche}
                   </p>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">

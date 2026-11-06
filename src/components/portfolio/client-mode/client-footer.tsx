@@ -63,7 +63,7 @@ export function ClientFooter() {
         </div>
 
         <div className="mt-6 flex flex-col items-center justify-between gap-2 border-t border-border/40 pt-6 text-center sm:flex-row sm:text-start">
-          <p className="text-[11px] text-muted-foreground/70">
+          <p className="text-[11px] text-muted-foreground">
             © {new Date().getFullYear()} {t.ownerName} · <span className="brand-gradient-text font-semibold">{t.footer.tagline}</span>
           </p>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/30 bg-brand/5 px-2.5 py-0.5 text-[11px] text-brand">

@@ -387,7 +387,7 @@ function ProjectDetail({ project }: { project: Project }) {
         />
       </div>
 
-      <p className="font-mono text-[10px] text-muted-foreground/60">
+      <p className="font-mono text-[10px] text-muted-foreground/75">
         Synced from github.com/{profile.githubUsername}/{project.slug}
       </p>
     </div>
@@ -527,7 +527,7 @@ export function ProjectModal() {
             >
               <ChevronLeft className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-brand" />
               <span className="flex min-w-0 flex-col items-start text-left">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground/60">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/75">
                   Prev
                 </span>
                 <span className="max-w-[9rem] truncate text-xs font-semibold text-foreground/90 sm:max-w-[11rem]">
@@ -540,7 +540,7 @@ export function ProjectModal() {
               <span className="font-mono text-[11px] font-semibold text-brand">
                 {index + 1} / {projects.length}
               </span>
-              <span className="hidden items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-muted-foreground/50 sm:flex">
+              <span className="hidden items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground/80 sm:flex">
                 <kbd className="kbd-key">←</kbd>
                 <kbd className="kbd-key">→</kbd>
                 to browse
@@ -555,7 +555,7 @@ export function ProjectModal() {
             >
               <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-brand" />
               <span className="flex min-w-0 flex-col items-end text-right">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground/60">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/75">
                   Next
                 </span>
                 <span className="max-w-[9rem] truncate text-xs font-semibold text-foreground/90 sm:max-w-[11rem]">

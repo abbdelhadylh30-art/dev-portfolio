@@ -62,7 +62,7 @@ export function TestimonialsStrip() {
                     <Icon className="h-4.5 w-4.5" />
                   </span>
                   <Quote
-                    className="h-5 w-5 text-muted-foreground/30 transition-colors group-hover:text-brand/60"
+                    className="h-5 w-5 text-muted-foreground/60 transition-colors group-hover:text-brand/80"
                     aria-hidden
                   />
                 </div>

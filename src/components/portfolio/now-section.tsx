@@ -97,7 +97,7 @@ export function NowSection() {
                 <h3 className="text-base font-semibold text-foreground">
                   Live notes
                 </h3>
-                <span className="ml-auto font-mono text-[10px] text-muted-foreground/60">
+                <span className="ml-auto font-mono text-[10px] text-muted-foreground/75">
                   admin-edited
                 </span>
               </div>
@@ -168,7 +168,7 @@ export function NowSection() {
                     Atom feed · every push lands here
                   </span>
                 </span>
-                <ArrowUpRight className="h-4 w-4 text-muted-foreground/50 transition-all group-hover:translate-x-0.5 group-hover:text-brand" />
+                <ArrowUpRight className="h-4 w-4 text-muted-foreground/70 transition-all group-hover:translate-x-0.5 group-hover:text-brand" />
               </a>
             </motion.aside>
           </div>
@@ -193,7 +193,7 @@ export function NowSection() {
                     <h3 className="text-base font-semibold text-foreground">
                       {group.heading}
                     </h3>
-                    <span className="ml-auto font-mono text-[10px] text-muted-foreground/60">
+                    <span className="ml-auto font-mono text-[10px] text-muted-foreground/75">
                       {group.entries.length} items
                     </span>
                   </div>

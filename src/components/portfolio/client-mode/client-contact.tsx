@@ -54,7 +54,7 @@ export function ClientContact() {
                 <p className="mt-0.5 text-sm text-muted-foreground">
                   <span dir="ltr">{profile.phoneDisplay}</span>
                 </p>
-                <p className="mt-1 text-xs text-muted-foreground/70">{t.contact.repliesNote}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{t.contact.repliesNote}</p>
               </div>
             </a>
 
@@ -122,7 +122,7 @@ export function ClientContact() {
               <h3 className="text-base font-semibold text-foreground">
                 {t.contact.formTitle}
               </h3>
-              <span className="hidden font-mono text-[10px] uppercase tracking-wider text-muted-foreground/70 sm:inline">
+              <span className="hidden font-mono text-[10px] uppercase tracking-wider text-muted-foreground sm:inline">
                 {t.contact.sameDay}
               </span>
             </div>

@@ -94,7 +94,7 @@ function LanguageBar({ languages }: { languages: Project["languages"] }) {
               }}
             />
             {l.name}
-            <span className="text-muted-foreground/60">
+            <span className="text-muted-foreground/75">
               {l.percent.toFixed(0)}%
             </span>
           </span>

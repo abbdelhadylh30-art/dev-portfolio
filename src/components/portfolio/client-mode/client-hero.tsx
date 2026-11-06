@@ -227,7 +227,7 @@ export function ClientHero() {
               <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                 {s.label}
               </div>
-              <div className="text-[10px] text-muted-foreground/70">{s.hint}</div>
+              <div className="text-[10px] text-muted-foreground">{s.hint}</div>
             </div>
           ))}
         </motion.div>
