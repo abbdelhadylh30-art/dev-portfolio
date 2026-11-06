@@ -12,7 +12,7 @@ import type { PortfolioMode } from "@/lib/mode";
  * late/failed `router.refresh()` can never clobber the visitor's chosen
  * view.
  *
- * `beginFlip(mode)` starts the 450ms clip-path flip ceremony: the
+ * `beginFlip(mode)` starts the ~1.15s clip-path flip ceremony: the
  * ModeFlipOverlay seals the screen in the NEW mode's skin tint, the
  * tree swap happens underneath at the midpoint, then the seal irises
  * open. Components should call `beginFlip` instead of `setLiveMode`
