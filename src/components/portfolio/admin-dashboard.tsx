@@ -156,16 +156,16 @@ const EVENT_LABELS: Record<string, string> = {
 
 /**
  * Color palette for the top-6 event-type sparklines. Each color is an OKLCH
- * string within the emerald brand family (hue 100-172) so each type is
- * visually distinguishable. No teal, no blue/indigo.
+ * string within the moonlight brand family (hue 230-310) so each type is
+ * visually distinguishable. No teal, no green.
  */
 const SPARKLINE_COLORS = [
-  "var(--brand)", // brand emerald (top type)
-  "oklch(0.7 0.14 155)", // emerald-leaning toward green
-  "oklch(0.74 0.13 172)", // soft jade
-  "oklch(0.7 0.13 140)", // emerald-leaning toward lime
-  "oklch(0.66 0.12 128)", // chartreuse green
-  "oklch(0.74 0.12 100)", // amber-leaning green (kept off red)
+  "var(--brand)", // brand periwinkle (top type)
+  "oklch(0.72 0.11 295)", // lavender
+  "oklch(0.7 0.1 255)", // moonlight steel-blue
+  "oklch(0.75 0.09 310)", // pale lilac
+  "oklch(0.64 0.11 265)", // deep indigo
+  "oklch(0.78 0.08 230)", // ice blue
 ];
 
 let sparklineUidCounter = 0;
