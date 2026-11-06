@@ -57,14 +57,21 @@ function TierCard({ tier }: { tier: PricingTier }) {
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       className={`client-card glow-card group relative flex flex-col rounded-2xl border p-6 ${
         tier.popular
-          ? "border-brand/50 bg-gradient-to-b from-brand/10 to-card/60 ring-1 ring-brand/30 md:-translate-y-1.5"
+          ? "border-brand/50 bg-gradient-to-b from-brand/10 to-card/60 ring-1 ring-brand/30 shadow-[0_28px_80px_-36px_color-mix(in_oklch,var(--brand)_65%,transparent)] md:-translate-y-1.5"
           : "border-border/60 bg-card/50"
       }`}
     >
       {tier.popular && (
-        <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-brand to-brand-2 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow">
-          {t.pricing.mostChosen}
-        </span>
+        <>
+          {/* tri-hue crown hairline — marks the spotlight tier */}
+          <span
+            aria-hidden
+            className="absolute inset-x-0 top-0 h-1 rounded-t-2xl bg-gradient-to-r from-brand via-brand-2 to-brand-3"
+          />
+          <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-brand to-brand-2 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow">
+            {t.pricing.mostChosen}
+          </span>
+        </>
       )}
 
       <h3 className="text-lg font-bold text-foreground transition-colors group-hover:text-brand">
@@ -166,7 +173,10 @@ export function ClientPricing() {
     <section id="pricing" className="relative overflow-hidden border-t border-border/40 py-20 sm:py-28">
       <div className="pointer-events-none absolute -right-32 top-24 -z-10 h-56 w-56 rounded-full bg-brand/8 blur-[100px] pulse-slow float-b" />
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        {/* Chapter numeral — decorative ghost behind the heading */}
+        <span aria-hidden className="page-ghost-num font-mono">04</span>
+
         <SectionHeading
           eyebrow={t.pricing.head.eyebrow}
           counter={{ current: "04", total: "06" }}
@@ -210,7 +220,9 @@ export function ClientPricing() {
                 transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 className="client-card relative flex flex-col rounded-xl border border-border/60 bg-card/50 p-5"
               >
-                <span className="brand-gradient-text font-mono text-xs font-bold">{step.num}</span>
+                <span className="grid h-8 w-8 place-items-center rounded-lg border border-brand/25 bg-brand/10 font-mono text-[11px] font-bold text-brand">
+                  {step.num}
+                </span>
                 <p className="mt-2 text-sm font-semibold leading-snug text-foreground">{step.title}</p>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{step.body}</p>
               </motion.li>
