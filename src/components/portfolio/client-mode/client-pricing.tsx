@@ -174,12 +174,12 @@ export function ClientPricing() {
       <div className="pointer-events-none absolute -right-32 top-24 -z-10 h-56 w-56 rounded-full bg-brand/8 blur-[100px] pulse-slow float-b" />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-        {/* Chapter numeral — decorative ghost behind the heading */}
-        <span aria-hidden className="page-ghost-num font-mono">04</span>
+        {/* Page numeral — matches the navbar pager (05/08) */}
+        <span aria-hidden className="page-ghost-num font-mono">05</span>
 
         <SectionHeading
           eyebrow={t.pricing.head.eyebrow}
-          counter={{ current: "04", total: "06" }}
+          counter={{ current: "05", total: "08" }}
           title={<GradTitle parts={t.pricing.head.title} />}
           description={t.pricing.head.description}
         />
