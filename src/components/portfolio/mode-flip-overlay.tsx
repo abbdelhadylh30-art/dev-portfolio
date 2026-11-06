@@ -9,9 +9,9 @@ import { useModeTransform } from "@/lib/mode-transform";
  * The Business ⇄ Developer flip ceremony, restored.
  *
  * When `flipTo` is set in the live-mode store, this overlay seals the
- * screen with a clip-path circle in the NEW mode's skin tint (0.19s),
+ * screen with a clip-path circle in the NEW mode's skin tint (0.52s),
  * the tree swap happens underneath at the midpoint, then the seal irises
- * closed into the new view (0.26s) — ~0.45s of ceremony total, so the
+ * closed into the new view (0.64s) — ~1.16s of ceremony total, so the
  * swap reads as a deliberate "day ⇄ night" cut instead of an abrupt
  * content blink.
  *
@@ -21,9 +21,9 @@ import { useModeTransform } from "@/lib/mode-transform";
  */
 
 /** Duration of the seal (cover) phase in ms. */
-const COVER_MS = 220;
+const COVER_MS = 520;
 /** Duration of the iris (reveal) phase in ms. */
-const IRIS_MS = 300;
+const IRIS_MS = 640;
 
 export function ModeFlipOverlay() {
   const flipTo = useModeTransform((s) => s.flipTo);
@@ -70,8 +70,8 @@ export function ModeFlipOverlay() {
         }
         transition={
           swapped
-            ? { duration: IRIS_MS / 1000, ease: [0.7, 0, 0.3, 1], delay: 0.02 }
-            : { duration: COVER_MS / 1000, ease: [0.32, 0, 0.67, 0] }
+            ? { duration: IRIS_MS / 1000, ease: [0.22, 1, 0.36, 1], delay: 0.02 }
+            : { duration: COVER_MS / 1000, ease: [0.45, 0.05, 0.55, 0.95] }
         }
       >
         {/* Celestial glyph surfacing at the seal's midpoint */}
