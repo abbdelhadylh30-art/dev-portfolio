@@ -186,6 +186,8 @@ const en = {
         headline: "From invisible to #1 on Google",
         story:
           "A marketing professional in Cairo had no web presence at all. We built him a portfolio that matches the quality of his own brand audits — dark, editorial, mobile-perfect.",
+        url: "https://zawedha.vercel.app",
+        urlLabel: "See the live site",
         metrics: [
           { value: "#1", label: "on Google for his name" },
           { value: "1 wk", label: "from launch to ranking" },
@@ -220,25 +222,29 @@ const en = {
     ] as ClientResult[],
 
     /**
-     * Live concept builds — clickable proof. These are spec sites on the
-     * demos subdomain (fictional brands, real booking flows) matching the
-     * exact niches the business view sells to. Honest by design: the copy
-     * says "concept", never "client".
+     * Live builds — clickable proof, led by a REAL client site. Mohamed
+     * Medhat's portfolio (zawedha.vercel.app) is delivered client work;
+     * Layan and Lumière are spec sites on the demos subdomain (fictional
+     * brands, real booking flows) matching the exact niches the business
+     * view sells to. Honest by design: every card carries a tag saying
+     * which is which ("Real client site" vs "Concept build").
      */
     demoStrip: {
-      kicker: "Live concept builds",
+      kicker: "Live builds",
       title: { pre: "Don't take my word — ", grad: "click a working site", post: "." },
-      sub: "Three spec builds for the exact niches I serve: real booking flows, real bilingual layouts, zero filler copy. The brands are fictional — the engineering isn't. Try one.",
+      sub: "One real client build and two spec sites, all live right now: real flows, real bilingual layouts, zero filler copy. The concept brands are fictional — the engineering isn't. Try one.",
       items: [
         {
-          name: "CoolFix",
-          niche: "Home services · Cairo & Riyadh",
-          blurb: "24/7 dispatch booking with 2-hour arrival windows and a live jobs board.",
-          url: "https://demos.abdelhadygabriel.me/coolfix",
-          image: "/screenshots/coolfix.webp",
+          name: "Mohamed Medhat",
+          tag: "Real client site",
+          niche: "Performance marketer · Cairo",
+          blurb: "Dark editorial portfolio that took him from no web presence to #1 on Google for his own name.",
+          url: "https://zawedha.vercel.app",
+          image: "/screenshots/mohamed-medhat.webp",
         },
         {
           name: "Layan Interiors",
+          tag: "Concept build",
           niche: "Interior studio · Cairo & Dubai",
           blurb: "Crawlable case-study portfolio plus consultation booking.",
           url: "https://demos.abdelhadygabriel.me/layan",
@@ -246,14 +252,15 @@ const en = {
         },
         {
           name: "Lumière Clinic",
+          tag: "Concept build",
           niche: "Aesthetic clinic · Dubai",
           blurb: "Treatment booking wizard with live time slots.",
           url: "https://demos.abdelhadygabriel.me/lumiere",
           image: "/screenshots/lumiere.webp",
         },
       ],
-      cta: "Open the live demo",
-      hubLabel: "All three demos + the bookings dashboard",
+      cta: "Open the live site",
+      hubLabel: "The concept demos hub + the bookings dashboard",
       hubUrl: "https://demos.abdelhadygabriel.me",
     },
   },
