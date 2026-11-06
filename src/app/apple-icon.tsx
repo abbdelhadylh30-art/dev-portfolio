@@ -8,7 +8,7 @@ export const contentType = "image/png";
 /**
  * /apple-icon (180×180) — home-screen / bookmark icon, same "AG"
  * monogram language as the 32×32 favicon but with more breathing room
- * and a subtle emerald glow so it reads well at large sizes and on
+ * and a subtle moonlight glow so it reads well at large sizes and on
  * iOS rounded-corner masking.
  */
 export default async function AppleIcon() {
@@ -38,11 +38,11 @@ export default async function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #0d1411 0%, #0a0e0c 100%)",
+          background: "linear-gradient(135deg, #141224 0%, #0e0d19 100%)",
           borderRadius: 40,
-          border: "3px solid rgba(52, 211, 153, 0.35)",
-          boxShadow: "0 0 60px rgba(16, 185, 129, 0.25)",
-          color: "#34d399",
+          border: "3px solid rgba(165, 180, 252, 0.4)",
+          boxShadow: "0 0 60px rgba(129, 140, 248, 0.25)",
+          color: "#a5b4fc",
           fontSize: 84,
           fontWeight: 700,
           letterSpacing: 2,
