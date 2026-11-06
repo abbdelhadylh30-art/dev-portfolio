@@ -17,7 +17,10 @@ import type { PortfolioMode } from "@/lib/mode";
  * tree swap happens underneath at the midpoint, then the seal irises
  * open. Components should call `beginFlip` instead of `setLiveMode`
  * when the switch is user-initiated; `setLiveMode` stays for direct,
- * ceremony-free swaps (deep links, reduced motion inside beginFlip).
+ * ceremony-free swaps (deep links, reduced motion inside beginFlip),
+ * while the overlay's midpoint swap uses `swapLiveMode` — it keeps
+ * `flipTo` set so the overlay survives to play its iris before
+ * `endFlip` releases it.
  */
 type LiveModeState = {
   /** Which tree (Business vs Developer) is on screen right now. */
@@ -30,6 +33,10 @@ type LiveModeState = {
   hydrate: (mode: PortfolioMode) => void;
   /** Swap the live tree immediately — no ceremony. */
   setLiveMode: (mode: PortfolioMode) => void;
+  /** Mid-ceremony tree swap: sets `liveMode` WITHOUT clearing `flipTo`,
+   *  so the flip overlay stays mounted through its iris phase. Only
+   *  `endFlip` clears `flipTo` and unmounts the overlay. */
+  swapLiveMode: (mode: PortfolioMode) => void;
   /** User-initiated switch: play the clip-path flip, swap at midpoint. */
   beginFlip: (mode: PortfolioMode) => void;
   /** Ceremony finished — clear the overlay state. */
@@ -51,6 +58,7 @@ export const useModeTransform = create<LiveModeState>((set, get) => ({
     set({ liveMode: mode, hydrated: true });
   },
   setLiveMode: (mode) => set({ liveMode: mode, hydrated: true, flipTo: null }),
+  swapLiveMode: (mode) => set({ liveMode: mode, hydrated: true }),
   beginFlip: (mode) => {
     if (mode === get().liveMode || get().flipTo) return;
     if (prefersReducedMotion()) {
