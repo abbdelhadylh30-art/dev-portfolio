@@ -1900,10 +1900,10 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
 .entry-curtain--moon { background: oklch(0.15 0.018 175); }
 
 /* Pure-CSS failsafe: if JS never runs, the curtain removes itself.
-   The delay must exceed the scripted 1.7s scene + 1.05s exit window so
+   The delay must exceed the scripted 1.0s scene + 1.0s exit window so
    it can never fade the curtain during normal playback. */
 .entry-curtain-failsafe {
-  animation: dp-curtain-failsafe 1.7s linear 2.75s forwards;
+  animation: dp-curtain-failsafe 1s linear 2.05s forwards;
 }
 @keyframes dp-curtain-failsafe {
   to { opacity: 0; visibility: hidden; pointer-events: none; }
@@ -1912,6 +1912,13 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
 .entry-scene {
   position: absolute;
   inset: 0;
+  /* Slow cinematic settle: the whole frame drifts from a gentle push-in
+     to rest across the full 2s window, so the scene is never static. */
+  animation: dp-scene-settle 2s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+@keyframes dp-scene-settle {
+  from { transform: scale(1.045); }
+  to   { transform: scale(1); }
 }
 
 /* --- 2. Sun (Business) scene ---------------------------------------- */
@@ -1934,7 +1941,7 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
   box-shadow:
     0 0 34px oklch(0.72 0.18 55 / 0.8),
     0 0 90px 18px oklch(0.8 0.14 70 / 0.45);
-  animation: dp-sunrise 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: dp-sunrise 2s cubic-bezier(0.65, 0, 0.35, 1) both;
 }
 @keyframes dp-sunrise {
   from { opacity: 0; transform: translateY(46px) scale(0.86); }
@@ -1950,7 +1957,7 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
   transform-origin: 50% 100%;
   background: linear-gradient(to top, oklch(0.72 0.17 45 / 0.75), transparent 85%);
   opacity: 0;
-  animation: dp-ray-sweep 2.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: dp-ray-sweep 2.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes dp-ray-sweep {
   from { opacity: 0; transform: rotate(var(--ray-a, 0deg)) scaleY(0.1); }
@@ -1964,7 +1971,7 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
   bottom: 24%;
   height: 2px;
   background: linear-gradient(90deg, transparent, oklch(0.72 0.17 52 / 0.75), transparent);
-  animation: dp-horizon-glow 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: dp-horizon-glow 1.8s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes dp-horizon-glow {
   from { opacity: 0; transform: scaleX(0.4); }
@@ -2004,7 +2011,7 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
     inset -24px 10px 0 2px oklch(0.93 0.02 165),
     0 0 26px oklch(0.85 0.06 165 / 0.55),
     0 0 70px 12px oklch(0.7 0.09 168 / 0.35);
-  animation: dp-moon-drift 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: dp-moon-drift 2s cubic-bezier(0.65, 0, 0.35, 1) both;
 }
 @keyframes dp-moon-drift {
   from { opacity: 0; transform: translateY(16px) scale(0.94); }
@@ -2139,6 +2146,7 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
 /* --- 8. Reduced motion: keep the meaning, drop the movement -------------- */
 @media (prefers-reduced-motion: reduce) {
   .entry-sun-ray,
+  .entry-scene,
   .entry-star,
   .hero-star,
   .sunrise-ray,
