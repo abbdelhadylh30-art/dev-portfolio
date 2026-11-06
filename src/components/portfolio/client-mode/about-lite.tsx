@@ -21,12 +21,12 @@ export function AboutLite() {
       <div className="pointer-events-none absolute -right-32 bottom-24 -z-10 h-56 w-56 rounded-full bg-brand-3/8 blur-[100px] pulse-slow float-b" />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-        {/* Chapter numeral — decorative ghost behind the heading */}
-        <span aria-hidden className="page-ghost-num font-mono">05</span>
+        {/* Page numeral — matches the navbar pager (06/08) */}
+        <span aria-hidden className="page-ghost-num font-mono">06</span>
 
         <SectionHeading
           eyebrow={t.about.head.eyebrow}
-          counter={{ current: "05", total: "06" }}
+          counter={{ current: "06", total: "08" }}
           title={<GradTitle parts={t.about.head.title} />}
           description={t.about.head.description}
         />
