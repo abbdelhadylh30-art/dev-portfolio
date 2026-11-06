@@ -1822,6 +1822,74 @@ html[data-palette="midnight"] body[data-view="client"] .bg-grid {
 }
 
 /* ===================================================================
+   BUSINESS MAKEOVER LAYER
+   Chapter identity, alternating panel bands, the Process journey
+   track and the hero proof-collage chips. Everything is built from
+   palette tokens (brand / brand-2 / brand-muted / foreground /
+   background / border), so the sunset, royal and midnight variants
+   all re-skin automatically. Scoped to [data-view="client"] — the
+   Developer view never sees any of this.
+   =================================================================== */
+
+/* --- Chapter numeral: a huge ghost number behind each page heading --- */
+[data-view="client"] .page-ghost-num {
+  position: absolute;
+  top: -0.12em;
+  inset-inline-end: -0.05em;
+  font-size: clamp(7rem, 17vw, 12rem);
+  line-height: 0.8;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: color-mix(in oklch, var(--foreground) 6%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* --- Warm panel band: breaks the single-cream page rhythm.
+       Two soft radial washes over a brand-muted tint of the canvas. --- */
+[data-view="client"] .band-panel {
+  background:
+    radial-gradient(
+      56rem 22rem at 12% -4rem,
+      color-mix(in oklch, var(--brand-muted) 40%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      44rem 20rem at 88% 108%,
+      color-mix(in oklch, var(--brand-2) 14%, transparent),
+      transparent 60%
+    ),
+    color-mix(in oklch, var(--brand-muted) 20%, var(--background));
+}
+
+/* --- Process journey: one gradient track threading the four nodes.
+       Symmetric end-fades → mirrors cleanly in RTL. The node halo is
+       cut from the band tint so the track appears to pause at nodes. --- */
+[data-view="client"] .journey-line {
+  height: 2px;
+  inset-inline: 1.75rem;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklch, var(--brand) 40%, transparent) 14%,
+    color-mix(in oklch, var(--brand-2) 40%, transparent) 86%,
+    transparent
+  );
+}
+[data-view="client"] .journey-node {
+  box-shadow: 0 0 0 6px
+    color-mix(in oklch, var(--brand-muted) 30%, var(--background));
+}
+
+/* --- Hero proof-collage chips: floating glass pills over the shot --- */
+[data-view="client"] .proof-chip {
+  background: color-mix(in oklch, var(--card) 90%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklch, var(--border) 80%, transparent),
+    0 14px 34px -16px color-mix(in oklch, var(--foreground) 45%, transparent);
+}
+
+/* ===================================================================
    ARABIC / RTL — "download and study Arabic well"
    Cairo (self-hosted via next/font, --font-arabic) takes over in AR
    mode; Geist remains for Latin fragments. Arabic script must NEVER
