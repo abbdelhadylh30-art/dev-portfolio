@@ -71,6 +71,13 @@ const en = {
     auditNote:
       "Free 15-minute audit · You'll see exactly what's costing you customers and what it takes to fix it — whether you hire me or not.",
     trustChips: ["Fixed-price quotes", "You own everything", "Launch in 2–4 weeks"],
+    /* Floating chips pinned to the hero proof collage — the same three
+       promises the sub-copy makes, echoed on the screenshots. */
+    proofChips: {
+      speed: "Loads in <2s on a phone",
+      google: "Shows up on Google",
+      bilingual: "Arabic + English",
+    },
   },
 
   stats: [
