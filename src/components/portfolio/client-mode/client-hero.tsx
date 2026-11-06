@@ -239,17 +239,17 @@ export function ClientHero() {
               className="absolute -inset-8 -z-10 rounded-[3rem] bg-[radial-gradient(55%_55%_at_55%_40%,color-mix(in_oklch,var(--brand)_16%,transparent),transparent_72%)] blur-2xl"
             />
 
-            {/* main browser window — a real concept build */}
+            {/* main browser window — a live site, led by the real client build */}
             <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card shadow-[0_36px_90px_-38px_color-mix(in_oklch,var(--foreground)_50%,transparent)]">
               <div className="flex items-center gap-1.5 border-b border-border/60 bg-muted/50 px-3.5 py-2.5">
                 <span aria-hidden className="h-2.5 w-2.5 rounded-full bg-border" />
                 <span aria-hidden className="h-2.5 w-2.5 rounded-full bg-border" />
                 <span aria-hidden className="h-2.5 w-2.5 rounded-full bg-brand/50" />
                 <span className="ms-2.5 flex-1 truncate rounded-md border border-border/50 bg-background/70 px-2.5 py-1 font-mono text-[10px] text-muted-foreground">
-                  yourbusiness.com
+                  {demos[0].url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
                 </span>
                 <span className="hidden shrink-0 rounded-full border border-brand/30 bg-brand/10 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wide text-brand sm:inline">
-                  {t.results.demoStrip.kicker}
+                  {demos[0].tag}
                 </span>
               </div>
               <img
