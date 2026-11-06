@@ -31,7 +31,7 @@ export function TrustFaq() {
   const [opened, setOpened] = React.useState<string[]>([]);
 
   return (
-    <section id="answers" className="relative overflow-hidden border-t border-border/40 py-20 sm:py-28">
+    <section id="answers" className="band-panel relative overflow-hidden border-t border-border/40 py-20 sm:py-28">
       <div className="pointer-events-none absolute -left-32 top-24 -z-10 h-56 w-56 rounded-full bg-brand-2/8 blur-[100px] pulse-slow float-a" />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
