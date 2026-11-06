@@ -13,7 +13,7 @@ import type { PortfolioMode } from "@/lib/mode";
  *   • Sun (Business view)  — warm cream field, a coral sun disc rising
  *     over a glowing horizon, seven light rays sweeping outward, then
  *     the whole curtain wipes upward like a sunrise.
- *   • Moon (Developer view) — deep jade night, an emerald-glow crescent
+ *   • Moon (Developer view) — deep indigo night, a silver-glow crescent
  *     drifting into place inside a sixteen-star twinkling field, then
  *     the night irises open onto the page.
  *
