@@ -13,11 +13,11 @@ import type { PortfolioMode } from "@/lib/mode";
  *   • Sun (Business view)  — warm cream field, a coral sun disc rising
  *     over a glowing horizon, seven light rays sweeping outward, then
  *     the whole curtain wipes upward like a sunrise.
- *   • Moon (Developer view) — deep indigo night, a silver crescent
+ *   • Moon (Developer view) — deep jade night, an emerald-glow crescent
  *     drifting into place inside a sixteen-star twinkling field, then
  *     the night irises open onto the page.
  *
- * Timing: 0.55s scene → 0.5s exit (~1.05s total). The exported
+ * Timing: 1.7s scene → 1.05s exit (~2.75s total). The exported
  * `entrySequenceDone` flag lets the heroes stagger their own entrance
  * under the curtain exactly once per load (later page navigations skip
  * the base delay).
@@ -91,7 +91,7 @@ export function EntryCurtain({ mode }: { mode: PortfolioMode }) {
       }}
       transition={
         phase === "out"
-          ? { duration: 0.5, ease: isSun ? [0.7, 0, 0.3, 1] : ENTRY_EASE }
+          ? { duration: 1.05, ease: isSun ? [0.7, 0, 0.3, 1] : ENTRY_EASE }
           : { duration: 0 }
       }
       onAnimationComplete={() => {
@@ -113,7 +113,7 @@ export function EntryCurtain({ mode }: { mode: PortfolioMode }) {
 
 function SunScene({ phase, onExit }: { phase: Phase; onExit: () => void }) {
   React.useEffect(() => {
-    const t = window.setTimeout(onExit, 560);
+    const t = window.setTimeout(onExit, 1700);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -153,7 +153,7 @@ function SunScene({ phase, onExit }: { phase: Phase; onExit: () => void }) {
             ? { opacity: 0, y: -10, filter: "blur(4px)" }
             : { opacity: 1, y: 0, filter: "blur(0px)" }
         }
-        transition={{ duration: phase === "out" ? 0.3 : 0.7, ease: ENTRY_EASE, delay: phase === "out" ? 0 : 0.16 }}
+        transition={{ duration: phase === "out" ? 0.45 : 0.9, ease: ENTRY_EASE, delay: phase === "out" ? 0 : 0.35 }}
       >
         <span className="entry-nameplate-glyph entry-nameplate-glyph--sun" aria-hidden />
         <span className="entry-nameplate-text">Abdelhady Gabriel</span>
@@ -169,7 +169,7 @@ function SunScene({ phase, onExit }: { phase: Phase; onExit: () => void }) {
 
 function MoonScene({ phase, onExit }: { phase: Phase; onExit: () => void }) {
   React.useEffect(() => {
-    const t = window.setTimeout(onExit, 560);
+    const t = window.setTimeout(onExit, 1700);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -207,7 +207,7 @@ function MoonScene({ phase, onExit }: { phase: Phase; onExit: () => void }) {
             ? { opacity: 0, y: -10, filter: "blur(4px)" }
             : { opacity: 1, y: 0, filter: "blur(0px)" }
         }
-        transition={{ duration: phase === "out" ? 0.3 : 0.7, ease: ENTRY_EASE, delay: phase === "out" ? 0 : 0.16 }}
+        transition={{ duration: phase === "out" ? 0.45 : 0.9, ease: ENTRY_EASE, delay: phase === "out" ? 0 : 0.35 }}
       >
         <span className="entry-nameplate-glyph entry-nameplate-glyph--moon" aria-hidden />
         <span className="entry-nameplate-text">Abdelhady Gabriel</span>
