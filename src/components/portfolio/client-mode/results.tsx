@@ -26,12 +26,12 @@ export function Results() {
       <div className="pointer-events-none absolute -right-32 top-32 -z-10 h-56 w-56 rounded-full bg-brand-3/8 blur-[100px] pulse-slow float-c" />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-        {/* Chapter numeral — decorative ghost behind the heading */}
-        <span aria-hidden className="page-ghost-num font-mono">02</span>
+        {/* Page numeral — decorative ghost behind the heading (matches the navbar pager) */}
+        <span aria-hidden className="page-ghost-num font-mono">03</span>
 
         <SectionHeading
           eyebrow={t.results.head.eyebrow}
-          counter={{ current: "02", total: "06" }}
+          counter={{ current: "03", total: "08" }}
           title={<GradTitle parts={t.results.head.title} />}
           description={t.results.head.description}
         />
@@ -76,6 +76,20 @@ export function Results() {
                 </div>
 
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{r.story}</p>
+
+                {/* optional live-site link — only on cards that have a URL */}
+                {r.url && (
+                  <a
+                    href={r.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    onClick={() => trackEvent("result_live_site", { label: r.client })}
+                    className="mt-3 inline-flex w-fit items-center gap-1.5 text-sm font-medium text-brand transition-colors hover:text-brand/85"
+                  >
+                    {r.urlLabel}
+                    <ArrowUpRight className="h-4 w-4 rtl:-scale-x-100" />
+                  </a>
+                )}
 
                 <div className="mt-auto pt-6">
                   <div className="grid grid-cols-3 gap-2">
@@ -171,10 +185,10 @@ export function Results() {
                     loading="lazy"
                     className="aspect-[16/10] w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                   />
-                  {/* honesty tag — these are concept builds, never presented
-                      as client work; mirrored from the strip's kicker copy */}
+                  {/* honesty tag — per-item: "Real client site" vs "Concept build";
+                      the strip mixes one delivered site with two spec builds */}
                   <span className="absolute start-3 top-3 inline-flex items-center gap-1 rounded-full border border-white/25 bg-black/50 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur">
-                    {t.results.demoStrip.kicker}
+                    {d.tag}
                   </span>
                 </div>
                 <div className="flex flex-1 flex-col p-5">
