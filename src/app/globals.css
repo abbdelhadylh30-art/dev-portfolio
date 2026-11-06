@@ -71,7 +71,7 @@
   --brand-foreground: oklch(0.985 0 0);
   --brand-muted: oklch(0.93 0.04 165);
   --chart-1: oklch(0.62 0.16 165);
-  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-2: oklch(0.62 0.13 152);
   --chart-3: oklch(0.55 0.13 170);
   --chart-4: oklch(0.7 0.15 145);
   --chart-5: oklch(0.65 0.14 180);
@@ -86,9 +86,9 @@
 }
 
 .dark {
-  --background: oklch(0.13 0.005 180);
+  --background: oklch(0.13 0.008 172);
   --foreground: oklch(0.96 0.005 180);
-  --card: oklch(0.17 0.008 180);
+  --card: oklch(0.17 0.01 172);
   --card-foreground: oklch(0.96 0.005 180);
   --popover: oklch(0.17 0.008 180);
   --popover-foreground: oklch(0.96 0.005 180);
@@ -112,7 +112,7 @@
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.7 0.15 145);
   --chart-4: oklch(0.65 0.14 180);
-  --chart-5: oklch(0.6 0.16 200);
+  --chart-5: oklch(0.68 0.15 128);
   --sidebar: oklch(0.17 0.008 180);
   --sidebar-foreground: oklch(0.96 0.005 180);
   --sidebar-primary: oklch(0.72 0.17 165);
@@ -1291,19 +1291,19 @@ html:has(body[data-view="client"])::-webkit-scrollbar-thumb:active {
 
 /* ===================================================================
    Task ID 18 — VIBRANCY PACK
-   A richer accent system (brand-2 teal + brand-3 lime alongside the
+   A richer accent system (brand-2 mint + brand-3 lime alongside the
    emerald brand) plus a set of animated utilities shared by BOTH the
    Business view (heavier dosage) and the Developer view (same language).
    All loops are disabled under prefers-reduced-motion (block at the end).
    =================================================================== */
 
-/* --- New accent tokens (teal 195 / lime 140 — deliberately NOT blue) --- */
+/* --- Accent tokens (mint 155 / lime 140 — one emerald family, no teal) --- */
 :root {
-  --brand-2: oklch(0.58 0.12 195);
+  --brand-2: oklch(0.6 0.12 155);
   --brand-3: oklch(0.62 0.14 140);
 }
 .dark {
-  --brand-2: oklch(0.76 0.12 195);
+  --brand-2: oklch(0.87 0.11 155);
   --brand-3: oklch(0.8 0.16 140);
 }
 @theme inline {
@@ -1311,7 +1311,7 @@ html:has(body[data-view="client"])::-webkit-scrollbar-thumb:active {
   --color-brand-3: var(--brand-3);
 }
 
-/* --- Animated tri-hue gradient text (emerald → teal → lime → emerald) --- */
+/* --- Animated tri-hue gradient text (emerald → mint → lime → emerald) --- */
 .brand-gradient-text {
   background: linear-gradient(
     100deg,
@@ -1885,7 +1885,7 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
 /*  SUN & MOON ENTRY SYSTEM                                            */
 /*  One-shot first-paint curtain + hero ambience + mode-flip ceremony. */
 /*  Sun (Business) = warm cream sky, coral sunrise, seven light rays.  */
-/*  Moon (Developer) = indigo night, silver crescent, starfield.      */
+/*  Moon (Developer) = jade night, emerald crescent, starfield.        */
 /* =================================================================== */
 
 /* --- 1. Entry curtain shell ----------------------------------------- */
@@ -1897,7 +1897,7 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
   will-change: clip-path;
 }
 .entry-curtain--sun { background: oklch(0.985 0.013 82); }
-.entry-curtain--moon { background: oklch(0.15 0.02 265); }
+.entry-curtain--moon { background: oklch(0.15 0.018 175); }
 
 /* Pure-CSS failsafe: if JS never runs, the curtain removes itself. */
 .entry-curtain-failsafe {
@@ -1974,15 +1974,15 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 62% 44% at 68% 30%, oklch(0.24 0.045 268 / 0.85), transparent 60%),
-    radial-gradient(ellipse 80% 60% at 30% 88%, oklch(0.2 0.04 262 / 0.7), transparent 64%),
-    linear-gradient(to bottom, oklch(0.13 0.02 265), oklch(0.17 0.025 268));
+    radial-gradient(ellipse 62% 44% at 68% 30%, oklch(0.24 0.045 175 / 0.85), transparent 60%),
+    radial-gradient(ellipse 80% 60% at 30% 88%, oklch(0.2 0.04 172 / 0.7), transparent 64%),
+    linear-gradient(to bottom, oklch(0.13 0.018 175), oklch(0.17 0.022 178));
 }
 .entry-star {
   position: absolute;
   border-radius: 9999px;
-  background: oklch(0.94 0.015 260);
-  box-shadow: 0 0 6px oklch(0.9 0.03 260 / 0.8);
+  background: oklch(0.94 0.015 165);
+  box-shadow: 0 0 6px oklch(0.9 0.04 165 / 0.8);
   opacity: 0;
   animation: dp-star-twinkle 1.7s ease-in-out infinite;
 }
@@ -1999,9 +1999,9 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
   margin-left: -48px;
   border-radius: 9999px;
   box-shadow:
-    inset -24px 10px 0 2px oklch(0.93 0.012 260),
-    0 0 26px oklch(0.85 0.04 260 / 0.55),
-    0 0 70px 12px oklch(0.7 0.06 265 / 0.35);
+    inset -24px 10px 0 2px oklch(0.93 0.02 165),
+    0 0 26px oklch(0.85 0.06 165 / 0.55),
+    0 0 70px 12px oklch(0.7 0.09 168 / 0.35);
   animation: dp-moon-drift 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes dp-moon-drift {
@@ -2031,10 +2031,10 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
   box-shadow: 0 0 14px oklch(0.72 0.18 55 / 0.8);
 }
 .entry-nameplate-glyph--moon {
-  background: oklch(0.92 0.012 260);
+  background: oklch(0.92 0.02 165);
   box-shadow:
-    inset -4px 2px 0 0 oklch(0.2 0.03 265),
-    0 0 12px oklch(0.85 0.04 260 / 0.7);
+    inset -4px 2px 0 0 oklch(0.2 0.03 175),
+    0 0 12px oklch(0.85 0.06 165 / 0.7);
 }
 .entry-nameplate-text {
   font-size: 0.8rem;
@@ -2043,7 +2043,7 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
   text-transform: uppercase;
 }
 .entry-curtain--sun .entry-nameplate-text { color: oklch(0.4 0.05 50); }
-.entry-curtain--moon .entry-nameplate-text { color: oklch(0.9 0.02 260); }
+.entry-curtain--moon .entry-nameplate-text { color: oklch(0.9 0.02 170); }
 .entry-nameplate-sub {
   font-size: 0.62rem;
   letter-spacing: 0.22em;
@@ -2051,13 +2051,13 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
   opacity: 0.65;
 }
 .entry-curtain--sun .entry-nameplate-sub { color: oklch(0.55 0.06 60); }
-.entry-curtain--moon .entry-nameplate-sub { color: oklch(0.75 0.03 260); }
+.entry-curtain--moon .entry-nameplate-sub { color: oklch(0.75 0.035 170); }
 
 /* --- 5. Hero ambience: Moon (Developer view) --------------------------- */
 .moon-arc {
   border-radius: 9999px;
-  background: radial-gradient(circle at 62% 38%, oklch(0.85 0.05 260 / 0.16), transparent 58%);
-  box-shadow: 0 0 90px 20px oklch(0.75 0.06 265 / 0.08);
+  background: radial-gradient(circle at 62% 38%, oklch(0.85 0.07 168 / 0.16), transparent 58%);
+  box-shadow: 0 0 90px 20px oklch(0.75 0.08 170 / 0.08);
   filter: blur(2px);
 }
 .hero-star {
@@ -2065,7 +2065,7 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
   width: 2px;
   height: 2px;
   border-radius: 9999px;
-  background: oklch(0.9 0.03 260);
+  background: oklch(0.9 0.035 168);
   opacity: 0.1;
   animation: dp-hero-star 3.4s ease-in-out infinite;
 }
@@ -2112,8 +2112,8 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
 }
 .flip-tint--moon {
   background:
-    radial-gradient(circle at 50% 46%, oklch(0.26 0.05 266 / 0.9), transparent 58%),
-    oklch(0.15 0.02 265);
+    radial-gradient(circle at 50% 46%, oklch(0.26 0.045 172 / 0.9), transparent 58%),
+    oklch(0.15 0.018 175);
 }
 .flip-glyph {
   width: 46px;
@@ -2127,11 +2127,11 @@ html[dir="rtl"] body[data-view="client"] .rtl-orb-safe {
     0 0 80px 14px oklch(0.8 0.14 70 / 0.4);
 }
 .flip-glyph--moon {
-  background: oklch(0.92 0.012 260);
+  background: oklch(0.92 0.02 165);
   box-shadow:
-    inset -12px 5px 0 0 oklch(0.17 0.03 265),
-    0 0 30px oklch(0.85 0.04 260 / 0.6),
-    0 0 80px 14px oklch(0.7 0.06 265 / 0.35);
+    inset -12px 5px 0 0 oklch(0.17 0.03 175),
+    0 0 30px oklch(0.85 0.06 165 / 0.6),
+    0 0 80px 14px oklch(0.7 0.09 168 / 0.35);
 }
 
 /* --- 8. Reduced motion: keep the meaning, drop the movement -------------- */
