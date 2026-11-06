@@ -11,7 +11,7 @@ export const revalidate = 3600; // cache for 1 hour
  * GET /api/og
  * Generates a 1200×630 Open Graph image on the fly using next/og
  * (Satori under the hood). Renders a branded card:
- *   - Dark Vercel-style background with a subtle emerald mesh
+ *   - Dark Vercel-style background with a subtle moonlight mesh
  *   - "AG" avatar block on the right (or full GitHub avatar if fetchable)
  *   - Name + role + tagline on the left
  *   - Footer with "9 repos synced from github.com/abbdelhadylh30-art"
@@ -118,7 +118,7 @@ export async function GET(request: Request) {
   const project = slug ? projects.find((p) => p.slug === slug) : undefined;
   if (project) {
     return new ImageResponse(
-      <ProjectOGCard project={project} monoFont={monoFont} brandHex="#34d399" />,
+      <ProjectOGCard project={project} monoFont={monoFont} brandHex="#818cf8" />,
       { width: 1200, height: 630, fonts }
     );
   }
@@ -139,8 +139,8 @@ export async function GET(request: Request) {
   const languagesStat = stats.find((s) => s.label === "Languages")?.value ?? "8";
   const liveDeploys = stats.find((s) => s.label === "Live Deploys")?.value ?? "6";
 
-  // Brand color (matches --brand dark token: oklch(0.72 0.17 165))
-  const brandHex = "#34d399"; // emerald-400 — close to brand on dark
+  // Brand color (matches --brand dark token: oklch(0.74 0.13 282))
+  const brandHex = "#818cf8"; // indigo-400 — matches the moonlight brand on night
 
   return new ImageResponse(
     (
@@ -151,8 +151,8 @@ export async function GET(request: Request) {
           display: "flex",
           flexDirection: "column",
           background:
-            "radial-gradient(circle at 20% 30%, rgba(52, 211, 153, 0.18), transparent 35%), radial-gradient(circle at 80% 70%, rgba(52, 211, 153, 0.10), transparent 45%), linear-gradient(135deg, #0a0c0b 0%, #0d1210 50%, #0a0c0b 100%)",
-          color: "#f4f7f5",
+            "radial-gradient(circle at 20% 30%, rgba(129, 140, 248, 0.18), transparent 35%), radial-gradient(circle at 80% 70%, rgba(165, 180, 252, 0.10), transparent 45%), linear-gradient(135deg, #0c0b14 0%, #12101f 50%, #0c0b14 100%)",
+          color: "#f4f4fa",
           padding: "64px",
           fontFamily: "Inter",
           position: "relative",
@@ -194,7 +194,7 @@ export async function GET(request: Request) {
                 height: "64px",
                 borderRadius: "16px",
                 background: brandHex,
-                color: "#0a0c0b",
+                color: "#0c0b14",
                 fontSize: "32px",
                 fontWeight: 700,
                 fontFamily: monoFont,
@@ -227,7 +227,7 @@ export async function GET(request: Request) {
                   display: "flex",
                   fontSize: "14px",
                   fontFamily: monoFont,
-                  color: "rgba(244, 247, 245, 0.55)",
+                  color: "rgba(244, 244, 250, 0.55)",
                   fontWeight: 400,
                 }}
               >
@@ -289,7 +289,7 @@ export async function GET(request: Request) {
                 fontWeight: 700,
                 letterSpacing: "-0.04em",
                 lineHeight: 1.05,
-                background: `linear-gradient(100deg, #f4f7f5 0%, ${brandHex} 50%, #f4f7f5 100%)`,
+                background: `linear-gradient(100deg, #f4f4fa 0%, ${brandHex} 50%, #f4f4fa 100%)`,
                 backgroundClip: "text",
                 WebkitBackgroundClip: "text",
                 color: "transparent",
@@ -301,7 +301,7 @@ export async function GET(request: Request) {
               style={{
                 fontSize: "28px",
                 fontWeight: 400,
-                color: "rgba(244, 247, 245, 0.85)",
+                color: "rgba(244, 244, 250, 0.85)",
                 marginTop: "12px",
                 letterSpacing: "-0.01em",
               }}
@@ -314,7 +314,7 @@ export async function GET(request: Request) {
             style={{
               fontSize: "20px",
               fontWeight: 400,
-              color: "rgba(244, 247, 245, 0.62)",
+              color: "rgba(244, 244, 250, 0.62)",
               maxWidth: "880px",
               lineHeight: 1.4,
               marginTop: "8px",
@@ -370,7 +370,7 @@ export async function GET(request: Request) {
                 display: "flex",
                 fontSize: "11px",
                 fontFamily: monoFont,
-                color: "rgba(244, 247, 245, 0.45)",
+                color: "rgba(244, 244, 250, 0.45)",
                 fontWeight: 400,
               }}
             >
@@ -415,7 +415,7 @@ function Stat({
         style={{
           fontSize: "28px",
           fontWeight: 700,
-          color: valueColor ?? "#f4f7f5",
+          color: valueColor ?? "#f4f4fa",
           fontFamily: mono,
           letterSpacing: "-0.02em",
         }}
@@ -425,7 +425,7 @@ function Stat({
       <div
         style={{
           fontSize: "11px",
-          color: labelColor ?? "rgba(244, 247, 245, 0.55)",
+          color: labelColor ?? "rgba(244, 244, 250, 0.55)",
           fontFamily: mono,
           textTransform: "uppercase",
           letterSpacing: "0.16em",
@@ -439,7 +439,7 @@ function Stat({
 
 /**
  * Per-project OG card — rendered for /api/og?p=<slug>. Mirrors the profile
- * card's brand language (mesh + dot grid + emerald) but leads with the
+ * card's brand language (mesh + dot grid + moonlight) but leads with the
  * project: name, category chip, description, a proportional language bar
  * and the repo path in the footer.
  */
@@ -467,8 +467,8 @@ function ProjectOGCard({
         display: "flex",
         flexDirection: "column",
         background:
-          "radial-gradient(circle at 20% 30%, rgba(52, 211, 153, 0.18), transparent 35%), radial-gradient(circle at 80% 70%, rgba(52, 211, 153, 0.10), transparent 45%), linear-gradient(135deg, #0a0c0b 0%, #0d1210 50%, #0a0c0b 100%)",
-        color: "#f4f7f5",
+          "radial-gradient(circle at 20% 30%, rgba(129, 140, 248, 0.18), transparent 35%), radial-gradient(circle at 80% 70%, rgba(165, 180, 252, 0.10), transparent 45%), linear-gradient(135deg, #0c0b14 0%, #12101f 50%, #0c0b14 100%)",
+        color: "#f4f4fa",
         padding: "64px",
         fontFamily: "Inter",
         position: "relative",
@@ -506,7 +506,7 @@ function ProjectOGCard({
               height: "56px",
               borderRadius: "14px",
               background: brandHex,
-              color: "#0a0c0b",
+              color: "#0c0b14",
               fontSize: "26px",
               fontWeight: 700,
               fontFamily: monoFont,
@@ -532,7 +532,7 @@ function ProjectOGCard({
                 display: "flex",
                 fontSize: "14px",
                 fontFamily: monoFont,
-                color: "rgba(244, 247, 245, 0.55)",
+                color: "rgba(244, 244, 250, 0.55)",
               }}
             >
               {`project brief · ${profile.role}`}
@@ -581,8 +581,8 @@ function ProjectOGCard({
               display: "flex",
               padding: "8px 16px",
               borderRadius: "9999px",
-              border: "1px solid rgba(244,247,245,0.18)",
-              color: "rgba(244, 247, 245, 0.75)",
+              border: "1px solid rgba(244,244,250,0.18)",
+              color: "rgba(244, 244, 250, 0.75)",
               fontSize: "13px",
               fontFamily: monoFont,
               letterSpacing: "0.06em",
@@ -611,7 +611,7 @@ function ProjectOGCard({
             fontWeight: 700,
             letterSpacing: "-0.04em",
             lineHeight: 1.05,
-            background: `linear-gradient(100deg, #f4f7f5 0%, ${brandHex} 50%, #f4f7f5 100%)`,
+            background: `linear-gradient(100deg, #f4f4fa 0%, ${brandHex} 50%, #f4f4fa 100%)`,
             backgroundClip: "text",
             WebkitBackgroundClip: "text",
             color: "transparent",
@@ -623,7 +623,7 @@ function ProjectOGCard({
           style={{
             fontSize: "22px",
             fontWeight: 400,
-            color: "rgba(244, 247, 245, 0.65)",
+            color: "rgba(244, 244, 250, 0.65)",
             maxWidth: "920px",
             lineHeight: 1.45,
           }}
@@ -649,7 +649,7 @@ function ProjectOGCard({
                 height: "10px",
                 borderRadius: "9999px",
                 overflow: "hidden",
-                background: "rgba(244,247,245,0.08)",
+                background: "rgba(244,244,250,0.08)",
               }}
             >
               {topLanguages.map((l, i) => (
@@ -669,7 +669,7 @@ function ProjectOGCard({
                 gap: "20px",
                 fontSize: "13px",
                 fontFamily: monoFont,
-                color: "rgba(244, 247, 245, 0.6)",
+                color: "rgba(244, 244, 250, 0.6)",
               }}
             >
               {topLanguages.map((l, i) => (
@@ -721,8 +721,8 @@ function ProjectOGCard({
                 display: "flex",
                 padding: "6px 14px",
                 borderRadius: "9999px",
-                border: "1px solid rgba(244,247,245,0.16)",
-                color: "rgba(244, 247, 245, 0.7)",
+                border: "1px solid rgba(244,244,250,0.16)",
+                color: "rgba(244, 244, 250, 0.7)",
                 fontSize: "13px",
                 fontFamily: monoFont,
               }}
@@ -738,8 +738,8 @@ function ProjectOGCard({
 
 /** Static palette for the OG language bar (GitHub-ish, brand-harmonised). */
 const OG_LANG_COLORS = [
-  "#34d399", // brand emerald
-  "#a7f3d0", // pale emerald
+  "#818cf8", // brand periwinkle
+  "#c7d2fe", // pale periwinkle
   "#fbbf24", // amber
   "#f472b6", // pink
 ] as const;
@@ -747,7 +747,7 @@ const OG_LANG_COLORS = [
 /**
  * Business-mode OG card — /api/og?mode=client. Wears the Business view's
  * friendly warm skin: cream canvas, coral → amber accents, espresso text —
- * the exact opposite of the Developer view's black + emerald card.
+ * the exact opposite of the Developer view's black + moonlight card.
  */
 function ClientOGCard({ monoFont, brandHex }: { monoFont: string; brandHex: string }) {
   const espresso = "#473527";
